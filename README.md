@@ -1,9 +1,18 @@
 Learning R
 ================
 
-- <a href="#learning-r" id="toc-learning-r">Learning R</a>
+- <a href="#introduction" id="toc-introduction">Introduction</a>
   - <a href="#vectors" id="toc-vectors">Vectors</a>
   - <a href="#lists" id="toc-lists">Lists</a>
+  - <a href="#functions" id="toc-functions">Functions</a>
+    - <a href="#function-components" id="toc-function-components">Function
+      components</a>
+    - <a href="#lexical-scoping" id="toc-lexical-scoping">Lexical scoping</a>
+    - <a href="#lazy-evaluation" id="toc-lazy-evaluation">Lazy evaluation</a>
+    - <a href="#dot-dot-dot" id="toc-dot-dot-dot">dot-dot-dot</a>
+    - <a href="#exiting-a-function" id="toc-exiting-a-function">Exiting a
+      function</a>
+    - <a href="#function-forms" id="toc-function-forms">Function forms</a>
   - <a href="#objects" id="toc-objects">Objects</a>
   - <a href="#general" id="toc-general">General</a>
   - <a href="#useful-plots" id="toc-useful-plots">Useful plots</a>
@@ -15,7 +24,7 @@ Learning R
       id="toc-variables-and-objects">Variables and objects</a>
   - <a href="#session-info" id="toc-session-info">Session info</a>
 
-# Learning R
+# Introduction
 
 The three core features of R are object-orientation, vectorisation, and
 its functional programming style.
@@ -172,6 +181,264 @@ map_lgl(.x = 1:10, .f = function(x) x > 5)
 
     ##  [1] FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE
 
+## Functions
+
+Notes from [Advanced R](https://adv-r.hadley.nz/functions.html).
+
+Two important ideas about functions in R need to be understood:
+
+1.  Functions can be broken down into three components: arguments, body,
+    and environment
+2.  Functions are objects, just as vectors are objects
+
+R functions are objects in their own right, a language property often
+called “first-class functions”.
+
+### Function components
+
+A function has three parts:
+
+1.  The `formals()`, which are the list of arguments that control how
+    you call the function.
+2.  The `body()`, which is the code inside the function.
+3.  The `environment()`, which is the data structure that determines the
+    namespace.
+
+The environment is based on where you define the function.
+
+``` r
+f02 <- function(x, y){
+  # comment
+  x + y
+}
+
+formals(f02)
+```
+
+    ## $x
+    ## 
+    ## 
+    ## $y
+
+``` r
+body(f02)
+```
+
+    ## {
+    ##     x + y
+    ## }
+
+``` r
+environment(f02)
+```
+
+    ## <environment: R_GlobalEnv>
+
+Functions contain any number of additional `attributes()` as with all
+objects in R. One attribute used by base R is `srcref`, which points to
+the source code used to create the function.
+
+``` r
+attr(f02, "srcref")
+```
+
+    ## function(x, y){
+    ##   # comment
+    ##   x + y
+    ## }
+
+However primitive functions do not have the three components (they
+return `NULL`) and call C code directly.
+
+``` r
+sum
+```
+
+    ## function (..., na.rm = FALSE)  .Primitive("sum")
+
+Primitive functions have either type `builtin` or type `special` but
+have class `function`.
+
+``` r
+class(f02)
+```
+
+    ## [1] "function"
+
+``` r
+class(sum)
+```
+
+    ## [1] "function"
+
+``` r
+class(`[`)
+```
+
+    ## [1] "function"
+
+``` r
+typeof(f02)
+```
+
+    ## [1] "closure"
+
+``` r
+typeof(sum)
+```
+
+    ## [1] "builtin"
+
+``` r
+typeof(`[`)
+```
+
+    ## [1] "special"
+
+### Lexical scoping
+
+Scoping is the act of finding the value associated with a name. R uses
+lexical scoping, which means it looks up the values of names based on
+how a function is defined and not by how it is called. Lexical in this
+context means that the scoping rules use a parse-time, rather than a
+run-time, structure. R’s lexical scoping follows four primary rules:
+
+1.  Name masking
+2.  Functions versus variables
+3.  A fresh start - each time you invoke a function, it starts fresh
+4.  Dynamic lookup
+
+The basic principle of lexical scoping is that names defined inside a
+function mask names defined outside a function. If a name is not defined
+inside a function, R looks one level up (all the way up to the global
+environment). Lexical scoping determines where, but not when to look for
+values. *R looks for values when the function is run and not when the
+function is created*.
+
+### Lazy evaluation
+
+Function arguments are only evaluated if accessed, i.e. lazily
+evaluated. This is a nice feature because it allows the inclusion of
+potentially expensive computations in function arguments that will only
+be evaluated if necessary.
+
+Lazy evaluation is powered by a data structure called a **promise**,
+which has three components:
+
+1.  An expression, like `x + y`, which gives rise to the delayed
+    computation.
+2.  An environment where the expression should be evaluated, i.e. the
+    environment where the function is called.
+3.  A value, which is computed and cached the first time a promise is
+    accessed when the expression is evaluated in the specified
+    environment.
+
+### dot-dot-dot
+
+Functions can have a special argument `...`, which is pronounced
+dot-dot-dot. In other programming languages, this type of argument is
+often called `varargs` (variable arguments) and a function that uses it
+is said to be variadic.
+
+``` r
+i01 <- function(y, z) {
+  list(y = y, z = z)
+}
+
+i02 <- function(x, ...) {
+  i01(...)
+}
+
+str(i02(x = 1, y = 2, z = 3))
+```
+
+    ## List of 2
+    ##  $ y: num 2
+    ##  $ z: num 3
+
+The `...` is useful when a function takes a function as an argument: you
+can pass additional arguments to that function. The downside of using
+`...` is that when arguments are used to pass arguments to another
+function, it is sometimes not clear to the user. Also a misspelled
+argument will not raise an error and this makes it easy for typos to go
+unnoticed.
+
+### Exiting a function
+
+Most functions exit in one of two ways:
+
+1.  They either return a value, indicating success. There are two ways a
+    function can return a value:
+    1.  Implicitly, where the last evaluated expression is returned.
+    2.  Explicitly by using `return()`.
+2.  They throw an error, indicating failure.
+
+Most functions return visibly, meaning that the result is printed when
+evaluated in an interactive context. The automatic printing can be
+prevented by using `invisible()` but the return value still exists.
+
+If a function cannot complete its assigned task, it should throw an
+error with `stop()`, which immediately terminates the execution of the
+function. `on.exit()` can be used to run some code regardless of how a
+function exits; always set `add = TRUE` when using `on.exit()` because
+if you don’t each call to `on.exit()` will overwrite the previous exit
+handler.
+
+### Function forms
+
+Function calls come in four varieties:
+
+1.  **prefix**: the function name comes before its arguments,
+    e.g. `sum(1:5)`. These constitute the majority of function calls in
+    R
+2.  **infix**: the function name comes in between its arguments,
+    e.g. `x + y`. Infix forms are used for many mathematical operators
+    and for user-defined functions that begin and end with `%`.
+3.  **replacement**: functions that replace values by assignment,
+    e.g. `names(my_df) <- c('a', 'b', 'c')`.
+4.  **special**: functions like `[[`, `if`, and `for` that do not have a
+    consistent structure.
+
+All functions can be written in prefix form.
+
+``` r
+x <- 1900
+y <- 84
+x + y
+```
+
+    ## [1] 1984
+
+``` r
+`+`(x, y)
+```
+
+    ## [1] 1984
+
+``` r
+df <- data.frame(a = 1, b = 2, c= 3)
+`names<-`(df, c("x", "y", "z"))
+```
+
+    ##   x y z
+    ## 1 1 2 3
+
+``` r
+for(i in 1:3) print(i)
+```
+
+    ## [1] 1
+    ## [1] 2
+    ## [1] 3
+
+``` r
+`for`(i, 1:3, print(i))
+```
+
+    ## [1] 1
+    ## [1] 2
+    ## [1] 3
+
 ## Objects
 
 [Base types](https://adv-r.hadley.nz/base-types.html).
@@ -253,7 +520,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   1.226   0.000   1.226
+    ##   1.223   0.001   1.223
 
 The `with` function evaluates an expression with data.
 
@@ -573,7 +840,7 @@ eval(parse(text = my_var))
 
 This README was generated by running `readme.Rmd` in RStudio Server.
 
-    ## [1] "2022-12-27 05:48:06 UTC"
+    ## [1] "2022-12-27 07:48:30 UTC"
 
 Session info.
 
