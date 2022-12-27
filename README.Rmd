@@ -1,8 +1,7 @@
 ---
 title: "Learning R"
 output:
-   md_document:
-      variant: markdown
+   github_document:
       toc: true
 ---
 
