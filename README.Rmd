@@ -6,8 +6,6 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-library(tidyverse)
-theme_set(theme_bw())
 knitr::opts_chunk$set(cache = FALSE)
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(fig.path = "img/")
@@ -28,7 +26,7 @@ Install packages if missing and load.
 
 ```{r load_package, message=FALSE, warning=FALSE}
 .libPaths('/packages')
-my_packages <- 'beepr'
+my_packages <- c('tidyverse', 'modeldata')
 
 for (my_package in my_packages){
    if(!require(my_package, character.only = TRUE)){
@@ -36,6 +34,7 @@ for (my_package in my_packages){
    }
   library(my_package, character.only = TRUE)
 }
+theme_set(theme_bw())
 ```
 
 ## Vectors
@@ -255,6 +254,122 @@ for(i in 1:3) print(i)
 ## Objects
 
 [Base types](https://adv-r.hadley.nz/base-types.html).
+
+## Modeling example
+
+Notes from [Tidy Modeling with R](https://www.tmwr.org/base-r.html).
+
+Load `crickets` data set that contains the relationship between the ambient temperature and the rate of cricket chirps per minute for two species.
+
+```{r crickets}
+data(crickets, package = "modeldata")
+head(crickets)
+```
+
+Plot.
+
+```{r crickets_plot}
+ggplot(
+  crickets, 
+  aes(x = temp, y = rate, color = species, pch = species, lty = species)
+) + 
+  geom_point(size = 2) + 
+  geom_smooth(method = lm, se = FALSE, alpha = 0.5) + 
+  scale_color_brewer(palette = "Paired") +
+  labs(x = "Temperature (C)", y = "Chirp Rate (per minute)")
+```
+
+For an inferential model, we might have specified the following null hypotheses prior to seeing the data:
+
+* Temperature has no effect on the chirp rate
+* There are no differences between the species' chirp rate.
+
+The `lm()` function is commonly used to fit an ordinary linear model. Arguments to this function are a model formula and the data frame that contains the data. The formula is _symbolic_; the simple formula below specifies that the chirp rate is the outcome and the temperature is the predictor.
+
+```{r rate_temp}
+rate ~ temp
+```
+
+If the time of day was also recorded in a column called `time`, the following formula does not add the time and temperature values together but the formula symbolically represents that temperature and time should be added as separate _main effects_ to the model. A main effect is a model term that contains a single predictor variable.
+
+```{r rate_temp_time}
+rate ~ temp + time
+```
+
+We can add the species to the model in the same way but since species is not a quantitative variable, an _indicator variable_ (also known as a dummy variable) is used in place of the original qualitative value. The model formula will automatically encode `species` as a numeric by adding a new column that has a value of zero and one for the two species.
+
+```{r rate_temp_species}
+rate ~ temp + species
+```
+
+The model formula `rate ~ temp + species` creates a model with different y-intercepts for each species; the slopes of the regression lines could be different for each species as well. To accommodate this structure, an interaction term can be added to the model. This can be specified in a few different ways and the most basic uses the colon.
+
+```{r interaction_term}
+rate ~ temp + species + temp:species
+
+# A shortcut can be used to expand all interactions containing
+# interactions with two variables:
+rate ~ (temp + species)^2
+
+# Another shortcut to expand factors to include all possible
+# interactions (equivalent for this example):
+rate ~ temp * species
+```
+
+The model formula also has other nice features:
+
+* _In-line_ functions can be used, e.g. to use the natural log of the temperature, we can use the formula `rate ~ log(temp)`
+* R has many functions that are useful inside formulas, e.g. `poly(x, 3)` adds linear, quadratic, and cubic terms for `x` to the model as main effects.
+* The period shortcut is available for data sets with many predictors. The period represents main effects for all of the columns that are not on the left-hand side of the tilde.
+
+Use a two-way interaction model.
+
+```{r interaction_fit}
+interaction_fit <- lm(rate ~ (temp + species)^2, data = crickets)
+
+interaction_fit
+```
+
+Now we will recompute the model without the interaction term to assess whether the interaction term is necessary using the `anova()` method.
+
+```{r main_effect_fit}
+main_effect_fit <- lm(rate ~ temp + species, data = crickets)
+
+anova(main_effect_fit, interaction_fit)
+```
+
+This statistical test generates a p-value of 0.25, which implies that there is a lack of evidence against the null hypothesis that the interaction term is not needed by the model.
+
+The `summary()` method can be used to inspect the coefficients, standard errors, and p-values of each model term.
+
+```{r summary_main_effect}
+summary(main_effect_fit)
+```
+
+The chirp rate for each species increases by 3.6 chirps as the temperature increases by a single degree. This term shows strong statistical sifnificance as evidenced by the p-value. The species term has a value of -10.07, which indicates that, across all temperature values, _O. niveus_ has a chirp rate that is about 10 fewer chirps per minute than _O. exclamationis_. The species effect is also associated with a very small p-value.
+
+The only issue in this analysis is the intercept value that indicates that at 0 degrees Celsius, there are negative chirps per minute for both species. The data only goes as low as 17.2 degrees Celsius and therefore the conclusions should be limited to the observed temperature range.
+
+If we needed to estimate the chirp rate at a temperature that was not observed in the experiment, we could use the `predict()` method, which takes the model object and a data frame of new values for prediction.
+
+```{r predict_main_effect}
+new_values <- data.frame(species = "O. exclamationis", temp = 15:20)
+predict(main_effect_fit, new_values)
+```
+
+### R formula
+
+The R model formula is used by many modeling packages and it usually serves multiple purposes:
+
+* The formula defines the columns that the model uses.
+* The standard R machinery uses the formula to encode the columns into an appropriate format, e.g. create indicator variables.
+* The roles of the columns are defined by the formula.
+
+For example, the following formula indicates that there are two predictors and the model should contain their main effects and the two-way interactions.
+
+```{r r_formula_eg}
+rate ~ (temp + species)^2
+```
 
 ## General
 
