@@ -1,0 +1,182 @@
+---
+title: "Understanding two-way interactions"
+output:
+   github_document:
+      toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.path = "img/")
+library(dplyr)
+```
+
+# Introduction
+
+Notes adapted from [Understanding 2-way Interactions](https://data.library.virginia.edu/understanding-2-way-interactions/).
+
+It is useful to examine whether or not the effect of one variable depends on the level of one or more variables when performing linear regression or ANOVA. It there is an effect, we have what is called an "interaction" and this means variables combine or interact to affect the response. The simplest type of interaction is between two two-level categorical variables such as gender (male or female), treatment (yes or no), and a continuous response. If the response to treatment depends on gender, then there is an interaction.
+
+## Data
+
+Generate gender factor using `gl()` (function to generate factor levels).
+
+```{r gender}
+gender <- gl(n = 2, k = 20, labels = c("male","female"))
+gender
+```
+
+Generate treatment factor.
+
+```{r treatment}
+treatment <- as.factor(rep(c("yes","no"), each = 10, times = 2))
+treatment
+```
+
+Generate response by sampling from two different normal distributions, one with mean 15 and another with mean 10. We create an interaction by sampling from the distributions in a different order for each gender.
+
+```{r response}
+set.seed(1)
+response <- c(
+  rnorm(n = 20, mean = rep(c(15,10), each = 10)),
+  rnorm(n = 20, mean = rep(c(10,15), each = 10))
+)
+
+response
+```
+
+Combine into a data frame.
+
+```{r dat}
+dat <- data.frame(gender, treatment, response)
+head(dat)
+```
+
+## Results
+
+Check mean response based on the two main effects, which appear to have no effect on the mean response value.
+
+```{r aggregate}
+aggregate(response ~ gender, data = dat, mean)
+aggregate(response ~ treatment, data = dat, mean)
+```
+
+We can check the interaction by calculating the mean response with both variables. The treatment effect depends on gender; in males, the treatment causes the mean response to increase by about 5 and in females, the treatment causes the mean response to decrease by about 5.
+
+```{r group_by}
+dat %>%
+  group_by(gender, treatment) %>%
+  summarise(mean = mean(response))
+```
+
+An interaction plot is useful for visualising interactions. `x.factor` is the variable to be plotted on the x-axis; `trace.factor` is how you want to group the lines; and `response` is the response variable.
+
+```{r interaction_plot}
+interaction.plot(
+  x.factor = dat$treatment,
+  trace.factor = dat$gender,
+  response = dat$response
+)
+```
+
+The resulting plot results in lines that cross, which indicate an interaction. A very strong interaction has lines that are nearly perpendicular as above. An interaction where the lines cross is sometimes called an "interference" or "antagonistic" interaction effect.
+
+We can also use box plots to visualise interactions. The formula below specifies that `response` should be plotted by the interaction of `gender` and `treatment`. By interacting two two-level variables, we get a new four-level variable.
+
+```{r boxplot}
+boxplot(response ~ gender * treatment, data = dat)
+```
+
+A common method for analysing the effect of categorical variables on a continuous response variable is using the Analysis of Variance (ANOVA). The formula below is interpreted as: model response as a function of gender, treatment, and the interaction of gender and treatment.
+
+```{r aov1_summary}
+aov1 <- aov(response ~ treatment * gender, data = dat)
+summary(aov1)
+```
+
+The main effects by themselves are not significant but their interaction is, i.e. mean response is substantially different when both variables were combined.
+
+The `model.tables()` function reports the grand mean, the means by main effects, and the means by the interaction.
+
+```{r aov1_model_tables}
+model.tables(aov1, type = "means")
+```
+
+We can fit a linear model using the `lm()` function.
+
+```{r lm}
+lm1 <- lm(response ~ treatment * gender, data = dat)
+summary(lm1)
+```
+
+The table of coefficients indicates that everything is significant, which just means the coefficients are significantly different from 0. It does not mean the main effects are significant and if we want a test for the significance of main effects, we should use `anova(lm1)`, which generates the same ANOVA table using `aov`.
+
+```{r anova_lm1}
+anova(lm1)
+```
+
+The intercept in the linear model output is the mean response for gender="male" and treatment="no". The coefficient for "genderfemale" is what you add to the intercept to get the mean response for gender="female" when treatment="no".
+
+Another type of interaction is when the variables combine to amplify an effect.
+
+```{r dat2}
+set.seed(12)
+response <- c(
+  rnorm(n = 20, mean = rep(c(10,13), each = 10)),
+  rnorm(n = 20, mean = rep(c(25,17), each = 10))
+)
+
+dat2 <- data.frame(gender, treatment, response)
+interaction.plot(
+  x.factor = dat2$treatment, 
+  trace.factor = dat2$gender,
+  response = dat2$response
+)
+```
+
+This type of interaction is sometimes called a "reinforcement" or "synergistic" interaction effect. We observe a difference between genders when treatment="no", but that difference is reinforced when treatment="yes" for each gender.
+
+Running an ANOVA reveals that the main effects are significant as well. The effects of gender and treatment individually explain a fair amount of variability in the data.
+
+```{r aov2}
+aov2 <- aov(response ~ treatment * gender, data = dat2)
+summary(aov2)
+```
+
+Finally we generate data where there is no interaction; the means of the distribution change for each treatment but the difference between them does not change for each gender.
+
+```{r dat3}
+set.seed(12)
+response <- c(
+  rnorm(n = 20, mean = rep(c(10,15), each = 10)),
+  rnorm(n = 20, mean = rep(c(12,17), each = 10))
+)
+
+dat3 <- data.frame(gender, treatment, response)
+interaction.plot(
+  x.factor = dat3$treatment, 
+  trace.factor = dat3$gender,
+  response = dat3$response
+)
+```
+
+The lines are parallel indicating the absence of an interaction effect; the effect of treatment does not depend on gender, which we observe in the ANOVA.
+
+```{r aov3}
+summary(aov(response ~ treatment * gender, data = dat3))
+```
+
+## Session info
+
+This README was generated by running `readme.Rmd` in RStudio Server.
+
+```{r time, echo=FALSE}
+Sys.time()
+```
+
+Session info.
+
+```{r session_info, echo=FALSE}
+sessionInfo()
+```
