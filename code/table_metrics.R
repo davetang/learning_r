@@ -44,7 +44,7 @@ table_metrics <- function(tab, pos, neg, truth, sig_fig = 3){
   total <- sum(tab)
   TP <- tab[pos, pos]
   TN <- tab[neg, neg]
-  list(
+  l_ <- list(
     accuracy = signif((TP+TN)/total, digits = sig_fig),
     misclassifcation_rate = signif((FP+FN)/total, digits = sig_fig),
     error_rate = signif((FP+FN)/total, digits = sig_fig),
@@ -57,4 +57,6 @@ table_metrics <- function(tab, pos, neg, truth, sig_fig = 3){
     precision = signif(TP/all_pos_pred, digits = sig_fig),
     prevalance = signif(all_pos/total, digits = sig_fig)
   )
+  l_$f1_score <- 2 * (l_$precision * l_$recall) / (l_$precision + l_$recall)
+  return(l_)
 }
