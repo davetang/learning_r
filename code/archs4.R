@@ -60,4 +60,4 @@ ggplot(
   ) +
   labs(y = "Expression") -> p
 
-ggsave("expr.png", p)
+ggsave("expr.png", p, bg = "white", width = 3000, height = 1600, units = "px")
