@@ -1,0 +1,578 @@
+[
+    {
+        "id": "System.Urogenital/Reproductive System.Kidney.RENAL CORTEX",
+        "min": 0.113644,
+        "q1": 8.27406,
+        "median": 9.69584,
+        "q3": 10.5167,
+        "max": 11.2197
+    },
+    {
+        "id": "System.Digestive System.Intestine.INTESTINAL EPITHELIAL CELL",
+        "min": 0.113644,
+        "q1": 5.90556,
+        "median": 9.57045,
+        "q3": 13.2647,
+        "max": 13.8359
+    },
+    {
+        "id": "System.Cardiovascular System.Heart.VENTRICLE",
+        "min": 3.48123,
+        "q1": 8.47622,
+        "median": 9.44557,
+        "q3": 10.1113,
+        "max": 10.6952
+    },
+    {
+        "id": "System.Urogenital/Reproductive System.Ovary.OOCYTE",
+        "min": 0.113644,
+        "q1": 5.82155,
+        "median": 8.4817,
+        "q3": 9.6386,
+        "max": 11.2282
+    },
+    {
+        "id": "System.Cardiovascular System.Heart.ATRIUM",
+        "min": 4.66744,
+        "q1": 6.60217,
+        "median": 7.53137,
+        "q3": 9.2205,
+        "max": 9.89437
+    },
+    {
+        "id": "System.Urogenital/Reproductive System.Ovary.GRANULOSA",
+        "min": 0.113644,
+        "q1": 3.1737,
+        "median": 7.28431,
+        "q3": 8.94921,
+        "max": 10.3422
+    },
+    {
+        "id": "System.Digestive System.Intestine.SMALL INTESTINE",
+        "min": 1.20968,
+        "q1": 3.28517,
+        "median": 6.06605,
+        "q3": 9.71796,
+        "max": 12.3859
+    },
+    {
+        "id": "System.Digestive System.Liver.HEPATOCYTE",
+        "min": 0.113644,
+        "q1": 3.56825,
+        "median": 5.31558,
+        "q3": 7.01742,
+        "max": 9.05624
+    },
+    {
+        "id": "System.Immune System.Myeloid.KUPFFER CELL",
+        "min": 1.93348,
+        "q1": 4.36506,
+        "median": 5.14316,
+        "q3": 6.02311,
+        "max": 6.49927
+    },
+    {
+        "id": "System.Respiratory System.Trachea.TRACHEA",
+        "min": 0.113644,
+        "q1": 2.92457,
+        "median": 4.89983,
+        "q3": 6.35023,
+        "max": 7.7039
+    },
+    {
+        "id": "System.Digestive System.Liver.LIVER",
+        "min": 0.113644,
+        "q1": 1.81287,
+        "median": 4.51527,
+        "q3": 6.39847,
+        "max": 10.3098
+    },
+    {
+        "id": "System.Digestive System.Stomach.GASTRIC EPITHELIAL CELL",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 4.26788,
+        "q3": 7.12018,
+        "max": 7.61676
+    },
+    {
+        "id": "System.Integumentary System.Skin.KERATINOCYTE",
+        "min": 0.113644,
+        "q1": 2.61696,
+        "median": 3.89584,
+        "q3": 5.20789,
+        "max": 7.00003
+    },
+    {
+        "id": "System.Integumentary System.Skin.BASAL CELL",
+        "min": 0.113644,
+        "q1": 1.20968,
+        "median": 3.56825,
+        "q3": 4.52654,
+        "max": 5.84692
+    },
+    {
+        "id": "System.Muscular System.Smooth muscle.VASCULAR SMOOTH MUSCLE",
+        "min": 0.113644,
+        "q1": 1.81287,
+        "median": 3.1737,
+        "q3": 4.38682,
+        "max": 5.49418
+    },
+    {
+        "id": "System.Urogenital/Reproductive System.Kidney.KIDNEY",
+        "min": 0.113644,
+        "q1": 1.20968,
+        "median": 3.1737,
+        "q3": 5.51459,
+        "max": 10.8177
+    },
+    {
+        "id": "System.Digestive System.Intestine.COLON",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 2.92457,
+        "q3": 8.1372,
+        "max": 10.8759
+    },
+    {
+        "id": "System.Urogenital/Reproductive System.Testis.TESTIS",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 2.77595,
+        "q3": 5.75659,
+        "max": 10.9586
+    },
+    {
+        "id": "System.Connective Tissue.Adipose tissue.ADIPOSE",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 2.61696,
+        "q3": 3.48123,
+        "max": 4.99416
+    },
+    {
+        "id": "System.Cardiovascular System.Heart.HEART",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 2.41968,
+        "q3": 7.28786,
+        "max": 9.92084
+    },
+    {
+        "id": "System.Cardiovascular System.Heart.VALVE",
+        "min": 0.113644,
+        "q1": 1.20968,
+        "median": 2.41968,
+        "q3": 3.28517,
+        "max": 6.03646
+    },
+    {
+        "id": "System.Urogenital/Reproductive System.Ovary.OVARY",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 2.16272,
+        "q3": 4.7377,
+        "max": 9.34977
+    },
+    {
+        "id": "System.Nervous System.CNS.MEDULLA",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 2.16272,
+        "q3": 3.5465,
+        "max": 8.39199
+    },
+    {
+        "id": "System.Urogenital/Reproductive System.Kidney.PODOCYTE",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 2.16272,
+        "q3": 3.05618,
+        "max": 4.39768
+    },
+    {
+        "id": "System.Nervous System.CNS.THALAMUS",
+        "min": 0.113644,
+        "q1": 1.20968,
+        "median": 1.81287,
+        "q3": 1.81287,
+        "max": 3.39305
+    },
+    {
+        "id": "System.Nervous System.Eye.RETINA",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 1.81287,
+        "q3": 2.61696,
+        "max": 4.59717
+    },
+    {
+        "id": "System.Urogenital/Reproductive System.Breast.MAMMARY GLAND",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 1.81287,
+        "q3": 3.48123,
+        "max": 6.71002
+    },
+    {
+        "id": "System.Digestive System.Intestine.COLON MUCOSA",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 1.81287,
+        "q3": 6.41693,
+        "max": 9.72701
+    },
+    {
+        "id": "System.Nervous System.CNS.HYPOTHALAMUS",
+        "min": 0.332852,
+        "q1": 1.20968,
+        "median": 1.81287,
+        "q3": 2.16272,
+        "max": 3.57285
+    },
+    {
+        "id": "System.Digestive System.Pancreas.BETA CELL",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 1.51127,
+        "q3": 3.64478,
+        "max": 6.95517
+    },
+    {
+        "id": "System.Muscular System.Skeletal muscle.SKELETAL MUSCLE",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 1.20968,
+        "q3": 2.41968,
+        "max": 4.1275
+    },
+    {
+        "id": "System.Nervous System.CNS.ASTROCYTE",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 1.20968,
+        "q3": 2.16272,
+        "max": 3.39116
+    },
+    {
+        "id": "System.Nervous System.CNS.CEREBRAL CORTEX",
+        "min": 0.113644,
+        "q1": 1.20968,
+        "median": 1.20968,
+        "q3": 1.96457,
+        "max": 2.63234
+    },
+    {
+        "id": "System.Urogenital/Reproductive System.Breast.BREAST",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 1.20968,
+        "q3": 3.1737,
+        "max": 5.84343
+    },
+    {
+        "id": "System.Respiratory System.Lung.LUNG EPITHELIAL CELL",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 1.20968,
+        "q3": 3.89584,
+        "max": 7.02874
+    },
+    {
+        "id": "System.Digestive System.Esophagus.ESOPHAGUS",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 1.20968,
+        "q3": 4.6908,
+        "max": 6.324
+    },
+    {
+        "id": "System.Nervous System.PNS.SENSORY NEURON",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 1.20968,
+        "q3": 1.81287,
+        "max": 2.16272
+    },
+    {
+        "id": "System.Connective Tissue.Adipose tissue.ADIPOCYTE",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 1.20968,
+        "q3": 2.61696,
+        "max": 5.39525
+    },
+    {
+        "id": "System.Integumentary System.Skin.SKIN",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 1.20968,
+        "q3": 2.61696,
+        "max": 4.63537
+    },
+    {
+        "id": "System.Muscular System.Smooth muscle.AIRWAY SMOOTH MUSCLE",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 1.20968,
+        "max": 1.81287
+    },
+    {
+        "id": "System.Connective Tissue.Bone marrow.CHONDROCYTE",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 1.20968,
+        "max": 2.41968
+    },
+    {
+        "id": "System.Digestive System.Liver.HEPATIC STELLATE CELL",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 2.16272,
+        "max": 3.96066
+    },
+    {
+        "id": "System.Integumentary System.Skin.MELANOCYTE",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 1.20968,
+        "max": 2.77595
+    },
+    {
+        "id": "System.Muscular System.Smooth muscle.MYOFIBROBLAST",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 1.20968,
+        "max": 4.8743
+    },
+    {
+        "id": "System.Connective Tissue.Bone.OSTEOBLAST",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 1.20968,
+        "max": 2.14523
+    },
+    {
+        "id": "System.Nervous System.CNS.PONS",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 1.81287,
+        "max": 5.4984
+    },
+    {
+        "id": "System.Connective Tissue.Bone marrow.BONE MARROW",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 0.113644,
+        "max": 2.16272
+    },
+    {
+        "id": "System.Respiratory System.Lung.LUNG",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 3.05618,
+        "max": 6.30103
+    },
+    {
+        "id": "System.Immune System.Myeloid.MICROGLIA",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 1.20968,
+        "max": 2.77595
+    },
+    {
+        "id": "System.Digestive System.Pancreas.ALPHA CELL",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 2.99037,
+        "max": 5.25453
+    },
+    {
+        "id": "System.Digestive System.Pancreas.PANCREATIC ISLET",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 0.113644,
+        "max": 6.76567
+    },
+    {
+        "id": "System.Immune System.Granulocytic.GRANULOCYTE",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 2.61696,
+        "max": 3.90657
+    },
+    {
+        "id": "System.Immune System.Granulocytic.NEUTROPHIL",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 2.16272,
+        "max": 4.51978
+    },
+    {
+        "id": "System.Immune System.Lymphoid.BLYMPHOCYTE",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 0.113644,
+        "max": 2.16272
+    },
+    {
+        "id": "System.Immune System.Lymphoid.PLASMA CELL",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 0.113644,
+        "max": 0.113644
+    },
+    {
+        "id": "System.Immune System.Lymphoid.PLASMACYTOID DENDRITIC CELL",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 1.20968,
+        "max": 2.16272
+    },
+    {
+        "id": "System.Immune System.Lymphoid.TLYMPHOCYTE",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 0.113644,
+        "max": 1.95281
+    },
+    {
+        "id": "System.Immune System.Myeloid.DENDRITIC CELL",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 0.113644,
+        "max": 2.05777
+    },
+    {
+        "id": "System.Immune System.Myeloid.MACROPHAGE",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 0.113644,
+        "max": 3.56825
+    },
+    {
+        "id": "System.Immune System.Spleen.SPLEEN",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 0.113644,
+        "max": 2.41968
+    },
+    {
+        "id": "System.Nervous System.PNS.MOTOR NEURON",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 1.20968,
+        "max": 2.41968
+    },
+    {
+        "id": "System.Immune System.Thymus.THYMOCYTE",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 0.113644,
+        "max": 0.113644
+    },
+    {
+        "id": "System.Immune System.Thymus.THYMUS",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 0.113644,
+        "max": 2.16272
+    },
+    {
+        "id": "System.Integumentary System.Skin.FIBROBLAST",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 1.20968,
+        "max": 4.3519
+    },
+    {
+        "id": "System.Integumentary System.Skin.HAIR FOLLICLE",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 1.20968,
+        "max": 3.91029
+    },
+    {
+        "id": "System.Muscular System.Skeletal muscle.MYOBLAST",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 0.113644,
+        "max": 1.81287
+    },
+    {
+        "id": "System.Nervous System.CNS.CEREBELLUM",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 0.113644,
+        "max": 1.20968
+    },
+    {
+        "id": "System.Connective Tissue.Bone.STROMAL CELL",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 1.20968,
+        "max": 4.47643
+    },
+    {
+        "id": "System.Nervous System.CNS.NEURON",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 1.81287,
+        "max": 2.92457
+    },
+    {
+        "id": "System.Nervous System.CNS.OLIGODENDROCYTE",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 1.20968,
+        "max": 2.41968
+    },
+    {
+        "id": "System.Nervous System.CNS.SPINAL CORD",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 1.20968,
+        "max": 2.16272
+    },
+    {
+        "id": "System.Nervous System.CNS.MIDBRAIN",
+        "min": 0.113644,
+        "q1": 0.113644,
+        "median": 0.113644,
+        "q3": 1.81287,
+        "max": 2.41968
+    }
+]
