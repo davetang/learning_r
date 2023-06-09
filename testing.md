@@ -5,7 +5,11 @@ R unit testing
       - [Initial setup](#initial-setup)
       - [Creating a test](#creating-a-test)
       - [Running tests](#running-tests)
-      - [Session info](#session-info)
+          - [Micro-iteration](#micro-iteration)
+          - [Mezzo-iteration](#mezzo-iteration)
+          - [Macro-iteration](#macro-iteration)
+      - [Test organisation](#test-organisation)
+  - [Session info](#session-info)
 
 # Introduction
 
@@ -103,8 +107,7 @@ When `use_test()` creates a new test file, it inserts an example test:
   - A test file holds one or more `test_that()` tests.
   - Each test describes what it is testing such as whether
     multiplication works.
-  - Each test has one or more expectations, e.g. `expect_equal(2
-    * 2, 4)`.
+  - Each test has one or more expectations using `expect_equal()`
 
 ## Running tests
 
@@ -114,12 +117,117 @@ performed at the level of individual tests. As the code matures, testing
 will be performed on entire test files and eventually the entire test
 suite.
 
-## Session info
+### Micro-iteration
+
+This is the interactive phase where a function is created, refined, and
+tested. `devtools::load_all()` will be used often and individual
+expectations or whole tests are executed interactively in the console.
+Note that `load_all()` attaches testthat allowing you to test your
+functions and to execute the individual tests and expectations.
+
+An example workflow could be:
+
+1.  Tweak the `foofy()` function and then re-load it
+    
+    devtools::load\_all()
+
+2.  Interactively explore and refine expectations and tests
+    
+    expect\_equal(foofy(…), EXPECTED\_OUTPUT) test\_that(“foofy does
+    good things”, {…})
+
+### Mezzo-iteration
+
+To execute an entire file’s list of associated tests use
+`testthat::test_file()`.
+
+    testthat::test_file("tests/testthat/test-foofy.R")
+
+In RStudio, if the target test file is the active file, you can click on
+“Run Tests”. There is also a useful function,
+`devtools::test_active_file()` that infers the target test file from the
+active file.
+
+### Macro-iteration
+
+The entire test suite can be run using `devtools::test()`; this is
+mapped to Ctrl/Cmd + Shift + T in RStudio.
+
+    devtools::test()
+
+Then eventually using `devtools::check()`; this is mapped to Ctrl/Cmd +
+Shift + E in RStudio.
+
+    devtools::check()
+
+## Test organisation
+
+Recall that a test file resides in `tests/testthat` and that its names
+must start with `test`. Below is an example of a test
+(`tests/testthat/test-dup.r`) from the `stringr` package.
+
+``` r
+test_that("basic duplication works", {
+  expect_equal(str_dup("a", 3), "aaa")
+  expect_equal(str_dup("abc", 2), "abcabc")
+  expect_equal(str_dup(c("a", "b"), 2), c("aa", "bb"))
+  expect_equal(str_dup(c("a", "b"), c(2, 3)), c("aa", "bbb"))
+})
+
+test_that("0 duplicates equals empty string", {
+  expect_equal(str_dup("a", 0), "")
+  expect_equal(str_dup(c("a", "b"), 0), rep("", 2))
+})
+
+test_that("uses tidyverse recycling rules", {
+  expect_error(str_dup(1:2, 1:3), class = "vctrs_error_incompatible_size")
+})
+```
+
+Contained in the file are a typical mix of tests:
+
+  - “basic duplication works” tests typical usage of `str_dup()`.
+  - “0 duplicates equals empty string” probes a specific edge case.
+  - “uses tidyverse recycling rules” checks that malformed input results
+    in a specific kind of error.
+
+Tests are organised hierarchically: **expectations** are grouped into
+**tests**, which are organised in **files**:
+
+  - A **file** holds multiple related tests. In the example, the file
+    `tests/testthat/test-dup.r` has all of the tests for the code in
+    `R/dup.r`.
+
+  - A **test** groups together multiple expectations to test the output
+    from a simple function, a range of possibilities for a single
+    parameter from a more complicated function, or tightly related
+    functionality from across multiple functions. This is why they are
+    sometimes called **unit** tests. Each test should cover a single
+    unit of functionality. A test is created with `test_that(desc,
+    code)`. It is common to write a description that reads naturally. A
+    test failure report includes this description, which is why you want
+    a concise statement of the test’s purpose, e.g. a specific
+    behaviour.
+
+  - An **expectation** is the atom of testing. It describes the expected
+    result of a computation: Does it have the right value and right
+    class? Does it produce an error when it should? An expectation
+    automates visual checking of results in the console. Expectations
+    are functions that start with `expect_`.
+
+You’d want to arrange things such that, when a test fails, you will know
+what is wrong and where in your code to look for the problem. This
+motivates all our recommendations regarding file organisation, file
+naming, and the test description. Finally, try to avoid putting too many
+expectations in one test - it is better to have more smaller tests than
+fewer larger tests.
+
+# Session info
 
 This document was generated by rendering `testing.Rmd` using
 `./rmd_to_md.sh`.
 
-    ## [1] "2023-06-08 02:16:39 UTC"
+    ## [1] "2023-06-09 01:06:27 UTC"
 
 Session info.
 
