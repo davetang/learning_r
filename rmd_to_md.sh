@@ -15,8 +15,13 @@ fi
 
 infile=$1
 if [[ ! -e ${infile} ]]; then
-  >&2 echo ${infile} does not exist
-  exit 1
+   >&2 echo ${infile} does not exist
+   exit 1
+fi
+
+if [[ ! ${infile} =~ \.Rmd$ ]]; then
+   >&2 echo ${infile} does not have a .Rmd extension
+   exit 1
 fi
 
 outfile=$(basename ${infile} .Rmd).md
