@@ -45,12 +45,18 @@ them first if they haven't been installed yet).
 .libPaths('/packages')
 my_packages <- c('tidyverse', 'modeldata')
 
-for (my_package in my_packages){
-   if(!require(my_package, character.only = TRUE)){
-      install.packages(my_package, '/packages')
-   }
-   library(my_package, character.only = TRUE)
+using<-function(...) {
+   # https://stackoverflow.com/a/44660688
+	libs<-unlist(list(...))
+	req<-unlist(lapply(libs,require,character.only=TRUE))
+	need<-libs[req==FALSE]
+	if(length(need)>0){
+		install.packages(need)
+		lapply(need,require,character.only=TRUE)
+	}
 }
+using(my_packages)
+
 theme_set(theme_bw())
 ```
 
