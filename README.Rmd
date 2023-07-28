@@ -22,7 +22,24 @@ The three core features of R are object-orientation, vectorisation, and its func
 >
 > --John Chambers
 
-Install packages if missing and load.
+## Packages
+
+If you look up the help page for `require` or `library`, you will be provided
+with the "Loading/Attaching and Listing of Packages" help page. The description
+is that `library` and `require` load and attach add-on packages. When you type
+`library(tidyverse)` the `tidyverse` package is attached to the search path. It
+works in the same way as when you add another directory to your `PATH`
+environment variable in Linux.
+
+We can use `base::search()` to get the names of environments attached to the
+search path.
+
+```{r base_search_before}
+base::search()
+```
+
+The code below will attach the `tidyverse` and `modeldata` packages (installing
+them first if they haven't been installed yet).
 
 ```{r load_package, message=FALSE, warning=FALSE}
 .libPaths('/packages')
@@ -32,10 +49,28 @@ for (my_package in my_packages){
    if(!require(my_package, character.only = TRUE)){
       install.packages(my_package, '/packages')
    }
-  library(my_package, character.only = TRUE)
+   library(my_package, character.only = TRUE)
 }
 theme_set(theme_bw())
 ```
+
+If we run `base::search()` again, we will see the additional packages attached
+to the search path.
+
+```{r base_search_after}
+base::search()
+```
+
+As for the difference between `library` and `require`?
+
+* `library` returns an error by default if the package is not installed
+* `require` returns a logical depending on whether a package is attached or not
+
+This is the reason why `require` was used above to check whether a package was
+installed or not.
+
+The difference between attaching and loading is a bit technical and you can read
+about it on [SO](https://stackoverflow.com/a/56538266).
 
 ## Vectors
 

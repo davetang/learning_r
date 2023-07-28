@@ -1,41 +1,63 @@
 Learning R
 ================
 
--   [Introduction](#introduction)
-    -   [Vectors](#vectors)
-    -   [Lists](#lists)
-    -   [Functions](#functions)
-        -   [Function components](#function-components)
-        -   [Lexical scoping](#lexical-scoping)
-        -   [Lazy evaluation](#lazy-evaluation)
-        -   [dot-dot-dot](#dot-dot-dot)
-        -   [Exiting a function](#exiting-a-function)
-        -   [Function forms](#function-forms)
-    -   [Objects](#objects)
-    -   [Modeling example](#modeling-example)
-        -   [R formula](#r-formula)
-    -   [General](#general)
-    -   [Useful plots](#useful-plots)
-    -   [Useful tips](#useful-tips)
-        -   [Getting help](#getting-help)
-    -   [Hacks](#hacks)
-        -   [Library paths](#library-paths)
-        -   [Variables and objects](#variables-and-objects)
-    -   [Session info](#session-info)
+  - [Introduction](#introduction)
+      - [Packages](#packages)
+      - [Vectors](#vectors)
+      - [Lists](#lists)
+      - [Functions](#functions)
+          - [Function components](#function-components)
+          - [Lexical scoping](#lexical-scoping)
+          - [Lazy evaluation](#lazy-evaluation)
+          - [dot-dot-dot](#dot-dot-dot)
+          - [Exiting a function](#exiting-a-function)
+          - [Function forms](#function-forms)
+      - [Objects](#objects)
+      - [Modeling example](#modeling-example)
+          - [R formula](#r-formula)
+      - [General](#general)
+      - [Useful plots](#useful-plots)
+      - [Useful tips](#useful-tips)
+          - [Getting help](#getting-help)
+      - [Hacks](#hacks)
+          - [Library paths](#library-paths)
+          - [Variables and objects](#variables-and-objects)
+      - [Session info](#session-info)
 
 # Introduction
 
 The three core features of R are object-orientation, vectorisation, and
 its functional programming style.
 
-> “To understand computations in R, two slogans are helpful:
->
-> -   Everything that exists is an object.
-> -   Everything that happens is a function call.”
->
+> "To understand computations in R, two slogans are helpful:
+> 
+>   - Everything that exists is an object.
+>   - Everything that happens is a function call."
+> 
 > –John Chambers
 
-Install packages if missing and load.
+## Packages
+
+If you look up the help page for `require` or `library`, you will be
+provided with the “Loading/Attaching and Listing of Packages” help page.
+The description is that `library` and `require` load and attach add-on
+packages. When you type `library(tidyverse)` the `tidyverse` package is
+attached to the search path. It works in the same way as when you add
+another directory to your `PATH` environment variable in Linux.
+
+We can use `base::search()` to get the names of environments attached to
+the search path.
+
+``` r
+base::search()
+```
+
+    ## [1] ".GlobalEnv"        "package:stats"     "package:graphics" 
+    ## [4] "package:grDevices" "package:utils"     "package:datasets" 
+    ## [7] "package:methods"   "Autoloads"         "package:base"
+
+The code below will attach the `tidyverse` and `modeldata` packages
+(installing them first if they haven’t been installed yet).
 
 ``` r
 .libPaths('/packages')
@@ -45,10 +67,38 @@ for (my_package in my_packages){
    if(!require(my_package, character.only = TRUE)){
       install.packages(my_package, '/packages')
    }
-  library(my_package, character.only = TRUE)
+   library(my_package, character.only = TRUE)
 }
 theme_set(theme_bw())
 ```
+
+If we run `base::search()` again, we will see the additional packages
+attached to the search path.
+
+``` r
+base::search()
+```
+
+    ##  [1] ".GlobalEnv"        "package:modeldata" "package:lubridate"
+    ##  [4] "package:forcats"   "package:stringr"   "package:dplyr"    
+    ##  [7] "package:purrr"     "package:readr"     "package:tidyr"    
+    ## [10] "package:tibble"    "package:ggplot2"   "package:tidyverse"
+    ## [13] "package:stats"     "package:graphics"  "package:grDevices"
+    ## [16] "package:utils"     "package:datasets"  "package:methods"  
+    ## [19] "Autoloads"         "package:base"
+
+As for the difference between `library` and `require`?
+
+  - `library` returns an error by default if the package is not
+    installed
+  - `require` returns a logical depending on whether a package is
+    attached or not
+
+This is the reason why `require` was used above to check whether a
+package was installed or not.
+
+The difference between attaching and loading is a bit technical and you
+can read about it on [SO](https://stackoverflow.com/a/56538266).
 
 ## Vectors
 
@@ -391,9 +441,9 @@ Function calls come in four varieties:
 1.  **prefix**: the function name comes before its arguments,
     e.g. `sum(1:5)`. These constitute the majority of function calls in
     R
-2.  **infix**: the function name comes in between its arguments,
-    e.g. `x + y`. Infix forms are used for many mathematical operators
-    and for user-defined functions that begin and end with `%`.
+2.  **infix**: the function name comes in between its arguments, e.g. `x
+    + y`. Infix forms are used for many mathematical operators and for
+    user-defined functions that begin and end with `%`.
 3.  **replacement**: functions that replace values by assignment,
     e.g. `names(my_df) <- c('a', 'b', 'c')`.
 4.  **special**: functions like `[[`, `if`, and `for` that do not have a
@@ -486,8 +536,8 @@ ggplot(
 For an inferential model, we might have specified the following null
 hypotheses prior to seeing the data:
 
--   Temperature has no effect on the chirp rate
--   There are no differences between the species’ chirp rate.
+  - Temperature has no effect on the chirp rate
+  - There are no differences between the species’ chirp rate.
 
 The `lm()` function is commonly used to fit an ordinary linear model.
 Arguments to this function are a model formula and the data frame that
@@ -555,12 +605,12 @@ rate ~ temp * species
 
 The model formula also has other nice features:
 
--   *In-line* functions can be used, e.g. to use the natural log of the
+  - *In-line* functions can be used, e.g. to use the natural log of the
     temperature, we can use the formula `rate ~ log(temp)`
--   R has many functions that are useful inside formulas,
-    e.g. `poly(x, 3)` adds linear, quadratic, and cubic terms for `x` to
-    the model as main effects.
--   The period shortcut is available for data sets with many predictors.
+  - R has many functions that are useful inside formulas,
+    e.g. `poly(x, 3)` adds linear, quadratic, and cubic terms for `x`
+    to the model as main effects.
+  - The period shortcut is available for data sets with many predictors.
     The period represents main effects for all of the columns that are
     not on the left-hand side of the tilde.
 
@@ -660,10 +710,10 @@ predict(main_effect_fit, new_values)
 The R model formula is used by many modeling packages and it usually
 serves multiple purposes:
 
--   The formula defines the columns that the model uses.
--   The standard R machinery uses the formula to encode the columns into
+  - The formula defines the columns that the model uses.
+  - The standard R machinery uses the formula to encode the columns into
     an appropriate format, e.g. create indicator variables.
--   The roles of the columns are defined by the formula.
+  - The roles of the columns are defined by the formula.
 
 For example, the following formula indicates that there are two
 predictors and the model should contain their main effects and the
@@ -752,7 +802,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   1.451   0.000   1.453
+    ##   1.476   0.000   1.479
 
 The `with` function evaluates an expression with data.
 
@@ -885,14 +935,14 @@ noquote(unlist(format(.Machine)))
     ##                      1024                2147483647                         8 
     ##           sizeof.longlong         sizeof.longdouble            sizeof.pointer 
     ##                         8                        16                         8 
-    ##            longdouble.eps        longdouble.neg.eps         longdouble.digits 
-    ##              1.084202e-19              5.421011e-20                        64 
-    ##       longdouble.rounding          longdouble.guard     longdouble.ulp.digits 
-    ##                         5                         0                       -63 
-    ## longdouble.neg.ulp.digits       longdouble.exponent        longdouble.min.exp 
-    ##                       -64                        15                    -16382 
-    ##        longdouble.max.exp 
-    ##                     16384
+    ##             sizeof.time_t            longdouble.eps        longdouble.neg.eps 
+    ##                         8              1.084202e-19              5.421011e-20 
+    ##         longdouble.digits       longdouble.rounding          longdouble.guard 
+    ##                        64                         5                         0 
+    ##     longdouble.ulp.digits longdouble.neg.ulp.digits       longdouble.exponent 
+    ##                       -63                       -64                        15 
+    ##        longdouble.min.exp        longdouble.max.exp 
+    ##                    -16382                     16384
 
 When asking for help online, it is useful to include a minimal example
 that includes some data specific to your question. To easily convert
@@ -915,19 +965,27 @@ Show all the functions of a package.
 ls("package:stringr")
 ```
 
-    ##  [1] "%>%"             "boundary"        "coll"            "fixed"          
-    ##  [5] "fruit"           "invert_match"    "regex"           "sentences"      
-    ##  [9] "str_c"           "str_conv"        "str_count"       "str_detect"     
-    ## [13] "str_dup"         "str_ends"        "str_extract"     "str_extract_all"
-    ## [17] "str_flatten"     "str_glue"        "str_glue_data"   "str_interp"     
-    ## [21] "str_length"      "str_locate"      "str_locate_all"  "str_match"      
-    ## [25] "str_match_all"   "str_order"       "str_pad"         "str_remove"     
-    ## [29] "str_remove_all"  "str_replace"     "str_replace_all" "str_replace_na" 
-    ## [33] "str_sort"        "str_split"       "str_split_fixed" "str_squish"     
-    ## [37] "str_starts"      "str_sub"         "str_sub<-"       "str_subset"     
-    ## [41] "str_to_lower"    "str_to_sentence" "str_to_title"    "str_to_upper"   
-    ## [45] "str_trim"        "str_trunc"       "str_view"        "str_view_all"   
-    ## [49] "str_which"       "str_wrap"        "word"            "words"
+    ##  [1] "%>%"               "boundary"          "coll"             
+    ##  [4] "fixed"             "fruit"             "invert_match"     
+    ##  [7] "regex"             "sentences"         "str_c"            
+    ## [10] "str_conv"          "str_count"         "str_detect"       
+    ## [13] "str_dup"           "str_ends"          "str_equal"        
+    ## [16] "str_escape"        "str_extract"       "str_extract_all"  
+    ## [19] "str_flatten"       "str_flatten_comma" "str_glue"         
+    ## [22] "str_glue_data"     "str_interp"        "str_length"       
+    ## [25] "str_like"          "str_locate"        "str_locate_all"   
+    ## [28] "str_match"         "str_match_all"     "str_order"        
+    ## [31] "str_pad"           "str_rank"          "str_remove"       
+    ## [34] "str_remove_all"    "str_replace"       "str_replace_all"  
+    ## [37] "str_replace_na"    "str_sort"          "str_split"        
+    ## [40] "str_split_1"       "str_split_fixed"   "str_split_i"      
+    ## [43] "str_squish"        "str_starts"        "str_sub"          
+    ## [46] "str_sub_all"       "str_sub<-"         "str_subset"       
+    ## [49] "str_to_lower"      "str_to_sentence"   "str_to_title"     
+    ## [52] "str_to_upper"      "str_trim"          "str_trunc"        
+    ## [55] "str_unique"        "str_view"          "str_view_all"     
+    ## [58] "str_which"         "str_width"         "str_wrap"         
+    ## [61] "word"              "words"
 
 Search is useful to list the search path, i.e. where R will look, for R
 objects such as functions.
@@ -936,13 +994,13 @@ objects such as functions.
 search()
 ```
 
-    ##  [1] ".GlobalEnv"        "package:modeldata" "package:forcats"  
-    ##  [4] "package:stringr"   "package:dplyr"     "package:purrr"    
-    ##  [7] "package:readr"     "package:tidyr"     "package:tibble"   
-    ## [10] "package:ggplot2"   "package:tidyverse" "package:stats"    
-    ## [13] "package:graphics"  "package:grDevices" "package:utils"    
-    ## [16] "package:datasets"  "package:methods"   "Autoloads"        
-    ## [19] "package:base"
+    ##  [1] ".GlobalEnv"        "package:modeldata" "package:lubridate"
+    ##  [4] "package:forcats"   "package:stringr"   "package:dplyr"    
+    ##  [7] "package:purrr"     "package:readr"     "package:tidyr"    
+    ## [10] "package:tibble"    "package:ggplot2"   "package:tidyverse"
+    ## [13] "package:stats"     "package:graphics"  "package:grDevices"
+    ## [16] "package:utils"     "package:datasets"  "package:methods"  
+    ## [19] "Autoloads"         "package:base"
 
 ### Getting help
 
@@ -1005,7 +1063,7 @@ get the default path.
 Sys.getenv("LD_LIBRARY_PATH")
 ```
 
-    ## [1] "/usr/local/lib/R/lib:/usr/local/lib:/usr/lib/x86_64-linux-gnu:/usr/lib/jvm/java-11-openjdk-amd64/lib/server:/usr/local/lib/R/lib:/lib:/usr/local/lib:/usr/lib/x86_64-linux-gnu:/usr/lib/jvm/java-11-openjdk-amd64/lib/server"
+    ## [1] "/usr/local/lib/R/lib:/usr/local/lib:/usr/lib/x86_64-linux-gnu:/usr/lib/jvm/java-11-openjdk-amd64/lib/server"
 
 Now we will add `/usr/include` to `LD_LIBRARY_PATH` and get the updated
 library path.
@@ -1016,7 +1074,7 @@ Sys.setenv("LD_LIBRARY_PATH" = new_path)
 Sys.getenv("LD_LIBRARY_PATH")
 ```
 
-    ## [1] "/usr/local/lib/R/lib:/usr/local/lib:/usr/lib/x86_64-linux-gnu:/usr/lib/jvm/java-11-openjdk-amd64/lib/server:/usr/local/lib/R/lib:/lib:/usr/local/lib:/usr/lib/x86_64-linux-gnu:/usr/lib/jvm/java-11-openjdk-amd64/lib/server:/usr/include"
+    ## [1] "/usr/local/lib/R/lib:/usr/local/lib:/usr/lib/x86_64-linux-gnu:/usr/lib/jvm/java-11-openjdk-amd64/lib/server:/usr/include"
 
 ### Variables and objects
 
@@ -1065,17 +1123,17 @@ eval(parse(text = my_var))
 
 This README was generated by running `readme.Rmd` in RStudio Server.
 
-    ## [1] "2023-01-04 06:22:51 UTC"
+    ## [1] "2023-07-28 05:42:26 UTC"
 
 Session info.
 
-    ## R version 4.2.0 (2022-04-22)
+    ## R version 4.3.0 (2023-04-21)
     ## Platform: x86_64-pc-linux-gnu (64-bit)
-    ## Running under: Ubuntu 20.04.4 LTS
+    ## Running under: Ubuntu 22.04.2 LTS
     ## 
     ## Matrix products: default
-    ## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3
-    ## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/liblapack.so.3
+    ## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+    ## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so;  LAPACK version 3.10.0
     ## 
     ## locale:
     ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
@@ -1085,34 +1143,26 @@ Session info.
     ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
     ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
     ## 
+    ## time zone: Etc/UTC
+    ## tzcode source: system (glibc)
+    ## 
     ## attached base packages:
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] modeldata_1.0.1 forcats_0.5.2   stringr_1.4.1   dplyr_1.0.10   
-    ##  [5] purrr_0.3.5     readr_2.1.3     tidyr_1.2.1     tibble_3.1.8   
-    ##  [9] ggplot2_3.4.0   tidyverse_1.3.2
+    ##  [1] modeldata_1.1.0 lubridate_1.9.2 forcats_1.0.0   stringr_1.5.0  
+    ##  [5] dplyr_1.1.2     purrr_1.0.1     readr_2.1.4     tidyr_1.3.0    
+    ##  [9] tibble_3.2.1    ggplot2_3.4.2   tidyverse_2.0.0
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] lubridate_1.9.0     lattice_0.20-45     assertthat_0.2.1   
-    ##  [4] digest_0.6.30       utf8_1.2.2          R6_2.5.1           
-    ##  [7] cellranger_1.1.0    backports_1.4.1     reprex_2.0.2       
-    ## [10] evaluate_0.17       highr_0.9           httr_1.4.4         
-    ## [13] pillar_1.8.1        rlang_1.0.6         googlesheets4_1.0.1
-    ## [16] readxl_1.4.1        rstudioapi_0.14     Matrix_1.5-1       
-    ## [19] rmarkdown_2.17      labeling_0.4.2      splines_4.2.0      
-    ## [22] googledrive_2.0.0   munsell_0.5.0       broom_1.0.1        
-    ## [25] compiler_4.2.0      modelr_0.1.9        xfun_0.34          
-    ## [28] pkgconfig_2.0.3     mgcv_1.8-41         htmltools_0.5.3    
-    ## [31] tidyselect_1.2.0    fansi_1.0.3         crayon_1.5.2       
-    ## [34] tzdb_0.3.0          dbplyr_2.2.1        withr_2.5.0        
-    ## [37] grid_4.2.0          nlme_3.1-160        jsonlite_1.8.3     
-    ## [40] gtable_0.3.1        lifecycle_1.0.3     DBI_1.1.3          
-    ## [43] magrittr_2.0.3      scales_1.2.1        cli_3.4.1          
-    ## [46] stringi_1.7.8       farver_2.1.1        fs_1.5.2           
-    ## [49] xml2_1.3.3          ellipsis_0.3.2      generics_0.1.3     
-    ## [52] vctrs_0.5.0         RColorBrewer_1.1-3  tools_4.2.0        
-    ## [55] glue_1.6.2          hms_1.1.2           fastmap_1.1.0      
-    ## [58] yaml_2.3.6          timechange_0.1.1    colorspace_2.0-3   
-    ## [61] gargle_1.2.1        rvest_1.0.3         knitr_1.40         
-    ## [64] haven_2.5.1
+    ##  [1] utf8_1.2.3         generics_0.1.3     stringi_1.7.12     lattice_0.21-8    
+    ##  [5] hms_1.1.3          digest_0.6.31      magrittr_2.0.3     evaluate_0.21     
+    ##  [9] grid_4.3.0         timechange_0.2.0   RColorBrewer_1.1-3 fastmap_1.1.1     
+    ## [13] Matrix_1.5-4       mgcv_1.8-42        fansi_1.0.4        scales_1.2.1      
+    ## [17] cli_3.6.1          rlang_1.1.1        munsell_0.5.0      splines_4.3.0     
+    ## [21] withr_2.5.0        yaml_2.3.7         tools_4.3.0        tzdb_0.4.0        
+    ## [25] colorspace_2.1-0   vctrs_0.6.3        R6_2.5.1           lifecycle_1.0.3   
+    ## [29] pkgconfig_2.0.3    pillar_1.9.0       gtable_0.3.3       glue_1.6.2        
+    ## [33] xfun_0.39          tidyselect_1.2.0   highr_0.10         rstudioapi_0.14   
+    ## [37] knitr_1.43         farver_2.1.1       htmltools_0.5.5    nlme_3.1-162      
+    ## [41] rmarkdown_2.22     labeling_0.4.2     compiler_4.3.0
