@@ -155,11 +155,19 @@ my_list <- list(
 do.call(what = rbind, args = my_list)
 ```
 
+Use `utils::stack` to create a data frame from a named list; the vectors are
+concatenated and the names are used to create factors.
+
+```{r utils_stack}
+utils::stack(my_list)
+```
+
 There is also the [purrr::map](https://purrr.tidyverse.org/reference/map.html) function, that is [similar](https://jennybc.github.io/purrr-tutorial/ls01_map-name-position-shortcuts.html) to the apply functions in base R, but you explicitly specify the output type. The `map_lgl` function will return logicals, i.e. Booleans.
 
 ```{r map_lgl}
 map_lgl(.x = 1:10, .f = function(x) x > 5)
 ```
+
 ## Functions
 
 Notes from [Advanced R](https://adv-r.hadley.nz/functions.html).
