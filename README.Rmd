@@ -509,6 +509,23 @@ for_loop <- function(n){
 plot(ms)
 ```
 
+Use `system.time` to measure CPU time.
+
+```{r with_replicate}
+system.time(
+  x <- replicate(1000, for_loop(my_num))
+)
+system.time(
+  y <- replicate(1000, map_int(my_num, function(x) x^2))
+)
+system.time(
+  z <- replicate(1000, sapply(my_num, function(x) x^2))
+)
+
+all.equal(x, y)
+all.equal(x, z)
+```
+
 ## General
 
 Assign a data frame column `NULL` to delete it.
