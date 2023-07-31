@@ -420,6 +420,42 @@ For example, the following formula indicates that there are two predictors and t
 rate ~ (temp + species)^2
 ```
 
+## Exceptions
+
+Notes from [Debugging, condition handling, and defensive programming](http://adv-r.had.co.nz/Exceptions-Debugging.html).
+
+`try()` gives you the ability to continue execution even when an error occurs.
+
+```{r try_log}
+try_log <- function(x) {
+  try(log(x))
+  10
+}
+
+try_log('a')
+```
+
+`tryCatch()` is a general tool for handling conditions: in addition to errors, you can take different actions for warnings, messages, and interrupts.
+
+```{r try_catch}
+show_condition <- function(code) {
+  tryCatch(
+    code,
+    error = function(x) "error",
+    warning = function(x) "warning",
+    message = function(x) "message"
+  )
+}
+
+show_condition(log('a'))
+show_condition(stop("!"))
+show_condition(stopifnot(2 + 2 == 5))
+show_condition(stopifnot(4 + 1980 == 1984))
+show_condition(warning("?!"))
+show_condition(message("?"))
+show_condition(10)
+```
+
 ## General
 
 Assign a data frame column `NULL` to delete it.
