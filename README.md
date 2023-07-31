@@ -16,6 +16,8 @@ Learning R
       - [Modeling example](#modeling-example)
           - [R formula](#r-formula)
       - [Exceptions](#exceptions)
+      - [Measuring performance](#measuring-performance)
+          - [Microbenchmarking](#microbenchmarking)
       - [General](#general)
       - [Useful plots](#useful-plots)
       - [Useful tips](#useful-tips)
@@ -62,7 +64,7 @@ The code below will attach the `tidyverse` and `modeldata` packages
 
 ``` r
 .libPaths('/packages')
-my_packages <- c('tidyverse', 'modeldata')
+my_packages <- c('tidyverse', 'modeldata', 'bench')
 
 using<-function(...) {
    # https://stackoverflow.com/a/44660688
@@ -86,13 +88,13 @@ attached to the search path.
 base::search()
 ```
 
-    ##  [1] ".GlobalEnv"        "package:modeldata" "package:lubridate"
-    ##  [4] "package:forcats"   "package:stringr"   "package:dplyr"    
-    ##  [7] "package:purrr"     "package:readr"     "package:tidyr"    
-    ## [10] "package:tibble"    "package:ggplot2"   "package:tidyverse"
-    ## [13] "package:stats"     "package:graphics"  "package:grDevices"
-    ## [16] "package:utils"     "package:datasets"  "package:methods"  
-    ## [19] "Autoloads"         "package:base"
+    ##  [1] ".GlobalEnv"        "package:bench"     "package:modeldata"
+    ##  [4] "package:lubridate" "package:forcats"   "package:stringr"  
+    ##  [7] "package:dplyr"     "package:purrr"     "package:readr"    
+    ## [10] "package:tidyr"     "package:tibble"    "package:ggplot2"  
+    ## [13] "package:tidyverse" "package:stats"     "package:graphics" 
+    ## [16] "package:grDevices" "package:utils"     "package:datasets" 
+    ## [19] "package:methods"   "Autoloads"         "package:base"
 
 As for the difference between `library` and `require`?
 
@@ -821,6 +823,87 @@ show_condition(10)
 
     ## [1] 10
 
+## Measuring performance
+
+Notes from [Measuring
+performance](https://adv-r.hadley.nz/perf-measure.html).
+
+### Microbenchmarking
+
+A
+[microbenchmark](https://adv-r.hadley.nz/perf-measure.html#microbenchmarking)
+is a measurement of the performance of a very small piece of code,
+something that might take milliseconds, microseconds, or nanoseconds to
+run.
+
+``` r
+set.seed(1984)
+x <- runif(100)
+(lb <- bench::mark(
+  sqrt(x),
+  x ^ 0.5
+))
+```
+
+    ## # A tibble: 2 × 6
+    ##   expression      min   median `itr/sec` mem_alloc `gc/sec`
+    ##   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
+    ## 1 sqrt(x)    327.01ns 347.03ns  1811535.      848B        0
+    ## 2 x^0.5        2.08µs   2.13µs   396553.      848B        0
+
+`for` versus `map_int` versus `sapply`.
+
+``` r
+my_num <- 1:10000
+for_loop <- function(n){
+  v <- vector(mode = "integer")
+  for(i in n){
+    v[i] <- i^2
+  }
+  return(v)
+}
+
+(ms <- bench::mark(
+  for_loop(my_num),
+  map_int(my_num, function(x) x^2),
+  sapply(my_num, function(x) x^2)
+))
+```
+
+    ## # A tibble: 3 × 6
+    ##   expression                            min  median `itr/sec` mem_alloc `gc/sec`
+    ##   <bch:expr>                       <bch:tm> <bch:t>     <dbl> <bch:byt>    <dbl>
+    ## 1 for_loop(my_num)                   2.01ms  2.07ms      480.    1.69MB    32.6 
+    ## 2 map_int(my_num, function(x) x^2)   4.93ms   5.5ms      185.   47.97KB     6.23
+    ## 3 sapply(my_num, function(x) x^2)    4.99ms  5.63ms      179.  367.85KB     6.47
+
+  - `min` - The minimum execution time.
+  - `median` - The sample median of execution time.
+  - `itr/sec` - The estimated number of executions performed per second.
+  - `mem_alloc` - Total amount of memory allocated by R while running
+    the expression.
+  - `gc/sec` - The number of garbage collections per second.
+  - `n_itr` - Total number of iterations after filtering garbage
+    collections (if filter\_gc == TRUE).
+  - `n_gc` - Total number of garbage collections performed over all
+    iterations.
+  - `total_time` - The total time to perform the benchmarks.
+  - `result` - A list column of the object(s) returned by the evaluated
+    expression(s).
+  - `memory` - A list column with results from Rprofmem().
+  - `time` - A list column of bench\_time vectors for each evaluated
+    expression.
+  - `gc` - A list column with tibbles containing the level of garbage
+    collection (0-2, columns) for each iteration (rows).
+
+<!-- end list -->
+
+``` r
+plot(ms)
+```
+
+![](img/plot_ms-1.png)<!-- -->
+
 ## General
 
 Assign a data frame column `NULL` to delete it.
@@ -898,7 +981,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   1.454   0.000   1.458
+    ##   1.450   0.000   1.453
 
 The `with` function evaluates an expression with data.
 
@@ -1090,13 +1173,13 @@ objects such as functions.
 search()
 ```
 
-    ##  [1] ".GlobalEnv"        "package:modeldata" "package:lubridate"
-    ##  [4] "package:forcats"   "package:stringr"   "package:dplyr"    
-    ##  [7] "package:purrr"     "package:readr"     "package:tidyr"    
-    ## [10] "package:tibble"    "package:ggplot2"   "package:tidyverse"
-    ## [13] "package:stats"     "package:graphics"  "package:grDevices"
-    ## [16] "package:utils"     "package:datasets"  "package:methods"  
-    ## [19] "Autoloads"         "package:base"
+    ##  [1] ".GlobalEnv"        "package:bench"     "package:modeldata"
+    ##  [4] "package:lubridate" "package:forcats"   "package:stringr"  
+    ##  [7] "package:dplyr"     "package:purrr"     "package:readr"    
+    ## [10] "package:tidyr"     "package:tibble"    "package:ggplot2"  
+    ## [13] "package:tidyverse" "package:stats"     "package:graphics" 
+    ## [16] "package:grDevices" "package:utils"     "package:datasets" 
+    ## [19] "package:methods"   "Autoloads"         "package:base"
 
 ### Getting help
 
@@ -1219,7 +1302,7 @@ eval(parse(text = my_var))
 
 This README was generated by running `readme.Rmd` in RStudio Server.
 
-    ## [1] "2023-07-31 05:25:33 UTC"
+    ## [1] "2023-07-31 06:03:02 UTC"
 
 Session info.
 
@@ -1246,9 +1329,9 @@ Session info.
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] modeldata_1.1.0 lubridate_1.9.2 forcats_1.0.0   stringr_1.5.0  
-    ##  [5] dplyr_1.1.2     purrr_1.0.1     readr_2.1.4     tidyr_1.3.0    
-    ##  [9] tibble_3.2.1    ggplot2_3.4.2   tidyverse_2.0.0
+    ##  [1] bench_1.1.3     modeldata_1.1.0 lubridate_1.9.2 forcats_1.0.0  
+    ##  [5] stringr_1.5.0   dplyr_1.1.2     purrr_1.0.1     readr_2.1.4    
+    ##  [9] tidyr_1.3.0     tibble_3.2.1    ggplot2_3.4.2   tidyverse_2.0.0
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] utf8_1.2.3         generics_0.1.3     stringi_1.7.12     lattice_0.21-8    
@@ -1256,9 +1339,10 @@ Session info.
     ##  [9] grid_4.3.0         timechange_0.2.0   RColorBrewer_1.1-3 fastmap_1.1.1     
     ## [13] Matrix_1.5-4       mgcv_1.8-42        fansi_1.0.4        scales_1.2.1      
     ## [17] cli_3.6.1          rlang_1.1.1        munsell_0.5.0      splines_4.3.0     
-    ## [21] withr_2.5.0        yaml_2.3.7         tools_4.3.0        tzdb_0.4.0        
-    ## [25] colorspace_2.1-0   vctrs_0.6.3        R6_2.5.1           lifecycle_1.0.3   
-    ## [29] pkgconfig_2.0.3    pillar_1.9.0       gtable_0.3.3       glue_1.6.2        
-    ## [33] xfun_0.39          tidyselect_1.2.0   highr_0.10         rstudioapi_0.14   
-    ## [37] knitr_1.43         farver_2.1.1       htmltools_0.5.5    nlme_3.1-162      
-    ## [41] rmarkdown_2.22     labeling_0.4.2     compiler_4.3.0
+    ## [21] withr_2.5.0        yaml_2.3.7         ggbeeswarm_0.7.2   tools_4.3.0       
+    ## [25] tzdb_0.4.0         colorspace_2.1-0   profmem_0.6.0      vctrs_0.6.3       
+    ## [29] R6_2.5.1           lifecycle_1.0.3    vipor_0.4.5        beeswarm_0.4.0    
+    ## [33] pkgconfig_2.0.3    pillar_1.9.0       gtable_0.3.3       glue_1.6.2        
+    ## [37] highr_0.10         xfun_0.39          tidyselect_1.2.0   rstudioapi_0.14   
+    ## [41] knitr_1.43         farver_2.1.1       htmltools_0.5.5    nlme_3.1-162      
+    ## [45] rmarkdown_2.22     labeling_0.4.2     compiler_4.3.0

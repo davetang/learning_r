@@ -43,7 +43,7 @@ them first if they haven't been installed yet).
 
 ```{r load_package, message=FALSE, warning=FALSE}
 .libPaths('/packages')
-my_packages <- c('tidyverse', 'modeldata')
+my_packages <- c('tidyverse', 'modeldata', 'bench')
 
 using<-function(...) {
    # https://stackoverflow.com/a/44660688
@@ -454,6 +454,59 @@ show_condition(stopifnot(4 + 1980 == 1984))
 show_condition(warning("?!"))
 show_condition(message("?"))
 show_condition(10)
+```
+
+## Measuring performance
+
+Notes from [Measuring performance](https://adv-r.hadley.nz/perf-measure.html).
+
+### Microbenchmarking
+
+A [microbenchmark](https://adv-r.hadley.nz/perf-measure.html#microbenchmarking) is a measurement of the performance of a very small piece of code, something that might take milliseconds, microseconds, or nanoseconds to run.
+
+```{r bench_mark}
+set.seed(1984)
+x <- runif(100)
+(lb <- bench::mark(
+  sqrt(x),
+  x ^ 0.5
+))
+```
+
+`for` versus `map_int` versus `sapply`.
+
+```{r map_vs_sapply}
+my_num <- 1:10000
+for_loop <- function(n){
+  v <- vector(mode = "integer")
+  for(i in n){
+    v[i] <- i^2
+  }
+  return(v)
+}
+
+(ms <- bench::mark(
+  for_loop(my_num),
+  map_int(my_num, function(x) x^2),
+  sapply(my_num, function(x) x^2)
+))
+```
+
+* `min` - The minimum execution time.
+* `median` - The sample median of execution time.
+* `itr/sec` - The estimated number of executions performed per second.
+* `mem_alloc` - Total amount of memory allocated by R while running the expression.
+* `gc/sec` - The number of garbage collections per second.
+* `n_itr` - Total number of iterations after filtering garbage collections (if filter_gc == TRUE).
+* `n_gc` - Total number of garbage collections performed over all iterations.
+* `total_time` - The total time to perform the benchmarks.
+* `result` - A list column of the object(s) returned by the evaluated expression(s).
+* `memory` - A list column with results from Rprofmem().
+* `time` - A list column of bench_time vectors for each evaluated expression.
+* `gc` - A list column with tibbles containing the level of garbage collection (0-2, columns) for each iteration (rows).
+
+```{r plot_ms}
+plot(ms)
 ```
 
 ## General
