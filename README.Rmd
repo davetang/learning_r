@@ -55,6 +55,56 @@ the problem into isolated functions that operate independently. Each function
 taken by itself is simple and straightforward to understand; complexity is
 handled by composing functions in various ways.
 
+## Object-Oriented Programming
+
+See [Advanced R](https://adv-r.hadley.nz/oo.html).
+
+Object-Oriented Programming (OOP) is a little more challenging in R because
+there are multiple OOP systems to choose from and there is disagreement about
+the relative importance of the systems. Hadley Wickham believes that the most
+important are S3, R6, and S4 in that order. S3 and S4 are provided by base R.
+R6 is provided by the R6 package, and is similar to the Reference Classes, or
+RC for short, from base R. S3 and S4 use generic function OOP which is rather
+different from the encapsulated OOP used by most languages popular today.
+
+The main reason to use OOP is **polymorphism**. Polymorphism means that a
+developer can consider a function's interface separately from its
+implementation, making it possible to use the same function form for different
+types of input. This is closely related to the idea of **encapsulation**: the
+user doesn't need to worry about details of an object because they are
+encapsulated behind a standard interface.
+
+Polymorphism is what allows summary() to produce different outputs for numeric
+and factor variables.
+
+```{r summary_polymorphism}
+diamonds <- ggplot2::diamonds
+summary(diamonds$carat)
+summary(diamonds$cut)
+```
+
+OO systems call the type of an object its **class**, and an implementation for
+a specific class is called a **method**; a class defines the object and methods
+describe what the object can do. Classes are organised in a hierarchy so that
+if a method does not exist for one class, its parent's method is used, and the
+child is said to **inherit** behaviour. For example, an ordered factor inherits
+from a regular factor, and a generalised linear model inherits from a linear
+model. The process of finding the correct method given a class is called
+**method dispatch**.
+
+There are two main paradigms of OOP which differ in how methods and classes are
+related. We can call these paradigms encapsulated and functional:
+
+* In **encapsulated** OOP, methods belong to objects or classes, and method calls
+  typically look like `object.method(arg1, arg2)`. This is called encapsulated
+  because the object encapsulates both data (with fields) and behaviour (with
+  methods), and is the paradigm found in most popular languages.
+
+* In **functional** OOP, methods belong to **generic** functions, and method
+  calls look like ordinary function calls: `generic(object, arg2, arg3)`. This
+  is called functional because from the outside it looks like a regular
+  function call, and internally the components are also functions.
+
 ## Packages
 
 If you look up the help page for `require` or `library`, you will be provided

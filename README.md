@@ -3,6 +3,7 @@ Learning R
 
   - [Introduction](#introduction)
       - [Functional programming](#functional-programming)
+      - [Object-Oriented Programming](#object-oriented-programming)
       - [Packages](#packages)
       - [Vectors](#vectors)
       - [Lists](#lists)
@@ -74,6 +75,70 @@ decompose components of the problem into isolated functions that operate
 independently. Each function taken by itself is simple and
 straightforward to understand; complexity is handled by composing
 functions in various ways.
+
+## Object-Oriented Programming
+
+See [Advanced R](https://adv-r.hadley.nz/oo.html).
+
+Object-Oriented Programming (OOP) is a little more challenging in R
+because there are multiple OOP systems to choose from and there is
+disagreement about the relative importance of the systems. Hadley
+Wickham believes that the most important are S3, R6, and S4 in that
+order. S3 and S4 are provided by base R. R6 is provided by the R6
+package, and is similar to the Reference Classes, or RC for short, from
+base R. S3 and S4 use generic function OOP which is rather different
+from the encapsulated OOP used by most languages popular today.
+
+The main reason to use OOP is **polymorphism**. Polymorphism means that
+a developer can consider a function’s interface separately from its
+implementation, making it possible to use the same function form for
+different types of input. This is closely related to the idea of
+**encapsulation**: the user doesn’t need to worry about details of an
+object because they are encapsulated behind a standard interface.
+
+Polymorphism is what allows summary() to produce different outputs for
+numeric and factor variables.
+
+``` r
+diamonds <- ggplot2::diamonds
+summary(diamonds$carat)
+```
+
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##  0.2000  0.4000  0.7000  0.7979  1.0400  5.0100
+
+``` r
+summary(diamonds$cut)
+```
+
+    ##      Fair      Good Very Good   Premium     Ideal 
+    ##      1610      4906     12082     13791     21551
+
+OO systems call the type of an object its **class**, and an
+implementation for a specific class is called a **method**; a class
+defines the object and methods describe what the object can do. Classes
+are organised in a hierarchy so that if a method does not exist for one
+class, its parent’s method is used, and the child is said to **inherit**
+behaviour. For example, an ordered factor inherits from a regular
+factor, and a generalised linear model inherits from a linear model. The
+process of finding the correct method given a class is called **method
+dispatch**.
+
+There are two main paradigms of OOP which differ in how methods and
+classes are related. We can call these paradigms encapsulated and
+functional:
+
+  - In **encapsulated** OOP, methods belong to objects or classes, and
+    method calls typically look like `object.method(arg1, arg2)`. This
+    is called encapsulated because the object encapsulates both data
+    (with fields) and behaviour (with methods), and is the paradigm
+    found in most popular languages.
+
+  - In **functional** OOP, methods belong to **generic** functions, and
+    method calls look like ordinary function calls: `generic(object,
+    arg2, arg3)`. This is called functional because from the outside it
+    looks like a regular function call, and internally the components
+    are also functions.
 
 ## Packages
 
@@ -884,8 +949,8 @@ x <- runif(100)
     ## # A tibble: 2 × 6
     ##   expression      min   median `itr/sec` mem_alloc `gc/sec`
     ##   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-    ## 1 sqrt(x)    360.07ns 571.02ns  1576799.      848B        0
-    ## 2 x^0.5        2.09µs   2.24µs   384112.      848B        0
+    ## 1 sqrt(x)    363.91ns 404.89ns  1189586.      848B        0
+    ## 2 x^0.5        2.43µs   2.62µs   320797.      848B        0
 
 `for` versus `map_int` versus `sapply`.
 
@@ -909,9 +974,9 @@ for_loop <- function(n){
     ## # A tibble: 3 × 6
     ##   expression                            min  median `itr/sec` mem_alloc `gc/sec`
     ##   <bch:expr>                       <bch:tm> <bch:t>     <dbl> <bch:byt>    <dbl>
-    ## 1 for_loop(my_num)                   2.01ms  2.07ms      479.    1.69MB    32.5 
-    ## 2 map_int(my_num, function(x) x^2)   4.92ms  5.47ms      184.   47.97KB     6.26
-    ## 3 sapply(my_num, function(x) x^2)    5.01ms  5.58ms      181.  367.85KB     6.46
+    ## 1 for_loop(my_num)                   2.39ms  2.56ms      385.    1.69MB    18.0 
+    ## 2 map_int(my_num, function(x) x^2)   6.13ms   7.2ms      142.   47.97KB     4.24
+    ## 3 sapply(my_num, function(x) x^2)    6.07ms  6.75ms      140.  367.85KB     6.47
 
   - `min` - The minimum execution time.
   - `median` - The sample median of execution time.
@@ -949,7 +1014,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   3.260   0.084   3.352
+    ##   5.292   0.094   5.401
 
 ``` r
 system.time(
@@ -958,7 +1023,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   5.541   0.027   5.580
+    ##   7.339   0.048   7.408
 
 ``` r
 system.time(
@@ -967,7 +1032,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   5.708   0.085   5.807
+    ##   7.450   0.131   7.600
 
 ``` r
 all.equal(x, y)
@@ -1058,7 +1123,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   1.475   0.000   1.478
+    ##   1.736   0.001   1.743
 
 The `with` function evaluates an expression with data.
 
@@ -1379,7 +1444,7 @@ eval(parse(text = my_var))
 
 This README was generated by running `readme.Rmd` in RStudio Server.
 
-    ## [1] "2023-07-31 07:41:02 UTC"
+    ## [1] "2023-08-01 08:20:43 UTC"
 
 Session info.
 
