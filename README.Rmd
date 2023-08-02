@@ -800,7 +800,37 @@ apropos("mutate")
 
 ## Hacks
 
-There are probably better ways to do the following, which is why I have labelled them as hacks, so follow at your own peril.
+There are probably better ways to do the following, which is why I have
+labelled them as hacks, so follow at your own peril.
+
+### Makevars
+
+You can set/modify preprocessor options (for example include paths and
+definitions) for C/C++ files using a
+[Makevars](https://cran.r-project.org/doc/manuals/r-devel/R-exts.html#Using-Makevars)
+file. I had a problem [installing the ranger
+package](https://github.com/imbs-hl/ranger/issues/669) because R (my version is
+4.3.0) sets the default C++
+[standard](https://gcc.gnu.org/projects/cxx-status.html) to C++11 and `ranger`
+requires C++14. I wrote this Bash snippet (I use a Bash script to install my
+packages) to overcome this problem.
+
+```bash
+makevars=${HOME}/.R/Makevars
+if [[ ! -e ${makevars} ]]; then
+   mkdir -p ${HOME}/.R
+   touch ${makevars} && echo "CXX = g++ -std=gnu++14" >> ${makevars}
+   install_ranger
+   rm ${makevars}
+else
+   if [[ $(grep -c "^CXX = g++ -std=gnu++14\b") == 0 ]]; then
+      cp ${makevars} ${HOME}/.R/Makevars_bk
+      echo "CXX = g++ -std=gnu++14" >> ${makevars}
+      install_ranger
+      mv -f ${HOME}/.R/Makevars_bk ${makevars}
+   fi
+fi
+```
 
 ### Library paths
 
