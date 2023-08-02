@@ -105,6 +105,42 @@ related. We can call these paradigms encapsulated and functional:
   is called functional because from the outside it looks like a regular
   function call, and internally the components are also functions.
 
+### OOP in R
+
+Base R provides three OOP systems: S3, S4, and reference classes (RC):
+
+* **S3** is R's first OOP system and is an informal implementation of
+  functional OOP. It relies on common conventions rather than ironclad
+  guarantees. This makes it easy to get started with, providing a low cost way
+  of solving many simple problems.
+
+* **S4** is a formal and rigorous rewrite of S3. It requires more upfront work
+  than S3, but in return provides more guarantees and greater encapsulation. S4
+  is implemented in the base **methods** package, which is always installed
+  with R.
+
+(There is no S1 or S2 because S3 and S4 were named according to the versions of
+S that they accompanied. The first two versions of S did not have any OOP
+framework.)
+
+* **RC** implements encapsulated OO. RC objects are a special type of S4
+  objects that are also **mutable**, i.e., instead of using R's usual
+  copy-on-modify semantics, they can be modified in place. This makes them
+  harder to reason about, but allows them to solve problems that are difficult
+  to solve in the functional OOP style of S3 and S4.
+
+A number of other OOP systems are provided by CRAN packages:
+
+* **R6** implements encapsulated OOP like RC, but resolves some important
+  issues.
+
+* **R.oo** provides some formalism on top of S3, and makes it possible to have
+  mutable S3 objects.
+
+* **proto** implements another style of OOP based on the idea of
+  **prototypes**, which blur the distinctions between classes and instances of
+  classes (objects).
+
 ## Packages
 
 If you look up the help page for `require` or `library`, you will be provided
