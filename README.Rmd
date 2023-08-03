@@ -13,7 +13,8 @@ knitr::opts_chunk$set(fig.path = "img/")
 
 # Introduction
 
-The three core features of R are object-orientation, vectorisation, and its functional programming style.
+The three core features of R are object-orientation, vectorisation, and its
+functional programming style.
 
 >"To understand computations in R, two slogans are helpful:
 >
@@ -24,7 +25,8 @@ The three core features of R are object-orientation, vectorisation, and its func
 
 ## Functional programming
 
-See [Advanced R](https://adv-r.hadley.nz/fp.html#functional-programming-languages).
+See [Advanced
+R](https://adv-r.hadley.nz/fp.html#functional-programming-languages).
 
 Functional languages have **first-class functions**, which are functions that
 behave like any other data structure. This means that you can do many of the
@@ -95,10 +97,11 @@ model. The process of finding the correct method given a class is called
 There are two main paradigms of OOP which differ in how methods and classes are
 related. We can call these paradigms encapsulated and functional:
 
-* In **encapsulated** OOP, methods belong to objects or classes, and method calls
-  typically look like `object.method(arg1, arg2)`. This is called encapsulated
-  because the object encapsulates both data (with fields) and behaviour (with
-  methods), and is the paradigm found in most popular languages.
+* In **encapsulated** OOP, methods belong to objects or classes, and method
+  calls typically look like `object.method(arg1, arg2)`. This is called
+  encapsulated because the object encapsulates both data (with fields) and
+  behaviour (with methods), and is the paradigm found in most popular
+  languages.
 
 * In **functional** OOP, methods belong to **generic** functions, and method
   calls look like ordinary function calls: `generic(object, arg2, arg3)`. This
@@ -194,12 +197,17 @@ As for the difference between `library` and `require`?
 This is the reason why `require` was used above to check whether a package was
 installed or not.
 
-The difference between attaching and loading is a bit technical and you can read
-about it on [SO](https://stackoverflow.com/a/56538266).
+The difference between attaching and loading is a bit technical and you can
+read about it on [SO](https://stackoverflow.com/a/56538266).
 
 ## Vectors
 
-R is a vectorised language and what this means is that you can perform operations on vectors without having to iterate through each element. A vector is simply "a single entity consisting of a collection of things" but these items must all belong to the same class. If you try to create a vector with different classes, the vector will be coerced in the following order: `logical` < `integer` < `numeric` < `character`.
+R is a vectorised language and what this means is that you can perform
+operations on vectors without having to iterate through each element. A vector
+is simply "a single entity consisting of a collection of things" but these
+items must all belong to the same class. If you try to create a vector with
+different classes, the vector will be coerced in the following order: `logical`
+< `integer` < `numeric` < `character`.
 
 ```{r vector_coercion}
 my_char <- c(1, 3.14, TRUE, 'str')
@@ -209,14 +217,17 @@ my_num <- c(1, 2, 3.14, 4)
 class(my_num)
 ```
 
-You can easily square each number in a vector by applying a exponential function.
+You can easily square each number in a vector by applying a exponential
+function.
 
 ```{r my_int_squared}
 my_int <- 1:6
 my_int^2
 ```
 
-You can operate on a vector using another vector too. If the right vector isn't the same length as the left vector but is a multiple, R performs a procedure called "recycling" that will re-use the right vector on the next set of values.
+You can operate on a vector using another vector too. If the right vector isn't
+the same length as the left vector but is a multiple, R performs a procedure
+called "recycling" that will re-use the right vector on the next set of values.
 
 ```{r vec_recycling}
 my_int + c(1, 2)
@@ -327,7 +338,8 @@ my_list <- list(
 my_list$my_func(my_list$my_vec)
 ```
 
-`lapply` can be used to apply a function to each item in a list and will return a list.
+`lapply` can be used to apply a function to each item in a list and will return
+a list.
 
 ```{r lapply}
 my_list <- list(
@@ -339,7 +351,9 @@ my_list <- list(
 lapply(my_list, sum)
 ```
 
-Another handy function is the `do.call` function, which constructs and executes a function call on a list. The example below is useful for converting a list into a matrix.
+Another handy function is the `do.call` function, which constructs and executes
+a function call on a list. The example below is useful for converting a list
+into a matrix.
 
 ```{r do_call}
 my_list <- list(
@@ -359,7 +373,11 @@ concatenated and the names are used to create factors.
 utils::stack(my_list)
 ```
 
-There is also the [purrr::map](https://purrr.tidyverse.org/reference/map.html) function, that is [similar](https://jennybc.github.io/purrr-tutorial/ls01_map-name-position-shortcuts.html) to the apply functions in base R, but you explicitly specify the output type. The `map_lgl` function will return logicals, i.e. Booleans.
+There is also the [purrr::map](https://purrr.tidyverse.org/reference/map.html)
+function, that is
+[similar](https://jennybc.github.io/purrr-tutorial/ls01_map-name-position-shortcuts.html)
+to the apply functions in base R, but you explicitly specify the output type.
+The `map_lgl` function will return logicals, i.e. Booleans.
 
 ```{r map_lgl}
 map_lgl(.x = 1:10, .f = function(x) x > 5)
@@ -371,18 +389,25 @@ Notes from [Advanced R](https://adv-r.hadley.nz/functions.html).
 
 Two important ideas about functions in R need to be understood:
 
-1. Functions can be broken down into three components: arguments, body, and environment
+1. Functions can be broken down into three components: arguments, body, and
+   environment
+
 2. Functions are objects, just as vectors are objects
 
-R functions are objects in their own right, a language property often called "first-class functions". 
+R functions are objects in their own right, a language property often called
+"first-class functions". 
 
 ### Function components
 
 A function has three parts:
 
-1. The `formals()`, which are the list of arguments that control how you call the function.
+1. The `formals()`, which are the list of arguments that control how you call
+   the function.
+
 2. The `body()`, which is the code inside the function.
-3. The `environment()`, which is the data structure that determines the namespace.
+
+3. The `environment()`, which is the data structure that determines the
+   namespace.
 
 The environment is based on where you define the function.
 
@@ -397,19 +422,23 @@ body(f02)
 environment(f02)
 ```
 
-Functions contain any number of additional `attributes()` as with all objects in R. One attribute used by base R is `srcref`, which points to the source code used to create the function.
+Functions contain any number of additional `attributes()` as with all objects
+in R. One attribute used by base R is `srcref`, which points to the source code
+used to create the function.
 
 ```{r f02_srcref}
 attr(f02, "srcref")
 ```
 
-However primitive functions do not have the three components (they return `NULL`) and call C code directly.
+However primitive functions do not have the three components (they return
+`NULL`) and call C code directly.
 
 ```{r sum}
 sum
 ```
 
-Primitive functions have either type `builtin` or type `special` but have class `function`.
+Primitive functions have either type `builtin` or type `special` but have class
+`function`.
 
 ```{r primitive_type}
 class(f02)
@@ -423,28 +452,45 @@ typeof(`[`)
 
 ### Lexical scoping
 
-Scoping is the act of finding the value associated with a name. R uses lexical scoping, which means it looks up the values of names based on how a function is defined and not by how it is called. Lexical in this context means that the scoping rules use a parse-time, rather than a run-time, structure. R's lexical scoping follows four primary rules:
+Scoping is the act of finding the value associated with a name. R uses lexical
+scoping, which means it looks up the values of names based on how a function is
+defined and not by how it is called. Lexical in this context means that the
+scoping rules use a parse-time, rather than a run-time, structure. R's lexical
+scoping follows four primary rules:
 
 1. Name masking
 2. Functions versus variables
 3. A fresh start - each time you invoke a function, it starts fresh
 4. Dynamic lookup
 
-The basic principle of lexical scoping is that names defined inside a function mask names defined outside a function. If a name is not defined inside a function, R looks one level up (all the way up to the global environment). Lexical scoping determines where, but not when to look for values. _R looks for values when the function is run and not when the function is created_.
+The basic principle of lexical scoping is that names defined inside a function
+mask names defined outside a function. If a name is not defined inside a
+function, R looks one level up (all the way up to the global environment).
+Lexical scoping determines where, but not when to look for values. _R looks for
+values when the function is run and not when the function is created_.
 
 ### Lazy evaluation
 
-Function arguments are only evaluated if accessed, i.e. lazily evaluated. This is a nice feature because it allows the inclusion of potentially expensive computations in function arguments that will only be evaluated if necessary.
+Function arguments are only evaluated if accessed, i.e. lazily evaluated. This
+is a nice feature because it allows the inclusion of potentially expensive
+computations in function arguments that will only be evaluated if necessary.
 
-Lazy evaluation is powered by a data structure called a **promise**, which has three components:
+Lazy evaluation is powered by a data structure called a **promise**, which has
+three components:
 
 1. An expression, like `x + y`, which gives rise to the delayed computation.
-2. An environment where the expression should be evaluated, i.e. the environment where the function is called.
-3. A value, which is computed and cached the first time a promise is accessed when the expression is evaluated in the specified environment.
+
+2. An environment where the expression should be evaluated, i.e. the
+   environment where the function is called.
+
+3. A value, which is computed and cached the first time a promise is accessed
+   when the expression is evaluated in the specified environment.
 
 ### dot-dot-dot
 
-Functions can have a special argument `...`, which is pronounced dot-dot-dot. In other programming languages, this type of argument is often called `varargs` (variable arguments) and a function that uses it is said to be variadic.
+Functions can have a special argument `...`, which is pronounced dot-dot-dot.
+In other programming languages, this type of argument is often called `varargs`
+(variable arguments) and a function that uses it is said to be variadic.
 
 ```{r dot_dot_dot_eg}
 i01 <- function(y, z) {
@@ -458,29 +504,48 @@ i02 <- function(x, ...) {
 str(i02(x = 1, y = 2, z = 3))
 ```
 
-The `...` is useful when a function takes a function as an argument: you can pass additional arguments to that function. The downside of using `...` is that when arguments are used to pass arguments to another function, it is sometimes not clear to the user. Also a misspelled argument will not raise an error and this makes it easy for typos to go unnoticed.
+The `...` is useful when a function takes a function as an argument: you can
+pass additional arguments to that function. The downside of using `...` is that
+when arguments are used to pass arguments to another function, it is sometimes
+not clear to the user. Also a misspelled argument will not raise an error and
+this makes it easy for typos to go unnoticed.
 
 ### Exiting a function
 
 Most functions exit in one of two ways:
 
-1. They either return a value, indicating success. There are two ways a function can return a value:
+1. They either return a value, indicating success. There are two ways a
+   function can return a value:
     1. Implicitly, where the last evaluated expression is returned.
     2. Explicitly by using `return()`.
 2. They throw an error, indicating failure.
 
-Most functions return visibly, meaning that the result is printed when evaluated in an interactive context. The automatic printing can be prevented by using `invisible()` but the return value still exists.
+Most functions return visibly, meaning that the result is printed when
+evaluated in an interactive context. The automatic printing can be prevented by
+using `invisible()` but the return value still exists.
 
-If a function cannot complete its assigned task, it should throw an error with `stop()`, which immediately terminates the execution of the function. `on.exit()` can be used to run some code regardless of how a function exits; always set `add = TRUE` when using `on.exit()` because if you don't each call to `on.exit()` will overwrite the previous exit handler.
+If a function cannot complete its assigned task, it should throw an error with
+`stop()`, which immediately terminates the execution of the function.
+`on.exit()` can be used to run some code regardless of how a function exits;
+always set `add = TRUE` when using `on.exit()` because if you don't each call
+to `on.exit()` will overwrite the previous exit handler.
 
 ### Function forms
 
 Function calls come in four varieties:
 
-1. **prefix**: the function name comes before its arguments, e.g. `sum(1:5)`. These constitute the majority of function calls in R
-2. **infix**: the function name comes in between its arguments, e.g. `x + y`. Infix forms are used for many mathematical operators and for user-defined functions that begin and end with `%`.
-3. **replacement**: functions that replace values by assignment, e.g. `names(my_df) <- c('a', 'b', 'c')`.
-4. **special**: functions like `[[`, `if`, and `for` that do not have a consistent structure.
+1. **prefix**: the function name comes before its arguments, e.g. `sum(1:5)`.
+   These constitute the majority of function calls in R
+
+2. **infix**: the function name comes in between its arguments, e.g. `x + y`.
+   Infix forms are used for many mathematical operators and for user-defined
+   functions that begin and end with `%`.
+
+3. **replacement**: functions that replace values by assignment, e.g.
+   `names(my_df) <- c('a', 'b', 'c')`.
+
+4. **special**: functions like `[[`, `if`, and `for` that do not have a
+   consistent structure.
 
 All functions can be written in prefix form.
 
@@ -505,7 +570,8 @@ for(i in 1:3) print(i)
 
 Notes from [Tidy Modeling with R](https://www.tmwr.org/base-r.html).
 
-Load `crickets` data set that contains the relationship between the ambient temperature and the rate of cricket chirps per minute for two species.
+Load `crickets` data set that contains the relationship between the ambient
+temperature and the rate of cricket chirps per minute for two species.
 
 ```{r crickets}
 data(crickets, package = "modeldata")
@@ -525,30 +591,46 @@ ggplot(
   labs(x = "Temperature (C)", y = "Chirp Rate (per minute)")
 ```
 
-For an inferential model, we might have specified the following null hypotheses prior to seeing the data:
+For an inferential model, we might have specified the following null hypotheses
+prior to seeing the data:
 
 * Temperature has no effect on the chirp rate
 * There are no differences between the species' chirp rate.
 
-The `lm()` function is commonly used to fit an ordinary linear model. Arguments to this function are a model formula and the data frame that contains the data. The formula is _symbolic_; the simple formula below specifies that the chirp rate is the outcome and the temperature is the predictor.
+The `lm()` function is commonly used to fit an ordinary linear model. Arguments
+to this function are a model formula and the data frame that contains the data.
+The formula is _symbolic_; the simple formula below specifies that the chirp
+rate is the outcome and the temperature is the predictor.
 
 ```{r rate_temp}
 rate ~ temp
 ```
 
-If the time of day was also recorded in a column called `time`, the following formula does not add the time and temperature values together but the formula symbolically represents that temperature and time should be added as separate _main effects_ to the model. A main effect is a model term that contains a single predictor variable.
+If the time of day was also recorded in a column called `time`, the following
+formula does not add the time and temperature values together but the formula
+symbolically represents that temperature and time should be added as separate
+_main effects_ to the model. A main effect is a model term that contains a
+single predictor variable.
 
 ```{r rate_temp_time}
 rate ~ temp + time
 ```
 
-We can add the species to the model in the same way but since species is not a quantitative variable, an _indicator variable_ (also known as a dummy variable) is used in place of the original qualitative value. The model formula will automatically encode `species` as a numeric by adding a new column that has a value of zero and one for the two species.
+We can add the species to the model in the same way but since species is not a
+quantitative variable, an _indicator variable_ (also known as a dummy variable)
+is used in place of the original qualitative value. The model formula will
+automatically encode `species` as a numeric by adding a new column that has a
+value of zero and one for the two species.
 
 ```{r rate_temp_species}
 rate ~ temp + species
 ```
 
-The model formula `rate ~ temp + species` creates a model with different y-intercepts for each species; the slopes of the regression lines could be different for each species as well. To accommodate this structure, an interaction term can be added to the model. This can be specified in a few different ways and the most basic uses the colon.
+The model formula `rate ~ temp + species` creates a model with different
+y-intercepts for each species; the slopes of the regression lines could be
+different for each species as well. To accommodate this structure, an
+interaction term can be added to the model. This can be specified in a few
+different ways and the most basic uses the colon.
 
 ```{r interaction_term}
 rate ~ temp + species + temp:species
@@ -564,9 +646,15 @@ rate ~ temp * species
 
 The model formula also has other nice features:
 
-* _In-line_ functions can be used, e.g. to use the natural log of the temperature, we can use the formula `rate ~ log(temp)`
-* R has many functions that are useful inside formulas, e.g. `poly(x, 3)` adds linear, quadratic, and cubic terms for `x` to the model as main effects.
-* The period shortcut is available for data sets with many predictors. The period represents main effects for all of the columns that are not on the left-hand side of the tilde.
+* _In-line_ functions can be used, e.g. to use the natural log of the
+  temperature, we can use the formula `rate ~ log(temp)`
+
+* R has many functions that are useful inside formulas, e.g. `poly(x, 3)` adds
+  linear, quadratic, and cubic terms for `x` to the model as main effects.
+
+* The period shortcut is available for data sets with many predictors. The
+  period represents main effects for all of the columns that are not on the
+  left-hand side of the tilde.
 
 Use a two-way interaction model.
 
@@ -576,7 +664,8 @@ interaction_fit <- lm(rate ~ (temp + species)^2, data = crickets)
 interaction_fit
 ```
 
-Now we will recompute the model without the interaction term to assess whether the interaction term is necessary using the `anova()` method.
+Now we will recompute the model without the interaction term to assess whether
+the interaction term is necessary using the `anova()` method.
 
 ```{r main_effect_fit}
 main_effect_fit <- lm(rate ~ temp + species, data = crickets)
@@ -584,19 +673,32 @@ main_effect_fit <- lm(rate ~ temp + species, data = crickets)
 anova(main_effect_fit, interaction_fit)
 ```
 
-This statistical test generates a p-value of 0.25, which implies that there is a lack of evidence against the null hypothesis that the interaction term is not needed by the model.
+This statistical test generates a p-value of 0.25, which implies that there is
+a lack of evidence against the null hypothesis that the interaction term is not
+needed by the model.
 
-The `summary()` method can be used to inspect the coefficients, standard errors, and p-values of each model term.
+The `summary()` method can be used to inspect the coefficients, standard
+errors, and p-values of each model term.
 
 ```{r summary_main_effect}
 summary(main_effect_fit)
 ```
 
-The chirp rate for each species increases by 3.6 chirps as the temperature increases by a single degree. This term shows strong statistical sifnificance as evidenced by the p-value. The species term has a value of -10.07, which indicates that, across all temperature values, _O. niveus_ has a chirp rate that is about 10 fewer chirps per minute than _O. exclamationis_. The species effect is also associated with a very small p-value.
+The chirp rate for each species increases by 3.6 chirps as the temperature
+increases by a single degree. This term shows strong statistical sifnificance
+as evidenced by the p-value. The species term has a value of -10.07, which
+indicates that, across all temperature values, _O. niveus_ has a chirp rate
+that is about 10 fewer chirps per minute than _O. exclamationis_. The species
+effect is also associated with a very small p-value.
 
-The only issue in this analysis is the intercept value that indicates that at 0 degrees Celsius, there are negative chirps per minute for both species. The data only goes as low as 17.2 degrees Celsius and therefore the conclusions should be limited to the observed temperature range.
+The only issue in this analysis is the intercept value that indicates that at 0
+degrees Celsius, there are negative chirps per minute for both species. The
+data only goes as low as 17.2 degrees Celsius and therefore the conclusions
+should be limited to the observed temperature range.
 
-If we needed to estimate the chirp rate at a temperature that was not observed in the experiment, we could use the `predict()` method, which takes the model object and a data frame of new values for prediction.
+If we needed to estimate the chirp rate at a temperature that was not observed
+in the experiment, we could use the `predict()` method, which takes the model
+object and a data frame of new values for prediction.
 
 ```{r predict_main_effect}
 new_values <- data.frame(species = "O. exclamationis", temp = 15:20)
@@ -605,13 +707,18 @@ predict(main_effect_fit, new_values)
 
 ### R formula
 
-The R model formula is used by many modeling packages and it usually serves multiple purposes:
+The R model formula is used by many modeling packages and it usually serves
+multiple purposes:
 
 * The formula defines the columns that the model uses.
-* The standard R machinery uses the formula to encode the columns into an appropriate format, e.g. create indicator variables.
+
+* The standard R machinery uses the formula to encode the columns into an
+  appropriate format, e.g. create indicator variables.
+
 * The roles of the columns are defined by the formula.
 
-For example, the following formula indicates that there are two predictors and the model should contain their main effects and the two-way interactions.
+For example, the following formula indicates that there are two predictors and
+the model should contain their main effects and the two-way interactions.
 
 ```{r r_formula_eg}
 rate ~ (temp + species)^2
@@ -619,7 +726,8 @@ rate ~ (temp + species)^2
 
 ## Exceptions
 
-Notes from [Debugging, condition handling, and defensive programming](http://adv-r.had.co.nz/Exceptions-Debugging.html).
+Notes from [Debugging, condition handling, and defensive
+programming](http://adv-r.had.co.nz/Exceptions-Debugging.html).
 
 `try()` gives you the ability to continue execution even when an error occurs.
 
@@ -632,7 +740,8 @@ try_log <- function(x) {
 try_log('a')
 ```
 
-`tryCatch()` is a general tool for handling conditions: in addition to errors, you can take different actions for warnings, messages, and interrupts.
+`tryCatch()` is a general tool for handling conditions: in addition to errors,
+you can take different actions for warnings, messages, and interrupts.
 
 ```{r try_catch}
 show_condition <- function(code) {
@@ -659,7 +768,9 @@ Notes from [Measuring performance](https://adv-r.hadley.nz/perf-measure.html).
 
 ### Microbenchmarking
 
-A [microbenchmark](https://adv-r.hadley.nz/perf-measure.html#microbenchmarking) is a measurement of the performance of a very small piece of code, something that might take milliseconds, microseconds, or nanoseconds to run.
+A [microbenchmark](https://adv-r.hadley.nz/perf-measure.html#microbenchmarking)
+is a measurement of the performance of a very small piece of code, something
+that might take milliseconds, microseconds, or nanoseconds to run.
 
 ```{r bench_mark}
 set.seed(1984)
@@ -692,15 +803,19 @@ for_loop <- function(n){
 * `min` - The minimum execution time.
 * `median` - The sample median of execution time.
 * `itr/sec` - The estimated number of executions performed per second.
-* `mem_alloc` - Total amount of memory allocated by R while running the expression.
+* `mem_alloc` - Total amount of memory allocated by R while running the
+  expression.
 * `gc/sec` - The number of garbage collections per second.
-* `n_itr` - Total number of iterations after filtering garbage collections (if filter_gc == TRUE).
+* `n_itr` - Total number of iterations after filtering garbage collections (if
+  filter_gc == TRUE).
 * `n_gc` - Total number of garbage collections performed over all iterations.
 * `total_time` - The total time to perform the benchmarks.
-* `result` - A list column of the object(s) returned by the evaluated expression(s).
+* `result` - A list column of the object(s) returned by the evaluated
+  expression(s).
 * `memory` - A list column with results from Rprofmem().
 * `time` - A list column of bench_time vectors for each evaluated expression.
-* `gc` - A list column with tibbles containing the level of garbage collection (0-2, columns) for each iteration (rows).
+* `gc` - A list column with tibbles containing the level of garbage collection
+  (0-2, columns) for each iteration (rows).
 
 ```{r plot_ms}
 plot(ms)
@@ -739,13 +854,15 @@ my_df$c <- NULL
 my_df
 ```
 
-Include an additional directory (`/packages`) to look for and install R packages.
+Include an additional directory (`/packages`) to look for and install R
+packages.
 
 ```{r lib_paths}
 .libPaths('/packages')
 ```
 
-Use `identical` to check whether two objects are exactly equal. Most times it should suffice to just use `all.equal`.
+Use `identical` to check whether two objects are exactly equal. Most times it
+should suffice to just use `all.equal`.
 
 ```{r identical}
 first <- 1:5
@@ -758,7 +875,10 @@ identical(first, second)
 all.equal(first, second)
 ```
 
-Set `scipen` (default is 0), which is a penalty to be applied when deciding to print numeric values in fixed or exponential notation, to determine when to print in exponential notation. (`.Options` contains all other options settings.)
+Set `scipen` (default is 0), which is a penalty to be applied when deciding to
+print numeric values in fixed or exponential notation, to determine when to
+print in exponential notation. (`.Options` contains all other options
+settings.)
 
 ```{r scipen}
 options(scipen=0)
@@ -787,7 +907,8 @@ wanted <- with(my_df, a > 5 & c > 27)
 my_df[wanted, ]
 ```
 
-The `which` function is a very useful for returning indicates that are `TRUE` and works with matrices.
+The `which` function is a very useful for returning indicates that are `TRUE`
+and works with matrices.
 
 ```{r which}
 my_mat <- matrix(1:9, nrow=3, byrow = TRUE)
@@ -796,7 +917,8 @@ my_mat <- matrix(1:9, nrow=3, byrow = TRUE)
 which(my_mat > 5, arr.ind = TRUE)
 ```
 
-The `match` function can be used with vectors to return the indexes of matching items and an `NA` is no match was found.
+The `match` function can be used with vectors to return the indexes of matching
+items and an `NA` is no match was found.
 
 ```{r match_xy}
 x <- c('b', 'c', 'a', 'd')
@@ -819,7 +941,8 @@ x_match <- match(x, my_df$a)
 my_df[x_match, ]
 ```
 
-Use the `complete.cases` function to list observations that have no missing values, i.e. NA values.
+Use the `complete.cases` function to list observations that have no missing
+values, i.e. NA values.
 
 ```{r complete_cases}
 my_df <- data.frame(
@@ -831,7 +954,8 @@ my_df <- data.frame(
 complete.cases(my_df)
 ```
 
-Use `commandArgs` to accept command line arguments without having to install an external package like `optparse`.
+Use `commandArgs` to accept command line arguments without having to install an
+external package like `optparse`.
 
 ```{r command_args}
 args <- commandArgs(TRUE)
@@ -847,22 +971,30 @@ mosaicplot(table(ChickWeight$Time, ChickWeight$Diet), main = "Timepoint versus d
 
 ## Useful tips
 
-A lot of R books are free to read; check out the [bookdown](https://bookdown.org/) page to see some of the best R books.
+A lot of R books are free to read; check out the
+[bookdown](https://bookdown.org/) page to see some of the best R books.
 
 R has four special values:
 
 1. `NA` - used for representing missing data.
-2. `NULL` - represents not having a value and unlike `NA`, it is its own object and cannot be used in a vector.
+2. `NULL` - represents not having a value and unlike `NA`, it is its own object
+   and cannot be used in a vector.
 3. `Inf`/`-Inf` - used for representing numbers too big for R (see below).
 4. `NaN` - used for storing results that are not a number.
 
-Check the `.Machine` variable to find out the numerical characteristics of the machine R is running on, such as the largest double or integer and the machine's precision.
+Check the `.Machine` variable to find out the numerical characteristics of the
+machine R is running on, such as the largest double or integer and the
+machine's precision.
 
 ```{r machine}
 noquote(unlist(format(.Machine)))
 ```
 
-When asking for help online, it is useful to include a minimal example that includes some data specific to your question. To easily convert data into code, use the `dput()` function. The example below is just for illustrative purposes since the `women` dataset is included with R, so you would not need to generate code for it.
+When asking for help online, it is useful to include a minimal example that
+includes some data specific to your question. To easily convert data into code,
+use the `dput()` function. The example below is just for illustrative purposes
+since the `women` dataset is included with R, so you would not need to generate
+code for it.
 
 ```{r dput}
 dput(women)
@@ -874,7 +1006,8 @@ Show all the functions of a package.
 ls("package:stringr")
 ```
 
-Search is useful to list the search path, i.e. where R will look, for R objects such as functions.
+Search is useful to list the search path, i.e. where R will look, for R objects
+such as functions.
 
 ```{r search_path}
 search()
@@ -948,13 +1081,16 @@ fi
 
 ### Library paths
 
-Some R packages require libraries not included in the default library path. Use `Sys.setenv` to include additional library paths. First we'll get the default path.
+Some R packages require libraries not included in the default library path. Use
+`Sys.setenv` to include additional library paths. First we'll get the default
+path.
 
 ```{r get_ld_library_path}
 Sys.getenv("LD_LIBRARY_PATH")
 ```
 
-Now we will add `/usr/include` to `LD_LIBRARY_PATH` and get the updated library path.
+Now we will add `/usr/include` to `LD_LIBRARY_PATH` and get the updated library
+path.
 
 ```{r set_ld_library_path}
 new_path <- paste0(Sys.getenv("LD_LIBRARY_PATH"), ":", "/usr/include")
@@ -964,7 +1100,8 @@ Sys.getenv("LD_LIBRARY_PATH")
 
 ### Variables and objects
 
-Sometimes you want to create objects with values stored in variables. This can be achieved using `assign()`.
+Sometimes you want to create objects with values stored in variables. This can
+be achieved using `assign()`.
 
 ```{r assign}
 my_varname <- 'one_to_ten'
@@ -974,7 +1111,10 @@ assign(my_varname, my_values)
 one_to_ten
 ```
 
-Likewise, sometimes you want to store an object's name into a variable. This can be achieved using `substitute` (returns the parse tree for an unevaluated expression) and `deparse` (turns unevaluated expressions into character strings).
+Likewise, sometimes you want to store an object's name into a variable. This
+can be achieved using `substitute` (returns the parse tree for an unevaluated
+expression) and `deparse` (turns unevaluated expressions into character
+strings).
 
 ```{r obj_to_string}
 obj_to_string <- function(x){
@@ -987,7 +1127,9 @@ my_var <- obj_to_string(my_obj_name)
 my_var
 ```
 
-To evaluating a string, use `parse` (returns an unevaluated expression) with a `text` argument specifying the character vector and `eval` (evaluates an unevaluated expression).
+To evaluating a string, use `parse` (returns an unevaluated expression) with a
+`text` argument specifying the character vector and `eval` (evaluates an
+unevaluated expression).
 
 ```{r eval}
 eval(parse(text = my_var))
