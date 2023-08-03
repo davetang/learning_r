@@ -8,6 +8,7 @@ Learning R
       - [Packages](#packages)
       - [Vectors](#vectors)
           - [Attributes](#attributes)
+          - [S3 atomic vectors](#s3-atomic-vectors)
       - [Lists](#lists)
       - [Functions](#functions)
           - [Function components](#function-components)
@@ -431,6 +432,233 @@ z
     ##      [,1] [,2] [,3]
     ## [1,]    1    3    5
     ## [2,]    2    4    6
+
+### S3 atomic vectors
+
+One of the most important vector attributes is `class`, which underlies
+the S3 object system. Having a class attribute turns an object into an
+**S3 object**, which means it will behave differently from a regular
+vector when passed to a **generic** function. Every S3 object is built
+on top of a base type, and often stores additional information in other
+attributes.
+
+There are four important S3 vectors used in base R:
+
+1.  Categorical data, where values come from a fixed set of levels
+    recorded in **factor** vectors.
+
+2.  Dates (with day resolution), which are recorded in **Date** vectors.
+
+3.  Date-times (with second or sub-second resolution), which are stored
+    in **POSIXct** vectors.
+
+4.  Durations, which are stored in **difftime** vectors.
+
+#### Factors
+
+A factor is a vector that can contain only predefined values. It is used
+to store categorical data. Factors are built on top of an integer vector
+with two attributes: a `class`, “factor”, which makes it behave
+differently from regular integer vectors, and `levels`, which defines
+the set of allowed values.
+
+``` r
+x <- factor(c("a", "b", "b", "a"))
+x
+```
+
+    ## [1] a b b a
+    ## Levels: a b
+
+``` r
+typeof(x)
+```
+
+    ## [1] "integer"
+
+``` r
+attributes(x)
+```
+
+    ## $levels
+    ## [1] "a" "b"
+    ## 
+    ## $class
+    ## [1] "factor"
+
+Factors are useful when you know the set of possible values even when
+they are not present in the data. In contrast to a character vector,
+when you tabulate a factor, you will get counts of all categories.
+
+``` r
+sex_char <- c("m", "m", "m")
+sex_factor <- factor(sex_char, levels = c("m", "f"))
+
+table(sex_char)
+```
+
+    ## sex_char
+    ## m 
+    ## 3
+
+``` r
+table(sex_factor)
+```
+
+    ## sex_factor
+    ## m f 
+    ## 3 0
+
+Use `ordered()` to create **ordered** factors, where the order of the
+levels is meaningful.
+
+#### Dates
+
+Date vectors are built on top of double vectors; they have class “Date”
+and no other attributes.
+
+``` r
+today <- Sys.Date()
+
+typeof(today)
+```
+
+    ## [1] "double"
+
+``` r
+attributes(today)
+```
+
+    ## $class
+    ## [1] "Date"
+
+The value of the double, which can be retrieved by stripping the class,
+represents the number of days since 1970-01-01.
+
+``` r
+date <- as.Date("1970-02-01")
+unclass(date)
+```
+
+    ## [1] 31
+
+#### Date-times
+
+Base R provides two ways of storing date-time information:
+
+1.  `POSIXct` - POSIX stands for Portable Operating System Interface,
+    which is a family of cross-platform standards. The “ct” here stands
+    for calendar time.
+2.  `POSIXlt` - The “lt” here stands for local time.
+
+`POSIXct` is built on top of an atomic vector and is most appropriate
+for use in data frames. `POSIXct` vectors are are built on top of double
+vectors, where the value represents the number of seconds since
+1970-01-01.
+
+``` r
+now_ct <- as.POSIXct("2018-08-01 22:00", tz = "UTC")
+now_ct
+```
+
+    ## [1] "2018-08-01 22:00:00 UTC"
+
+``` r
+typeof(now_ct)
+```
+
+    ## [1] "double"
+
+``` r
+attributes(now_ct)
+```
+
+    ## $class
+    ## [1] "POSIXct" "POSIXt" 
+    ## 
+    ## $tzone
+    ## [1] "UTC"
+
+The `tzone` attribute controls only how the date-time is formatted; it
+does not control the instant of time represented by the vector. Note
+that time is not printed if it is midnight (to prevent werewolves).
+
+``` r
+structure(now_ct, tzone = "Asia/Tokyo")
+```
+
+    ## [1] "2018-08-02 07:00:00 JST"
+
+``` r
+structure(now_ct, tzone = "America/New_York")
+```
+
+    ## [1] "2018-08-01 18:00:00 EDT"
+
+``` r
+structure(now_ct, tzone = "Australia/Lord_Howe")
+```
+
+    ## [1] "2018-08-02 08:30:00 +1030"
+
+``` r
+structure(now_ct, tzone = "Europe/Paris")
+```
+
+    ## [1] "2018-08-02 CEST"
+
+#### Durations
+
+Durations, which represent the amount of time between pairs of dates or
+date-times, are stored in `difftimes`. `difftimes` are built on top of
+doubles, and have a `units` attribute that determines how the integer
+should be interpreted.
+
+``` r
+one_week_1 <- as.difftime(1, units = "weeks")
+one_week_1
+```
+
+    ## Time difference of 1 weeks
+
+``` r
+typeof(one_week_1)
+```
+
+    ## [1] "double"
+
+``` r
+attributes(one_week_1)
+```
+
+    ## $class
+    ## [1] "difftime"
+    ## 
+    ## $units
+    ## [1] "weeks"
+
+``` r
+one_week_2 <- as.difftime(7, units = "days")
+one_week_2
+```
+
+    ## Time difference of 7 days
+
+``` r
+typeof(one_week_2)
+```
+
+    ## [1] "double"
+
+``` r
+attributes(one_week_2)
+```
+
+    ## $class
+    ## [1] "difftime"
+    ## 
+    ## $units
+    ## [1] "days"
 
 ## Lists
 
@@ -1123,8 +1351,8 @@ x <- runif(100)
     ## # A tibble: 2 × 6
     ##   expression      min   median `itr/sec` mem_alloc `gc/sec`
     ##   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-    ## 1 sqrt(x)    343.08ns  375.6ns  1369316.      848B        0
-    ## 2 x^0.5        2.15µs    2.2µs   380237.      848B        0
+    ## 1 sqrt(x)    331.08ns 367.06ns  1460214.      848B     146.
+    ## 2 x^0.5        2.08µs   2.24µs   439190.      848B       0
 
 `for` versus `map_int` versus `sapply`.
 
@@ -1148,9 +1376,9 @@ for_loop <- function(n){
     ## # A tibble: 3 × 6
     ##   expression                            min  median `itr/sec` mem_alloc `gc/sec`
     ##   <bch:expr>                       <bch:tm> <bch:t>     <dbl> <bch:byt>    <dbl>
-    ## 1 for_loop(my_num)                   2.12ms  2.18ms      445.    1.69MB    23.3 
-    ## 2 map_int(my_num, function(x) x^2)   5.18ms  5.56ms      181.   47.97KB     6.31
-    ## 3 sapply(my_num, function(x) x^2)     5.2ms  5.59ms      178.  367.85KB     6.44
+    ## 1 for_loop(my_num)                    2.1ms  2.17ms      447.    1.69MB    19.9 
+    ## 2 map_int(my_num, function(x) x^2)   5.32ms  5.85ms      171.   47.97KB     6.35
+    ## 3 sapply(my_num, function(x) x^2)    5.42ms  6.02ms      167.  367.85KB     6.33
 
   - `min` - The minimum execution time.
   - `median` - The sample median of execution time.
@@ -1188,7 +1416,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   4.125   0.078   4.214
+    ##   3.505   0.083   3.597
 
 ``` r
 system.time(
@@ -1197,7 +1425,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   5.806   0.032   5.852
+    ##   5.697   0.031   5.740
 
 ``` r
 system.time(
@@ -1206,7 +1434,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   6.010   0.088   6.112
+    ##   5.988   0.077   6.080
 
 ``` r
 all.equal(x, y)
@@ -1297,7 +1525,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   1.464   0.000   1.467
+    ##   1.488   0.001   1.492
 
 The `with` function evaluates an expression with data.
 
@@ -1647,7 +1875,7 @@ eval(parse(text = my_var))
 
 This README was generated by running `rmd_to_md.sh` with `readme.Rmd`.
 
-    ## [1] "2023-08-03 01:27:28 UTC"
+    ## [1] "2023-08-03 04:04:26 UTC"
 
 Session info.
 
