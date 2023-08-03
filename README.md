@@ -7,6 +7,7 @@ Learning R
           - [OOP in R](#oop-in-r)
       - [Packages](#packages)
       - [Vectors](#vectors)
+          - [Attributes](#attributes)
       - [Lists](#lists)
       - [Functions](#functions)
           - [Function components](#function-components)
@@ -293,7 +294,8 @@ my_int + c(1, 2)
 
     ## [1] 2 4 4 6 6 8
 
-Named vectors can be used as simple lookup tables.
+Named vectors (see [Attributes](#attributes)) can be used as simple
+lookup tables. Make sure that the names are unique and non-missing.
 
 ``` r
 my_lookup <- c(
@@ -308,6 +310,127 @@ my_lookup["PNG"]
 
     ##                PNG 
     ## "Papua New Guinea"
+
+### Attributes
+
+Attributes can be considered as name-value pairs that attach metadata to
+an object. Individual attributes can be retrieved and modified with
+`attr()` or retrieved en masse with `attributes()`, and set en masse
+with `structure()`.
+
+``` r
+a <- 1:3
+attr(a, "x") <- "abcdef"
+attr(a, "x")
+```
+
+    ## [1] "abcdef"
+
+``` r
+attr(a, "y") <- 4:6
+str(attributes(a))
+```
+
+    ## List of 2
+    ##  $ x: chr "abcdef"
+    ##  $ y: int [1:3] 4 5 6
+
+``` r
+a <- structure(
+  1:3,
+  x = "abcdef",
+  y = 4:6
+)
+str(attributes(a))
+```
+
+    ## List of 2
+    ##  $ x: chr "abcdef"
+    ##  $ y: int [1:3] 4 5 6
+
+Attributes should generally be thought of as ephemeral. There are only
+two attributes that are routinely preserved:
+
+  - **names**, a character vector giving each element a name.
+  - **dim**, short for dimensions, an integer vector, used to turn
+    vectors into matrices or arrays.
+
+To preserve other attributes, you will need to create your own S3 class.
+
+Vectors can be named in three ways.
+
+1.  When creating it.
+
+<!-- end list -->
+
+``` r
+x <- c(a = 1, b = 2, c = 3)
+```
+
+2.  By assigning a character vector to `names()`.
+
+<!-- end list -->
+
+``` r
+x <- 1:3
+names(x) <- c('a', 'b', 'c')
+```
+
+3.  Using `setNames()`.
+
+<!-- end list -->
+
+``` r
+x <- setNames(1:3, c('a', 'b', 'c'))
+```
+
+Avoid using `attr(x, 'names')` as it requires more typing and is less
+readable than `names(x)`. Names can be removed using `x <- unname(x)` or
+`names(x) <- NULL`.
+
+Adding a `dim` attribute to a vector allows it to behave like a
+2-dimensional **matrix** or a multi-dimensional **array**. However,
+matrices and arrays are primarily mathematical and statistical tools,
+not programming tools.
+
+Matrices and arrays can be created using `matrix()` and `array()` or by
+using the assignment form of `dim()`.
+
+``` r
+x <- matrix(1:6, nrow = 2, ncol = 3)
+x
+```
+
+    ##      [,1] [,2] [,3]
+    ## [1,]    1    3    5
+    ## [2,]    2    4    6
+
+``` r
+y <- array(1:12, c(2, 3, 2))
+y
+```
+
+    ## , , 1
+    ## 
+    ##      [,1] [,2] [,3]
+    ## [1,]    1    3    5
+    ## [2,]    2    4    6
+    ## 
+    ## , , 2
+    ## 
+    ##      [,1] [,2] [,3]
+    ## [1,]    7    9   11
+    ## [2,]    8   10   12
+
+``` r
+z <- 1:6
+dim(z) <- c(2, 3)
+z
+```
+
+    ##      [,1] [,2] [,3]
+    ## [1,]    1    3    5
+    ## [2,]    2    4    6
 
 ## Lists
 
@@ -988,8 +1111,8 @@ x <- runif(100)
     ## # A tibble: 2 × 6
     ##   expression      min   median `itr/sec` mem_alloc `gc/sec`
     ##   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-    ## 1 sqrt(x)       322ns 343.89ns   982842.      848B        0
-    ## 2 x^0.5         2.1µs   2.13µs   347094.      848B        0
+    ## 1 sqrt(x)       261ns 748.03ns  1195258.      848B        0
+    ## 2 x^0.5         2.1µs   2.25µs   378029.      848B        0
 
 `for` versus `map_int` versus `sapply`.
 
@@ -1013,9 +1136,9 @@ for_loop <- function(n){
     ## # A tibble: 3 × 6
     ##   expression                            min  median `itr/sec` mem_alloc `gc/sec`
     ##   <bch:expr>                       <bch:tm> <bch:t>     <dbl> <bch:byt>    <dbl>
-    ## 1 for_loop(my_num)                   2.25ms   2.4ms      407.    1.69MB    18.5 
-    ## 2 map_int(my_num, function(x) x^2)   5.34ms  6.41ms      157.   47.97KB     6.38
-    ## 3 sapply(my_num, function(x) x^2)    5.59ms  6.76ms      151.  367.85KB     4.19
+    ## 1 for_loop(my_num)                   2.13ms  2.24ms      437.    1.69MB    21.5 
+    ## 2 map_int(my_num, function(x) x^2)   5.28ms  5.84ms      169.   47.97KB     6.51
+    ## 3 sapply(my_num, function(x) x^2)    5.43ms   5.8ms      171.  367.85KB     6.48
 
   - `min` - The minimum execution time.
   - `median` - The sample median of execution time.
@@ -1053,7 +1176,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   4.598   0.121   4.729
+    ##    4.64    0.07    4.72
 
 ``` r
 system.time(
@@ -1062,7 +1185,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   6.500   0.051   6.567
+    ##   6.148   0.037   6.200
 
 ``` r
 system.time(
@@ -1071,7 +1194,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   7.391   0.072   7.481
+    ##   6.452   0.079   6.546
 
 ``` r
 all.equal(x, y)
@@ -1162,7 +1285,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   1.505   0.000   1.508
+    ##   1.496   0.000   1.499
 
 The `with` function evaluates an expression with data.
 
@@ -1510,9 +1633,9 @@ eval(parse(text = my_var))
 
 ## Session info
 
-This README was generated by running `readme.Rmd` in RStudio Server.
+This README was generated by running `rmd_to_md.sh` with `readme.Rmd`.
 
-    ## [1] "2023-08-02 00:37:02 UTC"
+    ## [1] "2023-08-03 00:49:23 UTC"
 
 Session info.
 
