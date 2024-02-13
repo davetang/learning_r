@@ -5,7 +5,7 @@ output:
       toc: true
 ---
 
-# Notes on installing R packages
+## Notes on installing R packages
 
 The function `install.packages` from the {utils} packages can install packages from repositories or local files.
 
@@ -50,7 +50,7 @@ install.packages("beepr", repos = "https://cran.ism.ac.jp/", quiet = TRUE)
 packageVersion("beepr")
 ```
 
-# Dependencies
+## Dependencies
 
 List available packages at CRAN-like repositories using `available.packages`.
 
@@ -59,10 +59,26 @@ avail_pack <- available.packages(repos = "https://cran.ism.ac.jp/")
 str(avail_pack)
 ```
 
+[DESCRIPTION](https://cran.r-project.org/doc/manuals/R-exts.html#The-DESCRIPTION-file) of {ggplot2}.
+
+```{r ggplot2_description}
+names(avail_pack['ggplot2', ])
+```
+
 Dependencies of {ggplot2}.
+
+> The "Depends" field gives a comma-separated list of package names which this package depends on. Those packages will be attached before the current package when library or require is called. Each package name may be optionally followed by a comment in parentheses specifying a version requirement. The comment should contain a comparison operator, whitespace and a valid version number, e.g. 'MASS (>= 3.1-20)'.
 
 ```{r ggplot2_depends}
 avail_pack["ggplot2", "Depends"]
+```
+
+Imports of {ggplot2}.
+
+> The "Imports" field lists packages whose namespaces are imported from (as specified in the NAMESPACE file) but which do not need to be attached. Namespaces accessed by the '::' and ':::' operators must be listed here, or in 'Suggests' or 'Enhances' (see below). Ideally this field will include all the standard packages that are used, and it is important to include S4-using packages (as their class definitions can change and the DESCRIPTION file is used to decide which packages to re-install when this happens). Packages declared in the 'Depends' field should not also be in the 'Imports' field. Version requirements can be specified and are checked when the namespace is loaded.
+
+```{r ggplot2_imports}
+avail_pack["ggplot2", "Imports"]
 ```
 
 ## Session info
