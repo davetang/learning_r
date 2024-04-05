@@ -30,6 +30,7 @@ usethis::use_r("colours")
 devtools::document()
 usethis::use_testthat()
 usethis::use_test("colours")
+devtools::test()
 devtools::check()
 ```
 
@@ -306,6 +307,93 @@ The above script makes sure that our tests are run with `devtools::check()`. To 
 
 usethis::use_test("colours")
 ```
+
+`use_test("colours")` creates `tests/testthat/test-colours.R`, which matches up with the R files but with `test-` as the prefix. This test file comes with a small example that shows how to use {testthat}.
+
+```{r}
+#| label: test_that_example
+#| eval: false
+
+test_that("multiplication works", {
+  expect_equal(2 * 2, 4)
+})
+```
+
+Each set of tests starts with the `test_that()` function. This function has two arguments, a description and the code with the tests that we want to run. Inside the code section we see an expect function. This function also has two parts, the thing we want to test and what we expect it to be. There are different functions for different types of expectations.
+
+For our test we want to use the `expect_error()` function, because that is what we expect.
+
+```{r}
+#| label: test_that_n_is_at_least_one
+#| eval: false
+
+test_that("n is at least 1", {
+  expect_error(make_shades("goldenrod", -1),
+               "n must be at least 1")
+  expect_error(make_shades("goldenrod", 0),
+               "n must be at least 1")
+})
+```
+
+To run our tests we use `devtools::test()`. We will see that both of our tests failed. The first test fails because the error message is wrong and the second one because there is no error. Now that we have some tests and we know they check the right things we can modify our function to check the value of `n` and give the correct error.
+
+Let's add some code to check the value of n. We will update the documentation as well so the user knows what values can be used.
+
+```{r}
+#| label: make_shades_check_n
+
+#' Make shades
+#'
+#' Given a colour make \code{n} lighter or darker shades
+#'
+#' @param colour The colour to make shades of
+#' @param n The number of shades to make, at least 1
+#' @param lighter Whether to make lighter (\code{TRUE}) or darker (\code{FALSE})
+#' shades
+#'
+#' @return A vector of \code{n} colour hex codes
+#' @export
+#'
+#' @examples
+#' # Five lighter shades
+#' make_shades("goldenrod", 5)
+#' # Five darker shades
+#' make_shades("goldenrod", 5, lighter = FALSE)
+make_shades <- function(colour, n, lighter = TRUE) {
+  
+  # Check the value of n
+  if (n < 1) {
+    stop("n must be at least 1")
+  }
+  
+  # Convert the colour to RGB
+  colour_rgb <- grDevices::col2rgb(colour)[, 1]
+  
+  # Decide if we are heading towards white or black
+  if (lighter) {
+    end <- 255
+  } else {
+    end <- 0
+  }
+  
+  # Calculate the red, green and blue for the shades
+  # we calculate one extra point to avoid pure white/black
+  red <- seq(colour_rgb[1], end, length.out = n + 1)[1:n]
+  green <- seq(colour_rgb[2], end, length.out = n + 1)[1:n]
+  blue <- seq(colour_rgb[3], end, length.out = n + 1)[1:n]
+  
+  # Convert the RGB values to hex codes
+  shades <- grDevices::rgb(red, green, blue, maxColorValue = 255)
+  
+  return(shades)
+}
+```
+
+These kinds of checks for parameter inputs are an important part of a function that is going to be used by other people (or future you). They make sure that all the input is correct before the function tries to do anything and avoids confusing error messages. However they can be fiddly and repetitive to write. If you find yourself writing lots of these checks two packages that can make life easier by providing functions to do it for you are {checkmate} and {assertthat}.
+
+In the code above we have used the `stop()` function to raise an error. If we wanted to give a warning we would use `warning()` and if just wanted to give some information to the user we would use `message()`. Using `message()` instead of `print()` or `cat()` is important because it means the user can hide the messages using `suppressMessages()` (or `suppressWarnings()` for warnings). Now if we try our tests again they should pass.
+
+If you want to see what parts of your code need testing you can run the `devtools::test_coverage()` function (you will need to install the {DT} and {covr} packages first). This function uses the {covr} package to make a report showing which lines of your code are covered by tests.
 
 # Session information
 
