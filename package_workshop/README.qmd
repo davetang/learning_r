@@ -395,6 +395,155 @@ In the code above we have used the `stop()` function to raise an error. If we wa
 
 If you want to see what parts of your code need testing you can run the `devtools::test_coverage()` function (you will need to install the {DT} and {covr} packages first). This function uses the {covr} package to make a report showing which lines of your code are covered by tests.
 
+## Dependencies
+
+The `make_shades()` function produces shades of a colour but it would be good to see what those look like. Below is a new function called `plot_colours()` that can visualise them for us using {ggplot2}. Add the following function to `colours.R`.
+
+```{r}
+#| label: plot_colours
+#| eval: false
+
+#' Plot colours
+#'
+#' Plot a vector of colours to see what they look like
+#' 
+#' @param colours Vector of colour to plot
+#'
+#' @return A ggplot2 object
+#' @export
+#'
+#' @examples
+#' shades <- make_shades("goldenrod", 5)
+#' plot_colours(shades)
+plot_colours <- function(colours) {
+  plot_data <- data.frame(Colour = colours)
+  
+  ggplot(plot_data,
+         aes(x = .data$Colour, y = 1, fill = .data$Colour,
+             label = .data$Colour)) +
+    geom_tile() +
+    geom_text(angle = "90") +
+    scale_fill_identity() +
+    theme_void()
+}
+```
+
+If we run `devtools::check()`, we'll get the error:
+
+```
+Error in ggplot(plot_data, aes(x = .data$Colour, y = 1, fill = .data$Colour,  : 
+    could not find function "ggplot"
+```
+
+Just like when we export a function in our package we need to make it clear when we are using functions in another package. To do this we can use `usethis::use_package()`.
+
+```{r}
+#| label: use_package
+#| eval: false
+
+usethis::use_package("ggplot2")
+```
+
+This will add {ggplot2} to the `Imports` field in `DESCRIPTION`. If we look in `DESCRIPTION` we will see the following line:
+
+```
+Imports:
+    ggplot2
+```
+
+Those two lines tell us that our package uses functions in {ggplot2}. There are three main types of dependencies.
+
+1. `Imports` is the most common. This means that we use functions from these packages and they must be installed when our package is installed.
+2. The next most common is `Suggests`. These are packages that we use in developing our package (such as {testthat} which is already listed here) or packages that provide some additional, optional functionality. Suggested packages aren't usually installed so we need to do a check before we use them. The output of `usethis::use_package()` will give you an example if you add a suggested package.
+3. The third type of dependency is `Depends`. If you depend on a package it will be loaded whenever your package is loaded. Depends shouldn't usually be used unless your package closely complements another package. An example of when Depends is necessary is if you package mainly operates on an object defined by another package.
+
+Should you use a dependency? Deciding which packages (and how many) to depend on is a difficult and philosophical choice. Using functions from other packages can save you time and effort in development but it might make it more difficult to maintain your package. Some things you might want to consider before depending on a package are:
+
+* How much of the functionality of the package do you want to use?
+* Could you easily reproduce that functionality?
+* How well maintained is the package?
+* How often is it updated? Packages that change a lot are more likely to break your code.
+* How many dependencies of it's own does that package have?
+* Are you users likely to have the package installed already?
+
+Packages like {ggplot2} are good choices for dependencies because they are well maintained, don't change too often, are commonly used and perform a single task so you are likely to use many of the functions.
+
+Now if we change the `plot_colours` function to use the {ggplot2} namespace, we will get no more errors when we run `devtools::check()` but a note.
+
+```{r}
+#| label: plot_colours_ggplot2
+#| eval: false
+
+#' Plot colours
+#'
+#' Plot a vector of colours to see what they look like
+#' 
+#' @param colours Vector of colour to plot
+#'
+#' @return A ggplot2 object
+#' @export
+#'
+#' @examples
+#' shades <- make_shades("goldenrod", 5)
+#' plot_colours(shades)
+plot_colours <- function(colours) {
+  plot_data <- data.frame(Colour = colours)
+  
+  ggplot2::ggplot(plot_data,
+                  ggplot2::aes(x = .data$Colour, y = 1, fill = .data$Colour,
+                               label = .data$Colour)) +
+    ggplot2::geom_tile() +
+    ggplot2::geom_text(angle = "90") +
+    ggplot2::scale_fill_identity() +
+    ggplot2::theme_void()
+}
+```
+
+To deal with the note, we need to import the {rlang} package.
+
+```{r}
+#| label: use_rlang
+#| eval: false
+
+usethis::use_package("rlang")
+```
+
+Writing `rlang::.data` wouldn't be very attractive or readable. When we want to use a function in another package without `::` we need to explicitly import it. Just like when we exported our functions we do this using a {Roxygen} comment.
+
+
+```{r}
+#| label: plot_colours_import
+#| eval: false
+
+#' Plot colours
+#'
+#' Plot a vector of colours to see what they look like
+#' 
+#' @param colours Vector of colour to plot
+#'
+#' @return A ggplot2 object
+#' @export
+#'
+#' @importFrom rlang .data
+#' 
+#' @examples
+#' shades <- make_shades("goldenrod", 5)
+#' plot_colours(shades)
+plot_colours <- function(colours) {
+  plot_data <- data.frame(Colour = colours)
+  
+  ggplot2::ggplot(plot_data,
+                  ggplot2::aes(x = .data$Colour, y = 1, fill = .data$Colour,
+                               label = .data$Colour)) +
+    ggplot2::geom_tile() +
+    ggplot2::geom_text(angle = "90") +
+    ggplot2::scale_fill_identity() +
+    ggplot2::theme_void()
+}
+```
+
+If we used `rlang::.data` in multiple functions in our package it might make sense to only import it once. It doesn't matter where we put the `@importFrom` line (or how many times) it will still be added once to NAMESPACE. This means we can put all import in a central location. The advantage of this is that they only appear once and are all in one place but it makes it harder to know which of our functions have which imports and remove them if they are no longer needed. Which approach you take is up to you.
+
 # Session information
 
 ```{r session_info}
