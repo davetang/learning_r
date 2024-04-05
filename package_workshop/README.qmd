@@ -94,6 +94,17 @@ The `Authors@R` field shows an example of how to define an author. You can see t
 * `ctb`: contributors, people who have made smaller contributions
 * `cph`: copyright holder, useful if this is someone other than the creator (such as their employer)
 
+## License
+
+The software license describes how our code can be used and without one people must assume that it can't be used at all! For this example we will use the MIT license which basically says the code can be used for any purpose and doesn't come with any warranties. There are templates for some of the most common licenses included in {usethis}.
+
+```{r}
+#| label: use_mit_license
+#| eval: false
+ 
+usethis::use_mit_license("Dave Tang")
+```
+
 ## Functions
 
 Use `usethis::use_r()` to create an empty file in `R` to hold our function about colours.
@@ -134,21 +145,90 @@ make_shades <- function(colour, n, lighter = TRUE) {
   
   return(shades)
 }
-
-make_shades("goldenrod", 5)
 ```
 
 Usually when we write a new function we load it by copying the code to the console or sourcing the R file. When we are developing a package we want to try and keep our environment empty so that we can be sure we are only working with objects inside the package. Instead we can load functions using `devtools::load_all()`.
 
-## License
+## Checking your package
 
-The software license describes how our code can be used and without one people must assume that it can't be used at all! For this example we will use the MIT license which basically says the code can be used for any purpose and doesn't come with any warranties. There are templates for some of the most common licenses included in {usethis}.
+The `devtools::check()` function runs a series of checks to make sure your package is working correctly. It is highly recommended that you run `devtools::check()` often and follow its advice to fix any problems.
 
 ```{r}
-#| label: use_mit_license
+#| label: devtools_check
 #| eval: false
- 
-usethis::use_mit_license("Dave Tang")
+
+devtools::check()
+```
+
+You will see all the different types of checks that {devtools} has run but the most important section is at the end where it tells you how many errors, warnings, and notes there are.
+
+* Errors happen when your code has broken and failed one of the checks. If errors are not fixed your package will not work correctly.
+* Warnings are slightly less serious but should also be addressed. Your package will probably work without fixing them but it is highly advised that you do.
+* Notes are advice rather than problems. It can be up to you whether or not to address them but there is usually a good reason to.
+
+Often the failed checks come with hints about how to fix them but sometimes they can be hard to understand.
+
+## Documenting our function
+
+The {roxygen2} package makes it easy to document our function by writing some special comments at the start of our function. This has the extra advantage of keeping the documentation with the code which make it easier to keep it up to date.
+
+If you are using RStudio, open the "Code" menu and select "Insert Roxygen skeleton", which will create the template shown below. The parameters were automatically generated.
+
+```{r}
+#| label: roxygen_skeleton
+
+#' Title
+#'
+#' @param colour 
+#' @param n 
+#' @param lighter 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+```
+
+Roxygen comments all start with `#'`. The first line is the title of the function followed by a blank line. Next is a paragraph that provides a more detailed description of the function.
+
+The next section describes the parameters for the function marked by the `@param` field.
+
+The next field is `@return`, which is used to describe what the function returns. This is usually fairly short but you should provide enough detail to make sure that the user knows what they are getting back.
+
+The next field is `@export` and is a bit different because it doesn't add documentation to the help file but instead modifies the `NAMESPACE` file. Adding `@export` tells {Roxygen} that this is a function that we want to be available to the user. When we build the documentation, {Roxygen} will then add the correct information to the `NAMESPACE` file. If we had an internal function that wasn't meant to be used by the user we would leave out `@export`.
+
+The last field in the skeleton is `@examples` and is where we put some short examples showing how the function can be used. These will be placed in the help file and can be run using `example("function")`.
+
+```{r}
+#| label: roxygen_skeleton_filled
+
+#' Make shades
+#'
+#' Given a colour make n lighter or darker shades
+#' 
+#' @param colour The colour to make shades of
+#' @param n The number of shades to make
+#' @param lighter Whether to make lighter (TRUE) or darker (FALSE) shades
+#'
+#' @return A vector of n colour hex codes
+#' @export
+#'
+#' @examples
+#' # Five lighter shades
+#' make_shades("goldenrod", 5)
+#' # Five darker shades
+#' make_shades("goldenrod", 5, lighter = FALSE)
+```
+
+There are other useful fields such as `@author` (specify the function author), `@references` (any associated references) and `@seealso` (links to related functions).
+
+Use `devtools::document()` to build the documentation.
+
+```{r}
+#| label: document
+#| eval: false
+
+devtools::document()
 ```
 
 # Session information
