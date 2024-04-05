@@ -4,6 +4,7 @@
 - [Introduction](#introduction)
 - [Getting started](#getting-started)
   - [DESCRIPTION](#description)
+  - [Functions](#functions)
   - [License](#license)
 - [Session information](#session-information)
 
@@ -143,6 +144,61 @@ have an email address. Other roles include:
 - `ctb`: contributors, people who have made smaller contributions
 - `cph`: copyright holder, useful if this is someone other than the
   creator (such as their employer)
+
+## Functions
+
+Use `usethis::use_r()` to create an empty file in `R` to hold our
+function about colours.
+
+``` r
+usethis::use_r("colours")
+```
+
+There are no rules about how to organise your functions into different
+files but in general similar functions should be grouped together into
+the same file with a clear name. Putting all functions into a single
+file is not ideal but neither is having a separate file for each
+function. A good rule of thumb is that if you are finding it hard to
+locate a function you might need to move it to a new file.
+
+The example for this workshop is a function that takes the red, green
+and blue values for a colour and returns a given number of shades. Save
+the function below into `R/colours.R`.
+
+``` r
+make_shades <- function(colour, n, lighter = TRUE) {
+  # Convert the colour to RGB
+  colour_rgb <- grDevices::col2rgb(colour)[, 1]
+  
+  # Decide if we are heading towards white or black
+  if (lighter) {
+    end <- 255
+  } else {
+    end <- 0
+  }
+  
+  # Calculate the red, green and blue for the shades
+  # we calculate one extra point to avoid pure white/black
+  red   <- seq(colour_rgb[1], end, length.out = n + 1)[1:n]
+  green <- seq(colour_rgb[2], end, length.out = n + 1)[1:n]
+  blue  <- seq(colour_rgb[3], end, length.out = n + 1)[1:n]
+  
+  # Convert the RGB values to hex codes
+  shades <- grDevices::rgb(red, green, blue, maxColorValue = 255)
+  
+  return(shades)
+}
+
+make_shades("goldenrod", 5)
+```
+
+    [1] "#DAA520" "#E1B74C" "#E8C979" "#F0DBA5" "#F7EDD2"
+
+Usually when we write a new function we load it by copying the code to
+the console or sourcing the R file. When we are developing a package we
+want to try and keep our environment empty so that we can be sure we are
+only working with objects inside the package. Instead we can load
+functions using `devtools::load_all()`.
 
 ## License
 
