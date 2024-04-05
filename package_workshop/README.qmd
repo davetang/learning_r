@@ -27,6 +27,9 @@ pkgbuild::check_build_tools()
 usethis::create_package(path = '/tmp/mypkg')
 usethis::use_mit_license("Dave Tang")
 usethis::use_r("colours")
+devtools::document()
+usethis::use_testthat()
+usethis::use_test("colours")
 devtools::check()
 ```
 
@@ -247,6 +250,61 @@ Use `devtools::document()` to build the documentation.
 #| eval: false
 
 devtools::document()
+```
+
+## Testing
+
+Unit tests are checks to make sure that a function works in the way that we expect. The examples in the documentation act like informal unit tests because they are run as part of the checking process but it is better to have something more rigorous.
+
+One approach to writing unit tests is what is known as "test driven development". The idea is to write the tests before you write a function. This way you know exactly what a function is supposed to do and what problems there might be. While this is a good principal it can take a lot of advance planning.
+
+A more common approach could be called "bug-driven testing". For this approach whenever we come across a bug we write a test for it before we fix it, that way the same bug should never happen a again. When combined with some tests for obvious problems this is a good compromise between testing for every possible outcome and not testing at all.
+
+For example, let's see what happens when we ask `make_shades()` for a negative number of shades.
+
+```{r}
+#| label: make_shades_error
+#| error: true
+
+make_shades("goldenrod", -1)
+```
+
+Before we make any changes to the function let's design some tests to make sure we get what we expect. There are a few ways to write unit tests for R packages but we are going to use the {testthat} package. We can set everything up with {usethis}.
+
+```{r}
+#| label: use_test_that
+#| eval: false
+
+usethis::use_testthat()
+```
+
+A `tests/` directory will be created to hold all our tests. There is also a `tests/testthat.R` file which looks like this:
+
+```{r}
+#| label: test_that_r_script
+#| eval: false
+
+# This file is part of the standard setup for testthat.
+# It is recommended that you do not modify it.
+#
+# Where should you do additional test configuration?
+# Learn more about the roles of various files in:
+# * https://r-pkgs.org/testing-design.html#sec-tests-files-overview
+# * https://testthat.r-lib.org/articles/special-files.html
+
+library(testthat)
+library(mypkg)
+
+test_check("mypkg")
+```
+
+The above script makes sure that our tests are run with `devtools::check()`. To open a new test file use `usethis::use_test()`.
+
+```{r}
+#| label: use_test_colours
+#| eval: false
+
+usethis::use_test("colours")
 ```
 
 # Session information
