@@ -1,6 +1,7 @@
 # R package workshop
 2024-04-05
 
+- [TL;DR](#tldr)
 - [Introduction](#introduction)
 - [Getting started](#getting-started)
   - [DESCRIPTION](#description)
@@ -9,6 +10,23 @@
   - [Checking your package](#checking-your-package)
   - [Documenting our function](#documenting-our-function)
 - [Session information](#session-information)
+
+# TL;DR
+
+Install packages, check whether the system is ready to build packages,
+initialise package, add license, create file to hold functions, and
+check for issues.
+
+``` r
+pkgs <- c("devtools", "usethis", "roxygen2", "testthat", "knitr", "ggplot2", "rlang")
+install.packages(pkgs, Ncpus = 2)
+pkgbuild::check_build_tools()
+
+usethis::create_package(path = '/tmp/mypkg')
+usethis::use_mit_license("Dave Tang")
+usethis::use_r("colours")
+devtools::check()
+```
 
 # Introduction
 

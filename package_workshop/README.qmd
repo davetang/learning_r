@@ -12,6 +12,24 @@ engine: knitr
 library(tidyverse)
 ```
 
+# TL;DR
+
+Install packages, check whether the system is ready to build packages, initialise package, add license, create file to hold functions, and check for issues.
+
+```{r}
+#| label: tl_dr
+#| eval: false
+
+pkgs <- c("devtools", "usethis", "roxygen2", "testthat", "knitr", "ggplot2", "rlang")
+install.packages(pkgs, Ncpus = 2)
+pkgbuild::check_build_tools()
+
+usethis::create_package(path = '/tmp/mypkg')
+usethis::use_mit_license("Dave Tang")
+usethis::use_r("colours")
+devtools::check()
+```
+
 # Introduction
 
 This [R package workshop](https://combine-australia.github.io/r-pkg-dev/) was created by COMBINE, an association for Australian students in bioinformatics, computational biology, and related fields. It is licensed under a [Creative Commons Attribution 4.0 International (CC BY 4.0) license](https://creativecommons.org/licenses/by/4.0/).
