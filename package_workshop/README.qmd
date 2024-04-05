@@ -1,0 +1,54 @@
+---
+title: "R package workshop"
+format:
+  gfm:
+    toc: true
+date: '`r Sys.Date()`'
+date-format: iso
+engine: knitr
+---
+
+```{r load_libraries, include=FALSE}
+library(tidyverse)
+```
+
+# Introduction
+
+This [R package workshop](https://combine-australia.github.io/r-pkg-dev/) was created by COMBINE, an association for Australian students in bioinformatics, computational biology, and related fields. It is licensed under a [Creative Commons Attribution 4.0 International (CC BY 4.0) license]((https://creativecommons.org/licenses/by/4.0/)).
+
+An R package is a collection of functions that are bundled together in a way that makes it easy to share. Usually these functions are designed to work together to complete a specific task such as analysing a particular kind of data. Packages are the best way to distribute code and documentation; even if you never intend to share your package it is useful to have a place to store your commonly used functions. It's a bit more effort now but it will save you a lot of time in the long run.
+
+This workshop teaches a modern package development workflow that makes use of packages designed to help with writing packages. The two main packages are {devtools} and {usethis}:
+
+* {devtools} contains functions that will help with development tasks such as checking, building and installing packages.
+* {usethis} contains a range of templates and handy functions for making life easier, many of which were originally in {devtools}.
+
+Other packages used in this workshop include:
+
+* {roxygen2} for function documentation
+* {testthat} for writing unit tests
+* {knitr} for building vignettes
+
+Install the required packages for this workshop.
+
+```{r}
+#| label: required_packages
+#| eval: false
+
+pkgs <- c("devtools", "usethis", "roxygen2", "testthat", "knitr", "ggplot2", "rlang")
+install.packages(pkgs, Ncpus = 2)
+```
+
+Some stages of the package development process can require other programs to be installed on your computer. To check that you have everything you need run the following:
+
+```{r}
+#| label: check_build_tools
+
+pkgbuild::check_build_tools()
+```
+
+# Session information
+
+```{r session_info}
+sessionInfo()
+```
