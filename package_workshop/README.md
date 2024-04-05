@@ -2,6 +2,9 @@
 2024-04-05
 
 - [Introduction](#introduction)
+- [Getting started](#getting-started)
+  - [DESCRIPTION](#description)
+  - [License](#license)
 - [Session information](#session-information)
 
 # Introduction
@@ -11,7 +14,7 @@ workshop](https://combine-australia.github.io/r-pkg-dev/) was created by
 COMBINE, an association for Australian students in bioinformatics,
 computational biology, and related fields. It is licensed under a
 [Creative Commons Attribution 4.0 International (CC BY 4.0)
-license]((https://creativecommons.org/licenses/by/4.0/)).
+license](https://creativecommons.org/licenses/by/4.0/).
 
 An R package is a collection of functions that are bundled together in a
 way that makes it easy to share. Usually these functions are designed to
@@ -52,6 +55,106 @@ pkgbuild::check_build_tools()
 ```
 
     Your system is ready to build packages!
+
+# Getting started
+
+To begin building a package, we need a package name; names can only
+consist of letters, numbers and dots (.) and must start with a letter.
+While all of these are allowed it is generally best to stick to just
+lowercase letters. Having a mix of lower and upper case letters can be
+hard for users to remember (is it RColorBrewer or Rcolorbrewer or
+rcolorbrewer?). For this workshop, we are going to use {mypkg}.
+
+To create a template for our package, use `usethis::create_package()`.
+
+``` r
+usethis::create_package(path = '/tmp/mypkg')
+```
+
+Several files get created.
+
+``` bash
+ls -R /tmp/mypkg
+```
+
+    /tmp/mypkg:
+    DESCRIPTION
+    mypkg.Rproj
+    NAMESPACE
+    R
+
+    /tmp/mypkg/R:
+
+- `DESCRIPTION` contains the metadata for your package.
+- `NAMESPACE` describes the functions in our package; it should not be
+  manually edited.
+- `mypkg.Rproj` is a RStudio project file.
+- `R` is the directory that will hold all our R code.
+
+These files are the minimal amount that is required for a package but we
+will create other files as we go along. Some other useful (hidden) files
+have also been created by {usethis}:
+
+- `.gitignore` is useful if you use `git` for version control.
+- `.Rbuildignore` is used to mark files that are in the directory but
+  aren’t really part of the package and shouldn’t be included when we
+  build it. Most of the time you won’t need to worry about this as
+  {usethis} will edit it for you.
+
+## DESCRIPTION
+
+The `DESCRIPTION` file is one of the most important parts of a package.
+It contains all the metadata about the package, things like what the
+package is called, what version it is, a description, who the authors
+are, what other packages it depends on, etc.
+
+``` bash
+cat /tmp/mypkg/DESCRIPTION
+```
+
+    Package: mypkg
+    Title: What the Package Does (One Line, Title Case)
+    Version: 0.0.0.9000
+    Authors@R: 
+        person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
+               comment = c(ORCID = "YOUR-ORCID-ID"))
+    Description: What the package does (one paragraph).
+    License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+        license
+    Encoding: UTF-8
+    Roxygen: list(markdown = TRUE)
+    RoxygenNote: 7.3.1
+
+- The `Title` should be a single line in Title Case that explains what
+  your package is.
+- The `Description` is a paragraph which goes into a bit more detail
+  about what the package does.
+
+The `Authors@R` field shows an example of how to define an author. You
+can see that the example person has been assigned the author (“aut”) and
+creator (“cre”) roles. There must be at least one author and one creator
+for every package (they can be the same person) and the creator must
+have an email address. Other roles include:
+
+- `cre`: the creator or maintainer of the package, the person who should
+  be contacted when there are problems
+- `aut`: authors, people who have made significant contributions to the
+  package
+- `ctb`: contributors, people who have made smaller contributions
+- `cph`: copyright holder, useful if this is someone other than the
+  creator (such as their employer)
+
+## License
+
+The software license describes how our code can be used and without one
+people must assume that it can’t be used at all! For this example we
+will use the MIT license which basically says the code can be used for
+any purpose and doesn’t come with any warranties. There are templates
+for some of the most common licenses included in {usethis}.
+
+``` r
+usethis::use_mit_license("Dave Tang")
+```
 
 # Session information
 
