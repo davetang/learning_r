@@ -34,6 +34,7 @@
     - [Coding style](#coding-style)
     - [Version control](#version-control)
     - [Continuous integration](#continuous-integration)
+  - [Resources](#resources)
 - [Session information](#session-information)
 
 # TL;DR
@@ -1189,6 +1190,45 @@ you won’t run into issues when you submit your package to them. If your
 package isn’t on one of the major repositories it helps give your users
 confidence that it will be reliable. Use the `usethis::use_CI_SERVICE()`
 function to set up CI.
+
+## Resources
+
+This section has links to additional resources on package development.
+
+- [Writing R
+  extensions](https://cran.r-project.org/doc/manuals/R-exts.html)
+- [Bioconductor Package
+  Guidelines](https://contributions.bioconductor.org/index.html)
+- [rOpenSci Packages: Development, Maintenance, and Peer
+  Review](https://devguide.ropensci.org/)
+- [Developing Packages with the RStudio
+  IDE](https://support.posit.co/hc/en-us/articles/200486488-Developing-Packages-with-the-RStudio-IDE)
+- [Building, Testing, and Distributing
+  Packages](https://support.posit.co/hc/en-us/articles/200486508-Building-Testing-and-Distributing-Packages)
+- [Writing R Package
+  Documentation](https://support.posit.co/hc/en-us/articles/200532317-Writing-R-Package-Documentation)
+- [R Packages](https://r-pkgs.org/)
+- [Advanced R](https://adv-r.hadley.nz/index.html)
+- [Advanced R Course](https://privefl.github.io/advr38book/)
+- [Writing an R package from scratch
+  (Updated)](https://r-mageddon.netlify.app/post/writing-an-r-package-from-scratch/)
+- [R package primer](https://kbroman.org/pkg_primer/)
+- [R Package Development
+  Pictorial](https://www.mjdenny.com/R_Package_Pictorial.html)
+- [Developing R packages](https://github.com/jtleek/rpackages)
+- [Instructions for creating your own R
+  package](https://web.mit.edu/insong/www/pdf/rpackage_instructions.pdf)
+- [R Forwards Package
+  Workshop](https://github.com/forwards/workshops/tree/main/Chicago2019)
+- [Write your own R package](https://stat545.com/package-overview.html)
+- [How to develop good R packages (for open
+  science)](https://masalmon.eu/2017/12/11/goodrpackages/)
+- [Tidyverse style guide](https://style.tidyverse.org/)
+- [Google’s R Style
+  Guide](https://google.github.io/styleguide/Rguide.html)
+- [Jean Fan’s R Style Guide](https://jef.works/R-style-guide/)
+- [The evolution of R programming
+  styles](https://github.com/chainsawriot/rstyle)
 
 # Session information
 
