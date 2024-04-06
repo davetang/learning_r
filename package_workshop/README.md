@@ -24,6 +24,11 @@
     - [Bioconductor](#bioconductor)
     - [rOpenSci](#ropensci)
     - [Code sharing websites](#code-sharing-websites)
+  - [Advanced topics](#advanced-topics)
+    - [Including datasets](#including-datasets)
+    - [Designing objects](#designing-objects)
+    - [Integrating other languages](#integrating-other-languages)
+    - [Metaprogramming](#metaprogramming)
 - [Session information](#session-information)
 
 # TL;DR
@@ -1000,6 +1005,86 @@ but the (very) quick steps in RStudio are:
 
 Refresh the GitHub repository website and you should see the changes you
 have made.
+
+## Advanced topics
+
+Most of the following topics are covered in Hadley Wickham’s [Advanced R
+book](https://adv-r.hadley.nz/).
+
+### Including datasets
+
+It can be useful to include small datasets in your R package which can
+be used for testing and examples in your vignettes. You may also have
+reference data that is required for your package to function. If you
+already have the data as an object in R it is easy to add it to your
+package with `usethis::use_data()`. The `usethis::use_data_raw()`
+function can be used to write a script that reads a raw data file,
+manipulates it in some way and adds it to the package with
+`usethis::use_data()`. This is useful for keeping a record of what you
+have done to the data and updating the processing or dataset if
+necessary.
+
+See the [Data section of R packages](https://r-pkgs.org/data.html) for
+more details about including data in your package.
+
+### Designing objects
+
+If you work with data types that don’t easily fit into a table or matrix
+you may find it convenient to design specific objects to hold them.
+Objects can also be useful for holding the output of functions such as
+those that fit models or perform tests. R has several different object
+systems.
+
+The S3 system is the simplest and probably the most commonly used.
+Packages in the Bioconductor ecosystem make use of the more formal S4
+system. If you want to learn more about designing R objects a good place
+to get started is the [Object-oriented programming
+chapter](https://adv-r.hadley.nz/oo.html) of Hadley Wickham’s Advanced R
+book. Other useful guides include Nicholas Tierney’s [A Simple Guide to
+S3 Methods](https://arxiv.org/abs/1608.07161) and Stuart Lee’s [S4: a
+short guide for the
+perplexed](https://stuartlee.org/2019/07/09/s4-short-guide/).
+
+### Integrating other languages
+
+If software for completing a task already exists but is in another
+language it might make sense to write an R package that provides an
+interface to the existing implementation rather than re-implementing it
+from scratch. Here are some of the R packages that help you integrate
+code from other languages:
+
+- Rcpp (C++) <https://www.rcpp.org/>
+- reticulate (Python) <https://rstudio.github.io/reticulate/>
+- RStan (Stan) <https://mc-stan.org/users/interfaces/rstan>
+- rJava (Java) <https://www.rforge.net/rJava/>
+
+Another common reason to include code from another language is to
+improve performance. While it is often possible to make code faster by
+re-considering how things are done within R, sometimes there is no
+alternative. The {Rcpp} package makes it very easy to write snippets of
+C++ code that is called from R. Depending on what you are doing moving
+even very small bits of code to C++ can have big impacts on performance.
+Using {Rcpp} can also provide access to existing C libraries for
+specialised tasks.
+
+The [Rewriting R code in C++](https://adv-r.hadley.nz/rcpp.html) section
+of Advanced R explains when and how to use {Rcpp}. You can find other
+resources including a gallery of examples on the [official Rcpp
+website](https://www.rcpp.org/).
+
+### Metaprogramming
+
+Metaprogramming refers to code that reads and modifies other code. This
+may seem like an obscure topic but it is important in R because of its
+relationship to non-standard evaluation (another fairly obscure topic).
+You may not have heard of non-standard evaluation before but it is
+likely you have used it. This is what happens whenever you provide a
+function with a bare name instead of a string or a variable.
+Metaprogramming particularly becomes relevant to package development if
+you want to have functions that make use of packages in the Tidyverse
+such as {dplyr}, {tidyr}, and {purrr}. The
+[Metaprogramming](https://adv-r.hadley.nz/metaprogramming.html) chapter
+of Advanced R covers the topic in more detail.
 
 # Session information
 
