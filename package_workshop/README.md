@@ -1,5 +1,5 @@
 # R package workshop
-2024-04-05
+2024-04-06
 
 - [TL;DR](#tldr)
 - [Introduction](#introduction)
@@ -11,6 +11,11 @@
   - [Documenting our function](#documenting-our-function)
   - [Testing](#testing)
   - [Dependencies](#dependencies)
+  - [Other documentation](#other-documentation)
+    - [Package help file](#package-help-file)
+    - [Vignettes](#vignettes)
+    - [README](#readme)
+    - [Package website](#package-website)
 - [Session information](#session-information)
 
 # TL;DR
@@ -670,6 +675,105 @@ advantage of this is that they only appear once and are all in one place
 but it makes it harder to know which of our functions have which imports
 and remove them if they are no longer needed. Which approach you take is
 up to you.
+
+## Other documentation
+
+### Package help file
+
+Users can find out about our functions using `?function-name` but what
+if they want to find out about the package itself? There is some
+information in the DESCRIPTION but that can be hard to access. We can
+add a help file for the package using `usethis::use_package_doc()`.
+
+``` r
+usethis::use_package_doc()
+```
+
+This command will create `'R/mypkg-package.R'`, which contains the
+following:
+
+``` r
+#' @keywords internal
+"_PACKAGE"
+
+## usethis namespace: start
+## usethis namespace: end
+NULL
+```
+
+When we run `devtools::document()` a new .Rd file will be created and we
+can view the contents using `?mypkg`. The information here has been
+automatically pulled from the `DESCRIPTION` file so we only need to
+update it in one place.
+
+### Vignettes
+
+The documentation we have written so far explains how individual
+functions work in detail but it doesn’t show what the package does as a
+whole. Vignettes are short tutorials that explain what the package is
+designed for and how different functions can be used together. There are
+different ways to write vignettes but usually they are R Markdown files.
+We can create a vignette with `usethis::use_vignette()`. There can be
+multiple vignettes but it is common practice to start with one that
+introduces the whole package.
+
+``` r
+usethis::use_vignette("mypkg")
+```
+
+This will create `vignettes/mypkg.Rmd` that you can use to create a
+tutorial for your package.
+
+To see what the vignette looks like run `devtools::build_vignettes()`.
+Asking {devtools} to build the vignette rather than rendering it in
+another way (such as the Knit button in RStudio) makes sure that we are
+using the development version of the package rather than any version
+that is installed.
+
+``` r
+devtools::build_vignettes()
+```
+
+This creates `doc/` that contains the rendered vignette. If you want to
+use any other packages in your vignette that the package doesn’t already
+depend on you need to add them as a suggested dependency.
+
+### README
+
+If you plan on sharing the source code rather than the built package it
+is useful to have a `README` file to explain what the package is, how to
+install and use it, how to contribute, etc. We can create a template
+with `usethis::use_readme_md()` (if we wanted to and R Markdown file
+with R code and output we might use `usethis::use_readme_rmd()`
+instead).
+
+``` r
+usethis::use_readme_rmd()
+```
+
+This will create `README.Rmd` and will be used to render `README.md`.
+
+There are the comments near the top that mention badges and you might
+have seen badges (or shields) on `README` files in code repositories
+before. There are several {usethis} functions for adding badges. For
+example we can mark this package as been at the experimental stage using
+`usethis::use_lifecycle_badge()`.
+
+``` r
+usethis::use_lifecycle_badge("experimental")
+```
+
+### Package website
+
+If you have a publicly available package it can be useful to have a
+website displaying the package documentation. It gives your users
+somewhere to go and helps your package appear in search results. Luckily
+this is easily achieved using the {pkgdown} package. If you have it
+installed you can set it up with {usethis}.
+
+``` r
+usethis::use_pkgdown()
+```
 
 # Session information
 
