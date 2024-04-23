@@ -198,10 +198,7 @@ For simple classes a validator is not necessary and the helper can be skipped if
 
 ### Constructors
 
-S3 doesn't provide a formal definition of a class, so it has no built-in way to
-ensure that all objects of a given class have the same structure (i.e. the same
-base type and the same attributes with the same types). Instead, you must
-enforce a consistent structure by using a **constructor**.
+S3 doesn't provide a formal definition of a class, so it has no built-in way to ensure that all objects of a given class have the same structure (i.e. the same base type and the same attributes with the same types). Instead, you must enforce a consistent structure by using a **constructor**.
 
 The constructor should follow three principles:
 
@@ -209,8 +206,7 @@ The constructor should follow three principles:
 2. Have one argument for the base object, and one for each attribute.
 3. Check the type of the base object and the types of each attribute.
 
-We'll get started with a constructor for the simplest S3 class: `Date`. A
-`Date` is just a double with a single attribute: its `class` is "Date".
+We'll get started with a constructor for the simplest S3 class: `Date`. A `Date` is just a double with a single attribute: its `class` is "Date".
 
 ```{r new_date}
 new_Date <- function(x = double()) {
@@ -220,6 +216,28 @@ new_Date <- function(x = double()) {
 
 new_Date(c(-1, 0, 1))
 ```
+
+The purpose of constructors is to help you, the developer. That means you can keep them simple, and you don't need to optimise error messages for public consumption. If you expect users to also create objects, you should create a friendly helper function, called `class_name`.
+
+A slightly more complicated constructor is that for `difftime`, which is used to represent time differences. It is again built on a double, but has a `units` attribute that must take one of a small set of values.
+
+```{r new_difftime}
+new_difftime <- function(x = double(), units = "secs"){
+  stopifnot(is.double(x))
+  units <- match.arg(units, c("secs", "mins", "hours", "days", "weeks"))
+  
+  structure(
+    x,
+    class = "difftime",
+    units = units
+  )
+}
+
+new_difftime(c(1, 10, 3600), "secs")
+new_difftime(52, "weeks")
+```
+
+The constructor is a developer function: it will be called in many places, by an experienced user. That means it is OK to trade a little safety in return for performance, and you should avoid potentially time-consuming checks in the constructor.
 
 ## Session info
 
