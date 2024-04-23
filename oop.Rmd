@@ -100,9 +100,7 @@ is.numeric(factor("x"))
 
 ## S3
 
-An S3 object is a base type with at least a `class` attribute. As an example,
-consider the factor. Its base type is the integer vector and it has a `class`
-attribute of "factor" and a `levels` attribute that stores the possible levels.
+An S3 object is a base type with at least a `class` attribute. As an example, consider the factor. Its base type is the integer vector and it has a `class` attribute of "factor" and a `levels` attribute that stores the possible levels.
 
 ```{r factor_example}
 f <- factor(c("a", "b", "c"))
@@ -111,17 +109,13 @@ typeof(f)
 attributes(f)
 ```
 
-You can get the underlying base type by using `unclass()`, which strips the
-class attribute, causing it to lose its special behaviour.
+You can get the underlying base type by using `unclass()`, which strips the class attribute, causing it to lose its special behaviour.
 
 ```{r unclass_a_factor}
 unclass(f)
 ```
 
-An S3 object behaves differently from its underlying base type whenever it is
-passed to a **generic** (short for generic function). The easiest way to tell
-if a function is a generic is to use `sloop::ftype()` and look for "generic" in
-the output.
+An S3 object behaves differently from its underlying base type whenever it is passed to a **generic** (short for generic function). The easiest way to tell if a function is a generic is to use `sloop::ftype()` and look for "generic" in the output.
 
 ```{r ftype}
 ftype(print)
@@ -129,8 +123,7 @@ ftype(str)
 ftype(unclass)
 ```
 
-A generic function defines an interface, which uses a different implementation
-depending on the class of an argument (almost always the first argument).
+A generic function defines an interface, which uses a different implementation depending on the class of an argument (almost always the first argument).
 
 ```{r print_unclass}
 print(f)
@@ -139,10 +132,7 @@ print(f)
 print(unclass(f))
 ```
 
-The generic is a middleman: its job is to define the interface (i.e. the
-arguments) then find the right implementation for the job. The implementation
-for a specific class is called a **method**, and the generic finds that method
-by performing **method dispatch**.
+The generic is a middleman: its job is to define the interface (i.e. the arguments) then find the right implementation for the job. The implementation for a specific class is called a **method**, and the generic finds that method by performing **method dispatch**.
 
 You can use `sloop::s3_dispatch()` to see the process of method dispatch.
 
@@ -150,23 +140,16 @@ You can use `sloop::s3_dispatch()` to see the process of method dispatch.
 sloop::s3_dispatch(print(f))
 ```
 
-Note that S3 methods are functions with a special naming scheme
-`generic.class()`. For example, the `factor` method for the `print()` generic
-is called `print.factor()`. **You should never call the method directly, but
-instead rely on the generic to find it for you**.
+Note that S3 methods are functions with a special naming scheme `generic.class()`. For example, the `factor` method for the `print()` generic is called `print.factor()`. **You should never call the method directly, but instead rely on the generic to find it for you**.
 
-Generally, you can identify a method by the presence of `.` in the function
-name but use `sloop::ftype()` to confirm.
+Generally, you can identify a method by the presence of `.` in the function name but use `sloop::ftype()` to confirm.
 
 ```{r ftype_check}
 ftype(t.test)
 ftype(t.data.frame)
 ```
 
-**You can not see the source code for most S3 methods by typing their names
-unlike most functions. That's because S3 methods are not usually exported: they
-live only inside the package, and are not available from the global
-environment**. Use `sloop::s3_get_method()` to get the method code.
+**You can not see the source code for most S3 methods by typing their names unlike most functions. That's because S3 methods are not usually exported: they live only inside the package, and are not available from the global environment**. Use `sloop::s3_get_method()` to get the method code.
 
 ```{r s3_get_method}
 sloop::s3_get_method(weighted.mean.Date)
@@ -174,9 +157,7 @@ sloop::s3_get_method(weighted.mean.Date)
 
 ## Classes
 
-S3 has no formal definition of a class: to make an object an instance of a
-class, you simply **set the class attribute**. You can do that during creation
-with `structure()`, or after with `class<-()`.
+S3 has no formal definition of a class: to make an object an instance of a class, you simply **set the class attribute**. You can do that during creation with `structure()`, or after with `class<-()`.
 
 ```{r structure_class}
 # Create and assign class in one step
@@ -187,8 +168,7 @@ x <- list()
 class(x) <- "my_class"
 ```
 
-You can determine the class of an S3 object with `class(x)` and see if an
-object is an instance of a class using `inherits(x, "classname")`.
+You can determine the class of an S3 object with `class(x)` and see if an object is an instance of a class using `inherits(x, "classname")`.
 
 ```{r class_inherits}
 class(x)
@@ -196,27 +176,25 @@ inherits(x, "my_class")
 inherits(x, "your_class")
 ```
 
-The class name can be any string, but Hadley recommends using only letters and
-`_`. Avoid `.` because it can be confused with the `.` separator between a
-generic name and a class name. When using a class in a package, it is
-recommended that the package name be included with the class name. That ensures
-you won't accidentally clash with a class defined by another package.
+The class name can be any string, but Hadley recommends using only letters and `_`. Avoid `.` because it can be confused with the `.` separator between a generic name and a class name. When using a class in a package, it is recommended that the package name be included with the class name. That ensures you won't accidentally clash with a class defined by another package.
 
-When creating a class, it is recommended that these three functions are
-provided:
+S3 has no checks for correctness which means you can change the class of existing objects.
 
-* A low-level **constructor**, `new_myclass()`, that efficiently creates new
-  objects with the correct structure.
+```{r change_class_of_existing_obj}
+mod <- lm(log(mpg) ~ log(disp), data = mtcars)
+class(mod)
 
-* A **validator**, `validate_myclass()`, that performs more computationally
-  expensive checks to ensure that the object has correct values.
+class(mod) <- "Date"
+class(mod)
+```
 
-* A user-friendly **helper**, `myclass()`, that provides a convenient way for
-  others to create objects of your class.
+When creating a class, it is recommended that these three functions are provided:
 
-For simple classes a validator is not necessary and the helper can be skipped
-if the class is for internal use only, but a constructors should always be
-provided.
+* A low-level **constructor**, `new_myclass()`, that efficiently creates new objects with the correct structure.
+* A **validator**, `validate_myclass()`, that performs more computationally expensive checks to ensure that the object has correct values.
+* A user-friendly **helper**, `myclass()`, that provides a convenient way for others to create objects of your class.
+
+For simple classes a validator is not necessary and the helper can be skipped if the class is for internal use only, but a constructors should always be provided.
 
 ### Constructors
 
