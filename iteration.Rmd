@@ -53,6 +53,79 @@ ChickWeight |>
   )
 ```
 
+## Pivot longer
+
+Compare `across` with `pivot_longer`.
+
+```{r across_again}
+mtcars |>
+  summarise(
+    across(mpg:qsec, median)
+  )
+```
+
+Using `pivot_longer` is useful if `across` isn't flexible enough.
+
+```{r pivot_longer}
+mtcars |>
+  pivot_longer(mpg:qsec) |>
+  group_by(name) |>
+  summarise(median = median(value))
+```
+
+## Reading multiple files
+
+[Create multiple files](https://davetang.org/muse/2023/06/23/reading-list-of-files-into-single-r-data-frame/).
+
+```{r random_files}
+random_df <- function(num_row = 100, num_col = 100, seed = 1984){
+  set.seed(seed)
+  matrix(
+    data = 
+      runif(
+        n = num_row * num_col,
+        min = 0,
+        max = 1
+      ),
+    nrow = num_row
+  ) |> as.data.frame()
+}
+
+random_files <- function(nfiles, prefix = 'x', outdir = 'random', leading_zero = 6){
+  if(!dir.exists(outdir)){
+    dir.create(outdir)
+  }
+  purrr::map(1:nfiles, function(x){
+    write.csv(
+      x = random_df(seed = x),
+      file = paste0(outdir, '/', prefix, stringr::str_pad(x, leading_zero, pad = 0), ".csv"),
+      row.names = FALSE
+    )
+  }) -> dev_null
+}
+
+random_files(5)
+
+list.files("random")
+```
+
+Read the files using `list_rbind`; remember to use `set_names` first and the `names_to` parameter.
+
+```{r list_rbind}
+list.files(path = "random", pattern = "csv$", full.names = TRUE) |>
+  purrr::set_names(basename) |>
+  purrr::map(readr::read_csv, show_col_types = FALSE) |>
+  purrr::list_rbind(names_to = "file") -> my_df
+
+dim(my_df)
+```
+
+Take a look at the data frame.
+
+```{r head_my_df}
+head(my_df)
+```
+
 ## Session info
 
 Session info.
