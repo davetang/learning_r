@@ -15,7 +15,8 @@ for tool in ${dependencies[@]}; do
    check_depend ${tool}
 done
 
-RVER=4.3.2
+RVER=4.4.0
+IMAGE=davetang/rstudio:${RVER}
 PORT=9998
 NAME=r_package_test
 
@@ -29,7 +30,7 @@ docker run \
    -e PASSWORD=password \
    -e USERID=$(id -u) \
    -e GROUPID=$(id -g) \
-   rocker/rstudio:${RVER}
+   ${IMAGE}
 
 >&2 echo ${NAME} listening on port ${PORT}
 
