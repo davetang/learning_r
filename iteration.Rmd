@@ -1,0 +1,62 @@
+---
+title: "Iteration"
+output:
+   github_document:
+      toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.path = "img/")
+library(tidyverse)
+```
+
+# Iterating using {dplyr} and {purrr}
+
+Ways to iterate using packages from the Tidyverse.
+
+## Working with multiple columns
+
+Use `across()`
+
+```{r across}
+mtcars |>
+  summarise(
+    n = n(),
+    across(mpg:qsec, median)
+  )
+```
+
+Multiple functions by using a list (and modifying column names by using `.names`).
+
+```{r across_multiple_functions}
+mtcars |>
+  summarise(
+    across(
+      mpg:qsec,
+      list(
+        mean = mean,
+        median = median
+      ),
+      .names = "{.fn}_{.col}"
+    )
+  )
+```
+
+Use `where()` to filter columns.
+
+```{r across_where}
+ChickWeight |>
+  summarise(
+    across(where(is.double), mean)
+  )
+```
+
+## Session info
+
+Session info.
+
+```{r session_info, echo=FALSE}
+sessionInfo()
+```
