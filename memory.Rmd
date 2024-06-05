@@ -1,0 +1,69 @@
+---
+title: "Memory usage in R"
+output:
+   github_document:
+      toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.path = "img/")
+library(tidyverse)
+```
+
+## Data
+
+Create `mat1`.
+
+```{r mat1}
+num_rows <- 1000
+num_cols <- 1000
+
+mat1 <- matrix(num_rows * num_cols, nrow = num_rows, ncol = num_cols)
+dim(mat1)
+```
+
+Create `mat2`.
+
+```{r mat1}
+num_rows <- 10000
+num_cols <- 10000
+
+mat2 <- matrix(num_rows * num_cols, nrow = num_rows, ncol = num_cols)
+dim(mat2)
+```
+
+## Memory usage
+
+`object.size` reports the space allocated for an object.
+
+```{r object_size}
+format(object.size(mat1), 'auto')
+format(object.size(mat2), 'auto')
+```
+
+In RStudio, the [Environment pane](https://support.posit.co/hc/en-us/articles/1500005616261-Understanding-Memory-Usage-in-the-RStudio-IDE) will show the amount of memory used in the session. Currently it is showing 1.05 GiB.
+
+Remove `mat2`.
+
+```{r remove_mat2}
+rm(mat2)
+ls()
+```
+
+The memory usage is still 1.05 GiB. Run `gc()` to cause a garbage collection to take place.
+
+```{r run_gc}
+gc()
+```
+
+Now the memory usage is down to 309 MiB.
+
+## Session info
+
+Session info.
+
+```{r session_info, echo=FALSE}
+sessionInfo()
+```
