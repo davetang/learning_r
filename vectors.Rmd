@@ -50,6 +50,52 @@ Each of the four primary types has a special syntax to create an individual valu
 
 You can determine the type of a vector with `typeof()` and its length with `length()`.
 
+### Missing values
+
+R represents missing or unknown values with the special sentinel value `NA`. Missing values tend to be infectious as most computations involving a missing value will return another missing values. There are only a few exceptions to this rule and these occur when some identity holds for all possible inputs.
+
+Propagation ofmissingness leads to a common mistake when determining which values in a vector are missing.
+
+```{r}
+x <- c(NA, 5, NA, 10)
+x == NA
+```
+
+The result is correct because there's no reason to believe that **one missing value has the same value as another**, i.e., since `NA` is an unknown value, we can't subset using `NA` and if we do everything is unknown.
+
+For testing if there are `NA`'s, use `is.na()`.
+
+```{r}
+x <- c(NA, 5, NA, 10)
+is.na(x)
+```
+
+### Testing and coercion
+
+Generally, you can **test** if a vector is of a given type with an `is.*()` function, but these functions need to be used with care.
+
+`is.logical()`, `is.integer()`, `is.double()`, and `is.character()` do what you might expect, which is they test if a vector is a logical, integer, double, or character.
+
+Avoid `is.vector()`, `is.atomic()`, and `is.numeric()` because they don't test if you have a vector, atomic vector, or numeric vector. You will need to read the documentation carefully to figure out what they actually do.
+
+For atomic vectors, type is a property of the entire vector: all elements must be the same type. When you attempt to combine different types they will be **coerced** in a fixed order:
+
+character -> double -> integer -> logical
+
+For example, combining a character and an integer yields a character:
+
+```{r}
+str(c("a", 1L))
+```
+
+Coercion often happens automatically and most mathematical functions (`+`, `log`, `abs`, etc.) will coerce to numeric. This coercion is particularly useful for logical vectors because `TRUE` becomes and `FALSE` becomes 0.
+
+Generally, you can deliberately coerce by using an `as.*()` function, like `as.logical()`, `as.integer()`, `as.double()`, or `as.character()`. Failed coercion of strings generates a warning and a missing value.
+
+```{r}
+as.integer(c("1", "1.5", "a"))
+```
+
 ## Session info
 
 Session info.
