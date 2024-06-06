@@ -39,6 +39,17 @@ There are four primary types of atomic vectors:
 
 Collectively integer and double vectors are known as numeric vectors. There are two rare types: complex and raw.
 
+### Scalars
+
+Each of the four primary types has a special syntax to create an individual value, AKA a scalar (a vector of length one):
+
+* Logicals can be written in full (`TRUE` or `FALSE`) or abbreviated (`T` or `F`)
+* Doubles can be specified in decimal, scientific, or hexadecimal form. There are three special values unique to doubles: `Inf`, `-Inf`, and `NaN` (not a number). These are special values defined by the floating point standard.
+* Integers are written similarly to doubles but must be followed by `L` (Long integer) and can not contain fractional values
+* Strings are surrounded by `"` or `'` and special characters are escaped with `\`.
+
+You can determine the type of a vector with `typeof()` and its length with `length()`.
+
 ## Session info
 
 Session info.
