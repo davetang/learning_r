@@ -1,0 +1,48 @@
+---
+title: "Vectors"
+output:
+   github_document:
+      toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.path = "img/")
+library(tidyverse)
+```
+
+# Introduction
+
+The most important family of data types in base R are vectors (from Advanced R). All the other data types are known as "node" types, which include things like functions and environments. You are most likely to come across this highly technical term when using `gc()`: the "N" in `Ncells` stands for nodes and the "V" in `Vcells` stands for vectors.
+
+Vectors come in two flavours:
+
+1. atomic vectors and
+2. lists.
+
+They differ in terms of their elements' types: for atomic vectors, all elements must have the same type; for lists, elements can have different types. While not a vector, `NULL` is closely related to vectors and often serves the role of a generic zero length vector.
+
+Every vector can also have **attributes**, which you can think of as a named list of arbitrary metadata. Two attributes are particularly important:
+
+1. the **dimension** attribute turns vectors into matrices and arrays and
+2. the **class** attribute powers the S3 object system.
+
+## Atomic vectors
+
+There are four primary types of atomic vectors:
+
+1. logical,
+2. integer,
+3. double, and
+4. character (which contains strings).
+
+Collectively integer and double vectors are known as numeric vectors. There are two rare types: complex and raw.
+
+## Session info
+
+Session info.
+
+```{r session_info, echo=FALSE}
+sessionInfo()
+```
