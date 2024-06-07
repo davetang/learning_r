@@ -230,6 +230,109 @@ Many of the functions for working with vectors have generalisations for matrices
 
 A vector without a `dim` attribute set is often thought of as 1-dimensional, but actually has `NULL` dimensions. You can also have matrices with a single row or column, or arrays with a single dimension. They may print similarly, but will behave differently. The differences aren't too important but it's useful to know they exist in case you get strange output from a function. As always, use `str()` to reveal the differences.
 
+## S3 atomic vectors
+
+One of the most important vector attributes is `class`, which underlies the S3 object system. Having a class attribute turns an object into an **S3 object**, which means it will behave differently from a regular vector when passed to a **generic** function.
+
+Every S3 object is built on top of a base type, and often stores additional information in other attributes. There are four important S3 vectors used in base R:
+
+1. Categorical data, where values come from a fixed set of levels recorded in **factor** vectors
+2. Dates (with day resolution), which are recorded in **Date** vectors
+3. Date-times (with second or sub-second resolution), which are stored in **POSIXct** vectors
+4. Durations, which are stored in **difftime** vectors
+
+### Factors
+
+A factor is a vector that can contain only predefined values. It is used to store categorical data. Factors are built on top of an integer vector with two attributes:
+
+1. a `class` "factor", which makes it behave differently from regular integer vectors, and
+2. `levels`, which defines the set of allowed values.
+
+```{r}
+x <- factor(c('a', 'b', 'b', 'a'))
+x
+
+typeof(x)
+
+attributes(x)
+```
+
+Factors are useful when you know the set of possible values but they're not all present in a given dataset. In contrast to a character vector, when you tabulate a factor, you'll get counts of all categories including the unobserved ones.
+
+```{r}
+sex_char <- rep('m', 3)
+
+sex_factor <- factor(sex_char, levels = c('m', 'f'))
+
+table(sex_char)
+table(sex_factor)
+```
+
+**Ordered** factors are a minor variation of factors. In general, they behave like regular factors but the order of the levels is meaningful like low, medium, and high; this property is automatically leveraged by some modelling and visualisation functions.
+
+```{r}
+grade <- ordered(c('b', 'b', 'a', 'a'), levels = c('c', 'b', 'a'))
+grade
+```
+
+In base R you tend to encounter factors very frequently because many base R functions automatically convert character vectors to factors. This is sub-optimal because there is no way for those functions to know the set of all possible levels or their correct order: the levels are a property of theory or experimental design, not of the data. Instead, use the argument `stringsAsFactors = FALSE` to suppress this behaviour (this is the default nowadays), and then manually convert character vectors to factors using your knowledge of the "theoretical" data.
+
+While factors look like (and often behave list) character vectors, they are built on top of integers. So be careful when treating them like strings. Some string methods will automatically coerce factors to strings, others will throw an error, and still others will use the underlying integer values. For this reason, it is usually best to explicitly convert factors to character vectors if you need string-like behaviour.
+
+### Dates
+
+Date vectors are built on top of double vectors. They have class "Date" and no other attributes.
+
+```{r}
+today <- Sys.Date()
+typeof(today)
+
+attributes(today)
+```
+
+The value of the double (which can be seen by stripping the class), represents the number of days since 1970-01-01.
+
+```{r}
+date <- as.Date("1970-02-01")
+unclass(date)
+```
+
+### Date-times
+
+Base R provides two ways of storing date-time information, POSIXct and POSIXlt. POSIX is short for Portable Operating System Interface, which is a family of cross-platform standards. "ct" stands for calendar time and "lt" for local time. Here we'll focus on POSIXct, because it's the simplest, is built on top of an atomic vector, and is most appropriate for use in data frames. POSIXct vectors are built on top of double vectors, where the value represents the number of seconds since 1970-01-01.
+
+```{r}
+now_ct <- as.POSIXct("2024-06-07 18:00", tz = "UTC")
+now_ct
+
+typeof(now_ct)
+
+attributes(now_ct)
+```
+
+The `tzone` attribute controls only how the date-time is formatted; it does not control the instant of time represented by the vector.
+
+```{r}
+structure(now_ct, tzone = "Asia/Tokyo")
+structure(now_ct, tzone = "Australia/Perth")
+```
+
+### Durations
+
+Durations, which represent the amount of time between pairs of dates or date-times, are stored in difftimes. Difftimes are built on top of doubles, and have a units attribute that determines how the integer should be interpreted.
+
+```{r}
+one_week_1 <- as.difftime(1, units = "weeks")
+one_week_1
+typeof(one_week_1)
+attributes(one_week_1)
+
+one_week_2 <- as.difftime(7, units = "days")
+one_week_2
+typeof(one_week_2)
+attributes(one_week_2)
+```
+
 ## Session info
 
 Session info.
