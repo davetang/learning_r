@@ -11,6 +11,16 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(fig.path = "img/")
 ```
 
+```{r install_packages, include=FALSE}
+my_packages <- c("ggbeeswarm")
+
+sapply(my_packages, function(x){
+  if(!require(x, character.only = TRUE)){
+    install.packages(x, quiet = TRUE)
+  }
+})
+```
+
 # Introduction
 
 The three core features of R are object-orientation, vectorisation, and its
@@ -1091,50 +1101,6 @@ Visualise a table.
 mosaicplot(table(ChickWeight$Time, ChickWeight$Diet), main = "Timepoint versus diet")
 ```
 
-## Useful tips
-
-A lot of R books are free to read; check out the
-[bookdown](https://bookdown.org/) page to see some of the best R books.
-
-R has four special values:
-
-1. `NA` - used for representing missing data.
-2. `NULL` - represents not having a value and unlike `NA`, it is its own object
-   and cannot be used in a vector.
-3. `Inf`/`-Inf` - used for representing numbers too big for R (see below).
-4. `NaN` - used for storing results that are not a number.
-
-Check the `.Machine` variable to find out the numerical characteristics of the
-machine R is running on, such as the largest double or integer and the
-machine's precision.
-
-```{r machine}
-noquote(unlist(format(.Machine)))
-```
-
-When asking for help online, it is useful to include a minimal example that
-includes some data specific to your question. To easily convert data into code,
-use the `dput()` function. The example below is just for illustrative purposes
-since the `women` dataset is included with R, so you would not need to generate
-code for it.
-
-```{r dput}
-dput(women)
-```
-
-Show all the functions of a package.
-
-```{r stringr_functions}
-ls("package:stringr")
-```
-
-Search is useful to list the search path, i.e. where R will look, for R objects
-such as functions.
-
-```{r search_path}
-search()
-```
-
 ### Getting help
 
 Get help on a class.
@@ -1255,6 +1221,55 @@ unevaluated expression).
 
 ```{r eval}
 eval(parse(text = my_var))
+```
+
+## Useful tips
+
+A lot of R books are free to read; check out the [bookdown](https://bookdown.org/) page to see some of the best R books.
+
+R has four special values:
+
+1. `NA` - used for representing missing data.
+2. `NULL` - represents not having a value and unlike `NA`, it is its own object
+   and cannot be used in a vector.
+3. `Inf`/`-Inf` - used for representing numbers too big for R (see below).
+4. `NaN` - used for storing results that are not a number.
+
+Check the `.Machine` variable to find out the numerical characteristics of the
+machine R is running on, such as the largest double or integer and the
+machine's precision.
+
+```{r machine}
+noquote(unlist(format(.Machine)))
+```
+
+When asking for help online, it is useful to include a minimal example that
+includes some data specific to your question. To easily convert data into code,
+use the `dput()` function. The example below is just for illustrative purposes
+since the `women` dataset is included with R, so you would not need to generate
+code for it.
+
+```{r dput}
+dput(women)
+```
+
+Show all the functions of a package.
+
+```{r stringr_functions}
+ls("package:stringr")
+```
+
+Search is useful to list the search path, i.e. where R will look, for R objects such as functions.
+
+```{r search_path}
+search()
+```
+
+Save all functions in the global environment into a file (that you can source later)!
+
+```{r dump_functions}
+dump(list = lsf.str(), file = "functions.R")
+unlink('functions.R')
 ```
 
 ## Session info

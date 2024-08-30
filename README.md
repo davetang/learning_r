@@ -25,12 +25,12 @@ Learning R
           - [Microbenchmarking](#microbenchmarking)
       - [General](#general)
       - [Useful plots](#useful-plots)
-      - [Useful tips](#useful-tips)
           - [Getting help](#getting-help)
       - [Hacks](#hacks)
           - [Makevars](#makevars)
           - [Library paths](#library-paths)
           - [Variables and objects](#variables-and-objects)
+      - [Useful tips](#useful-tips)
       - [Session info](#session-info)
 
 # Introduction
@@ -1351,8 +1351,8 @@ x <- runif(100)
     ## # A tibble: 2 × 6
     ##   expression      min   median `itr/sec` mem_alloc `gc/sec`
     ##   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-    ## 1 sqrt(x)    331.08ns 367.06ns  1460214.      848B     146.
-    ## 2 x^0.5        2.08µs   2.24µs   439190.      848B       0
+    ## 1 sqrt(x)    316.07ns 349.13ns  2169745.      848B        0
+    ## 2 x^0.5        2.06µs   2.12µs   404072.      848B        0
 
 `for` versus `map_int` versus `sapply`.
 
@@ -1376,9 +1376,9 @@ for_loop <- function(n){
     ## # A tibble: 3 × 6
     ##   expression                            min  median `itr/sec` mem_alloc `gc/sec`
     ##   <bch:expr>                       <bch:tm> <bch:t>     <dbl> <bch:byt>    <dbl>
-    ## 1 for_loop(my_num)                    2.1ms  2.17ms      447.    1.69MB    19.9 
-    ## 2 map_int(my_num, function(x) x^2)   5.32ms  5.85ms      171.   47.97KB     6.35
-    ## 3 sapply(my_num, function(x) x^2)    5.42ms  6.02ms      167.  367.85KB     6.33
+    ## 1 for_loop(my_num)                      2ms  2.06ms      482.    1.69MB     35.3
+    ## 2 map_int(my_num, function(x) x^2)   4.91ms  5.37ms      187.   47.97KB     13.9
+    ## 3 sapply(my_num, function(x) x^2)    4.91ms   5.4ms      185.  367.85KB     15.8
 
   - `min` - The minimum execution time.
   - `median` - The sample median of execution time.
@@ -1416,7 +1416,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   3.505   0.083   3.597
+    ##   2.837   0.033   2.870
 
 ``` r
 system.time(
@@ -1425,7 +1425,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   5.697   0.031   5.740
+    ##   5.137   0.001   5.137
 
 ``` r
 system.time(
@@ -1434,7 +1434,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   5.988   0.077   6.080
+    ##   5.539   0.024   5.564
 
 ``` r
 all.equal(x, y)
@@ -1525,7 +1525,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   1.488   0.001   1.492
+    ##   0.735   0.000   0.735
 
 The `with` function evaluates an expression with data.
 
@@ -1623,107 +1623,6 @@ mosaicplot(table(ChickWeight$Time, ChickWeight$Diet), main = "Timepoint versus d
 ```
 
 ![](img/mosaicplot-1.png)<!-- -->
-
-## Useful tips
-
-A lot of R books are free to read; check out the
-[bookdown](https://bookdown.org/) page to see some of the best R books.
-
-R has four special values:
-
-1.  `NA` - used for representing missing data.
-2.  `NULL` - represents not having a value and unlike `NA`, it is its
-    own object and cannot be used in a vector.
-3.  `Inf`/`-Inf` - used for representing numbers too big for R (see
-    below).
-4.  `NaN` - used for storing results that are not a number.
-
-Check the `.Machine` variable to find out the numerical characteristics
-of the machine R is running on, such as the largest double or integer
-and the machine’s precision.
-
-``` r
-noquote(unlist(format(.Machine)))
-```
-
-    ##                double.eps            double.neg.eps               double.xmin 
-    ##              2.220446e-16              1.110223e-16             2.225074e-308 
-    ##               double.xmax               double.base             double.digits 
-    ##             1.797693e+308                         2                        53 
-    ##           double.rounding              double.guard         double.ulp.digits 
-    ##                         5                         0                       -52 
-    ##     double.neg.ulp.digits           double.exponent            double.min.exp 
-    ##                       -53                        11                     -1022 
-    ##            double.max.exp               integer.max               sizeof.long 
-    ##                      1024                2147483647                         8 
-    ##           sizeof.longlong         sizeof.longdouble            sizeof.pointer 
-    ##                         8                        16                         8 
-    ##             sizeof.time_t            longdouble.eps        longdouble.neg.eps 
-    ##                         8              1.084202e-19              5.421011e-20 
-    ##         longdouble.digits       longdouble.rounding          longdouble.guard 
-    ##                        64                         5                         0 
-    ##     longdouble.ulp.digits longdouble.neg.ulp.digits       longdouble.exponent 
-    ##                       -63                       -64                        15 
-    ##        longdouble.min.exp        longdouble.max.exp 
-    ##                    -16382                     16384
-
-When asking for help online, it is useful to include a minimal example
-that includes some data specific to your question. To easily convert
-data into code, use the `dput()` function. The example below is just for
-illustrative purposes since the `women` dataset is included with R, so
-you would not need to generate code for it.
-
-``` r
-dput(women)
-```
-
-    ## structure(list(height = c(58, 59, 60, 61, 62, 63, 64, 65, 66, 
-    ## 67, 68, 69, 70, 71, 72), weight = c(115, 117, 120, 123, 126, 
-    ## 129, 132, 135, 139, 142, 146, 150, 154, 159, 164)), class = "data.frame", row.names = c(NA, 
-    ## -15L))
-
-Show all the functions of a package.
-
-``` r
-ls("package:stringr")
-```
-
-    ##  [1] "%>%"               "boundary"          "coll"             
-    ##  [4] "fixed"             "fruit"             "invert_match"     
-    ##  [7] "regex"             "sentences"         "str_c"            
-    ## [10] "str_conv"          "str_count"         "str_detect"       
-    ## [13] "str_dup"           "str_ends"          "str_equal"        
-    ## [16] "str_escape"        "str_extract"       "str_extract_all"  
-    ## [19] "str_flatten"       "str_flatten_comma" "str_glue"         
-    ## [22] "str_glue_data"     "str_interp"        "str_length"       
-    ## [25] "str_like"          "str_locate"        "str_locate_all"   
-    ## [28] "str_match"         "str_match_all"     "str_order"        
-    ## [31] "str_pad"           "str_rank"          "str_remove"       
-    ## [34] "str_remove_all"    "str_replace"       "str_replace_all"  
-    ## [37] "str_replace_na"    "str_sort"          "str_split"        
-    ## [40] "str_split_1"       "str_split_fixed"   "str_split_i"      
-    ## [43] "str_squish"        "str_starts"        "str_sub"          
-    ## [46] "str_sub_all"       "str_sub<-"         "str_subset"       
-    ## [49] "str_to_lower"      "str_to_sentence"   "str_to_title"     
-    ## [52] "str_to_upper"      "str_trim"          "str_trunc"        
-    ## [55] "str_unique"        "str_view"          "str_view_all"     
-    ## [58] "str_which"         "str_width"         "str_wrap"         
-    ## [61] "word"              "words"
-
-Search is useful to list the search path, i.e. where R will look, for R
-objects such as functions.
-
-``` r
-search()
-```
-
-    ##  [1] ".GlobalEnv"        "package:bench"     "package:modeldata"
-    ##  [4] "package:lubridate" "package:forcats"   "package:stringr"  
-    ##  [7] "package:dplyr"     "package:purrr"     "package:readr"    
-    ## [10] "package:tidyr"     "package:tibble"    "package:ggplot2"  
-    ## [13] "package:tidyverse" "package:stats"     "package:graphics" 
-    ## [16] "package:grDevices" "package:utils"     "package:datasets" 
-    ## [19] "package:methods"   "Autoloads"         "package:base"
 
 ### Getting help
 
@@ -1871,11 +1770,120 @@ eval(parse(text = my_var))
 
     ## [1] 1984
 
+## Useful tips
+
+A lot of R books are free to read; check out the
+[bookdown](https://bookdown.org/) page to see some of the best R books.
+
+R has four special values:
+
+1.  `NA` - used for representing missing data.
+2.  `NULL` - represents not having a value and unlike `NA`, it is its
+    own object and cannot be used in a vector.
+3.  `Inf`/`-Inf` - used for representing numbers too big for R (see
+    below).
+4.  `NaN` - used for storing results that are not a number.
+
+Check the `.Machine` variable to find out the numerical characteristics
+of the machine R is running on, such as the largest double or integer
+and the machine’s precision.
+
+``` r
+noquote(unlist(format(.Machine)))
+```
+
+    ##                double.eps            double.neg.eps               double.xmin 
+    ##              2.220446e-16              1.110223e-16             2.225074e-308 
+    ##               double.xmax               double.base             double.digits 
+    ##             1.797693e+308                         2                        53 
+    ##           double.rounding              double.guard         double.ulp.digits 
+    ##                         5                         0                       -52 
+    ##     double.neg.ulp.digits           double.exponent            double.min.exp 
+    ##                       -53                        11                     -1022 
+    ##            double.max.exp               integer.max               sizeof.long 
+    ##                      1024                2147483647                         8 
+    ##           sizeof.longlong         sizeof.longdouble            sizeof.pointer 
+    ##                         8                        16                         8 
+    ##             sizeof.time_t            longdouble.eps        longdouble.neg.eps 
+    ##                         8              1.084202e-19              5.421011e-20 
+    ##         longdouble.digits       longdouble.rounding          longdouble.guard 
+    ##                        64                         5                         0 
+    ##     longdouble.ulp.digits longdouble.neg.ulp.digits       longdouble.exponent 
+    ##                       -63                       -64                        15 
+    ##        longdouble.min.exp        longdouble.max.exp 
+    ##                    -16382                     16384
+
+When asking for help online, it is useful to include a minimal example
+that includes some data specific to your question. To easily convert
+data into code, use the `dput()` function. The example below is just for
+illustrative purposes since the `women` dataset is included with R, so
+you would not need to generate code for it.
+
+``` r
+dput(women)
+```
+
+    ## structure(list(height = c(58, 59, 60, 61, 62, 63, 64, 65, 66, 
+    ## 67, 68, 69, 70, 71, 72), weight = c(115, 117, 120, 123, 126, 
+    ## 129, 132, 135, 139, 142, 146, 150, 154, 159, 164)), class = "data.frame", row.names = c(NA, 
+    ## -15L))
+
+Show all the functions of a package.
+
+``` r
+ls("package:stringr")
+```
+
+    ##  [1] "%>%"               "boundary"          "coll"             
+    ##  [4] "fixed"             "fruit"             "invert_match"     
+    ##  [7] "regex"             "sentences"         "str_c"            
+    ## [10] "str_conv"          "str_count"         "str_detect"       
+    ## [13] "str_dup"           "str_ends"          "str_equal"        
+    ## [16] "str_escape"        "str_extract"       "str_extract_all"  
+    ## [19] "str_flatten"       "str_flatten_comma" "str_glue"         
+    ## [22] "str_glue_data"     "str_interp"        "str_length"       
+    ## [25] "str_like"          "str_locate"        "str_locate_all"   
+    ## [28] "str_match"         "str_match_all"     "str_order"        
+    ## [31] "str_pad"           "str_rank"          "str_remove"       
+    ## [34] "str_remove_all"    "str_replace"       "str_replace_all"  
+    ## [37] "str_replace_na"    "str_sort"          "str_split"        
+    ## [40] "str_split_1"       "str_split_fixed"   "str_split_i"      
+    ## [43] "str_squish"        "str_starts"        "str_sub"          
+    ## [46] "str_sub_all"       "str_sub<-"         "str_subset"       
+    ## [49] "str_to_lower"      "str_to_sentence"   "str_to_title"     
+    ## [52] "str_to_upper"      "str_trim"          "str_trunc"        
+    ## [55] "str_unique"        "str_view"          "str_view_all"     
+    ## [58] "str_which"         "str_width"         "str_wrap"         
+    ## [61] "word"              "words"
+
+Search is useful to list the search path, i.e. where R will look, for R
+objects such as functions.
+
+``` r
+search()
+```
+
+    ##  [1] ".GlobalEnv"        "package:bench"     "package:modeldata"
+    ##  [4] "package:lubridate" "package:forcats"   "package:stringr"  
+    ##  [7] "package:dplyr"     "package:purrr"     "package:readr"    
+    ## [10] "package:tidyr"     "package:tibble"    "package:ggplot2"  
+    ## [13] "package:tidyverse" "package:stats"     "package:graphics" 
+    ## [16] "package:grDevices" "package:utils"     "package:datasets" 
+    ## [19] "package:methods"   "Autoloads"         "package:base"
+
+Save all functions in the global environment into a file (that you can
+source later)\!
+
+``` r
+dump(list = lsf.str(), file = "functions.R")
+unlink('functions.R')
+```
+
 ## Session info
 
 This README was generated by running `rmd_to_md.sh` with `readme.Rmd`.
 
-    ## [1] "2023-08-03 04:04:26 UTC"
+    ## [1] "2024-08-30 09:36:25 UTC"
 
 Session info.
 
@@ -1913,8 +1921,8 @@ Session info.
     ## [13] Matrix_1.5-4       mgcv_1.8-42        fansi_1.0.4        scales_1.2.1      
     ## [17] cli_3.6.1          rlang_1.1.1        munsell_0.5.0      splines_4.3.0     
     ## [21] withr_2.5.0        yaml_2.3.7         ggbeeswarm_0.7.2   tools_4.3.0       
-    ## [25] tzdb_0.4.0         colorspace_2.1-0   profmem_0.6.0      vctrs_0.6.3       
-    ## [29] R6_2.5.1           lifecycle_1.0.3    vipor_0.4.5        beeswarm_0.4.0    
+    ## [25] tzdb_0.4.0         colorspace_2.1-0   profmem_0.6.0      vctrs_0.6.2       
+    ## [29] R6_2.5.1           lifecycle_1.0.3    vipor_0.4.7        beeswarm_0.4.0    
     ## [33] pkgconfig_2.0.3    pillar_1.9.0       gtable_0.3.3       glue_1.6.2        
     ## [37] highr_0.10         xfun_0.39          tidyselect_1.2.0   rstudioapi_0.14   
     ## [41] knitr_1.43         farver_2.1.1       htmltools_0.5.5    nlme_3.1-162      
