@@ -15,7 +15,7 @@ for tool in ${dependencies[@]}; do
    check_depend ${tool}
 done
 
-RVER=4.4.0
+RVER=4.4.1
 IMAGE=davetang/rstudio:${RVER}
 PORT=9998
 NAME=r_package_test
