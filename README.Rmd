@@ -12,7 +12,7 @@ knitr::opts_chunk$set(fig.path = "img/")
 ```
 
 ```{r install_packages, include=FALSE}
-my_packages <- c("ggbeeswarm")
+my_packages <- c("ggbeeswarm", "remotes", "git2r")
 
 sapply(my_packages, function(x){
   if(!require(x, character.only = TRUE)){
@@ -209,6 +209,28 @@ installed or not.
 
 The difference between attaching and loading is a bit technical and you can
 read about it on [SO](https://stackoverflow.com/a/56538266).
+
+### Installing a GitHub R package locally
+
+First clone R package.
+
+```{r clone_repo}
+repo_url <- "https://github.com/davetang/importbio.git"
+repo <- git2r::clone(url = repo_url, local_path = "/home/rstudio/importbio")
+```
+
+Install using `remotes::install_local()`.
+
+```{r install_local}
+remotes::install_local("/home/rstudio/importbio")
+```
+
+Check if you can load package.
+
+```{r importbio}
+library("importbio")
+packageVersion("importbio")
+```
 
 ## Vectors
 

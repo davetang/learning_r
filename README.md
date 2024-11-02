@@ -1,48 +1,50 @@
 Learning R
 ================
 
-  - [Introduction](#introduction)
-      - [Functional programming](#functional-programming)
-      - [Object-Oriented Programming](#object-oriented-programming)
-          - [OOP in R](#oop-in-r)
-      - [Packages](#packages)
-      - [Vectors](#vectors)
-          - [Attributes](#attributes)
-          - [S3 atomic vectors](#s3-atomic-vectors)
-      - [Lists](#lists)
-      - [Functions](#functions)
-          - [Function components](#function-components)
-          - [Lexical scoping](#lexical-scoping)
-          - [Lazy evaluation](#lazy-evaluation)
-          - [dot-dot-dot](#dot-dot-dot)
-          - [Exiting a function](#exiting-a-function)
-          - [Function forms](#function-forms)
-      - [Objects](#objects)
-      - [Modeling example](#modeling-example)
-          - [R formula](#r-formula)
-      - [Exceptions](#exceptions)
-      - [Measuring performance](#measuring-performance)
-          - [Microbenchmarking](#microbenchmarking)
-      - [General](#general)
-      - [Useful plots](#useful-plots)
-          - [Getting help](#getting-help)
-      - [Hacks](#hacks)
-          - [Makevars](#makevars)
-          - [Library paths](#library-paths)
-          - [Variables and objects](#variables-and-objects)
-      - [Useful tips](#useful-tips)
-      - [Session info](#session-info)
+- [Introduction](#introduction)
+  - [Functional programming](#functional-programming)
+  - [Object-Oriented Programming](#object-oriented-programming)
+    - [OOP in R](#oop-in-r)
+  - [Packages](#packages)
+    - [Installing a GitHub R package
+      locally](#installing-a-github-r-package-locally)
+  - [Vectors](#vectors)
+    - [Attributes](#attributes)
+    - [S3 atomic vectors](#s3-atomic-vectors)
+  - [Lists](#lists)
+  - [Functions](#functions)
+    - [Function components](#function-components)
+    - [Lexical scoping](#lexical-scoping)
+    - [Lazy evaluation](#lazy-evaluation)
+    - [dot-dot-dot](#dot-dot-dot)
+    - [Exiting a function](#exiting-a-function)
+    - [Function forms](#function-forms)
+  - [Objects](#objects)
+  - [Modeling example](#modeling-example)
+    - [R formula](#r-formula)
+  - [Exceptions](#exceptions)
+  - [Measuring performance](#measuring-performance)
+    - [Microbenchmarking](#microbenchmarking)
+  - [General](#general)
+  - [Useful plots](#useful-plots)
+    - [Getting help](#getting-help)
+  - [Hacks](#hacks)
+    - [Makevars](#makevars)
+    - [Library paths](#library-paths)
+    - [Variables and objects](#variables-and-objects)
+  - [Useful tips](#useful-tips)
+  - [Session info](#session-info)
 
 # Introduction
 
 The three core features of R are object-orientation, vectorisation, and
 its functional programming style.
 
-> "To understand computations in R, two slogans are helpful:
-> 
->   - Everything that exists is an object.
->   - Everything that happens is a function call."
-> 
+> “To understand computations in R, two slogans are helpful:
+>
+> - Everything that exists is an object.
+> - Everything that happens is a function call.”
+>
 > –John Chambers
 
 ## Functional programming
@@ -54,11 +56,11 @@ Functional languages have **first-class functions**, which are functions
 that behave like any other data structure. This means that you can do
 many of the things with a function that you can do with a vector:
 
-  - You can assigned them to variables,
-  - Store them in lists,
-  - Pass them as arguments to other functions,
-  - Create them inside functions, and
-  - Return them as the result of a function.
+- You can assigned them to variables,
+- Store them in lists,
+- Pass them as arguments to other functions,
+- Create them inside functions, and
+- Return them as the result of a function.
 
 Secondly, many functional languages requires functions to be **pure**. A
 function is pure if it satisfies two properties:
@@ -132,54 +134,53 @@ There are two main paradigms of OOP which differ in how methods and
 classes are related. We can call these paradigms encapsulated and
 functional:
 
-  - In **encapsulated** OOP, methods belong to objects or classes, and
-    method calls typically look like `object.method(arg1, arg2)`. This
-    is called encapsulated because the object encapsulates both data
-    (with fields) and behaviour (with methods), and is the paradigm
-    found in most popular languages.
+- In **encapsulated** OOP, methods belong to objects or classes, and
+  method calls typically look like `object.method(arg1, arg2)`. This is
+  called encapsulated because the object encapsulates both data (with
+  fields) and behaviour (with methods), and is the paradigm found in
+  most popular languages.
 
-  - In **functional** OOP, methods belong to **generic** functions, and
-    method calls look like ordinary function calls: `generic(object,
-    arg2, arg3)`. This is called functional because from the outside it
-    looks like a regular function call, and internally the components
-    are also functions.
+- In **functional** OOP, methods belong to **generic** functions, and
+  method calls look like ordinary function calls:
+  `generic(object, arg2, arg3)`. This is called functional because from
+  the outside it looks like a regular function call, and internally the
+  components are also functions.
 
 ### OOP in R
 
 Base R provides three OOP systems: S3, S4, and reference classes (RC):
 
-  - **S3** is R’s first OOP system and is an informal implementation of
-    functional OOP. It relies on common conventions rather than ironclad
-    guarantees. This makes it easy to get started with, providing a low
-    cost way of solving many simple problems.
+- **S3** is R’s first OOP system and is an informal implementation of
+  functional OOP. It relies on common conventions rather than ironclad
+  guarantees. This makes it easy to get started with, providing a low
+  cost way of solving many simple problems.
 
-  - **S4** is a formal and rigorous rewrite of S3. It requires more
-    upfront work than S3, but in return provides more guarantees and
-    greater encapsulation. S4 is implemented in the base **methods**
-    package, which is always installed with R.
+- **S4** is a formal and rigorous rewrite of S3. It requires more
+  upfront work than S3, but in return provides more guarantees and
+  greater encapsulation. S4 is implemented in the base **methods**
+  package, which is always installed with R.
 
 (There is no S1 or S2 because S3 and S4 were named according to the
 versions of S that they accompanied. The first two versions of S did not
 have any OOP framework.)
 
-  - **RC** implements encapsulated OO. RC objects are a special type of
-    S4 objects that are also **mutable**, i.e., instead of using R’s
-    usual copy-on-modify semantics, they can be modified in place. This
-    makes them harder to reason about, but allows them to solve problems
-    that are difficult to solve in the functional OOP style of S3 and
-    S4.
+- **RC** implements encapsulated OO. RC objects are a special type of S4
+  objects that are also **mutable**, i.e., instead of using R’s usual
+  copy-on-modify semantics, they can be modified in place. This makes
+  them harder to reason about, but allows them to solve problems that
+  are difficult to solve in the functional OOP style of S3 and S4.
 
 A number of other OOP systems are provided by CRAN packages:
 
-  - **R6** implements encapsulated OOP like RC, but resolves some
-    important issues.
+- **R6** implements encapsulated OOP like RC, but resolves some
+  important issues.
 
-  - **R.oo** provides some formalism on top of S3, and makes it possible
-    to have mutable S3 objects.
+- **R.oo** provides some formalism on top of S3, and makes it possible
+  to have mutable S3 objects.
 
-  - **proto** implements another style of OOP based on the idea of
-    **prototypes**, which blur the distinctions between classes and
-    instances of classes (objects).
+- **proto** implements another style of OOP based on the idea of
+  **prototypes**, which blur the distinctions between classes and
+  instances of classes (objects).
 
 ## Packages
 
@@ -197,9 +198,10 @@ the search path.
 base::search()
 ```
 
-    ## [1] ".GlobalEnv"        "package:stats"     "package:graphics" 
-    ## [4] "package:grDevices" "package:utils"     "package:datasets" 
-    ## [7] "package:methods"   "Autoloads"         "package:base"
+    ##  [1] ".GlobalEnv"        "package:git2r"     "package:stats"    
+    ##  [4] "package:graphics"  "package:grDevices" "package:utils"    
+    ##  [7] "package:datasets"  "package:methods"   "Autoloads"        
+    ## [10] "package:base"
 
 The code below will attach the `tidyverse` and `modeldata` packages
 (installing them first if they haven’t been installed yet).
@@ -219,7 +221,12 @@ using<-function(...) {
     }
 }
 using(my_packages)
+```
 
+    ## [[1]]
+    ## [1] TRUE
+
+``` r
 theme_set(theme_bw())
 ```
 
@@ -234,22 +241,72 @@ base::search()
     ##  [4] "package:lubridate" "package:forcats"   "package:stringr"  
     ##  [7] "package:dplyr"     "package:purrr"     "package:readr"    
     ## [10] "package:tidyr"     "package:tibble"    "package:ggplot2"  
-    ## [13] "package:tidyverse" "package:stats"     "package:graphics" 
-    ## [16] "package:grDevices" "package:utils"     "package:datasets" 
-    ## [19] "package:methods"   "Autoloads"         "package:base"
+    ## [13] "package:tidyverse" "package:git2r"     "package:stats"    
+    ## [16] "package:graphics"  "package:grDevices" "package:utils"    
+    ## [19] "package:datasets"  "package:methods"   "Autoloads"        
+    ## [22] "package:base"
 
 As for the difference between `library` and `require`?
 
-  - `library` returns an error by default if the package is not
-    installed
-  - `require` returns a logical depending on whether a package is
-    attached or not
+- `library` returns an error by default if the package is not installed
+- `require` returns a logical depending on whether a package is attached
+  or not
 
 This is the reason why `require` was used above to check whether a
 package was installed or not.
 
 The difference between attaching and loading is a bit technical and you
 can read about it on [SO](https://stackoverflow.com/a/56538266).
+
+### Installing a GitHub R package locally
+
+First clone R package.
+
+``` r
+repo_url <- "https://github.com/davetang/importbio.git"
+repo <- git2r::clone(url = repo_url, local_path = "/home/rstudio/importbio")
+```
+
+    ## cloning into '/home/rstudio/importbio'...
+    ## Receiving objects:   1% (2/174),   15 kb
+    ## Receiving objects:  11% (20/174),   15 kb
+    ## Receiving objects:  21% (37/174),   15 kb
+    ## Receiving objects:  31% (54/174),   23 kb
+    ## Receiving objects:  41% (72/174),   23 kb
+    ## Receiving objects:  51% (89/174),   31 kb
+    ## Receiving objects:  61% (107/174),   31 kb
+    ## Receiving objects:  71% (124/174),   39 kb
+    ## Receiving objects:  81% (141/174),  111 kb
+    ## Receiving objects:  91% (159/174),  119 kb
+    ## Receiving objects: 100% (174/174), 1960 kb, done.
+
+Install using `remotes::install_local()`.
+
+``` r
+remotes::install_local("/home/rstudio/importbio")
+```
+
+    ## Running `R CMD build`...
+
+    ## * checking for file ‘/tmp/Rtmp6MAW2v/file160c57ad5/importbio/DESCRIPTION’ ... OK
+    ## * preparing ‘importbio’:
+    ## * checking DESCRIPTION meta-information ... OK
+    ## * checking for LF line-endings in source and make files and shell scripts
+    ## * checking for empty or unneeded directories
+    ## Omitted ‘LazyData’ from DESCRIPTION
+    ## * building ‘importbio_0.1.0.tar.gz’
+
+    ## Installing package into '/packages'
+    ## (as 'lib' is unspecified)
+
+Check if you can load package.
+
+``` r
+library("importbio")
+packageVersion("importbio")
+```
+
+    ## [1] '0.1.0'
 
 ## Vectors
 
@@ -352,9 +409,9 @@ str(attributes(a))
 Attributes should generally be thought of as ephemeral. There are only
 two attributes that are routinely preserved:
 
-  - **names**, a character vector giving each element a name.
-  - **dim**, short for dimensions, an integer vector, used to turn
-    vectors into matrices or arrays.
+- **names**, a character vector giving each element a name.
+- **dim**, short for dimensions, an integer vector, used to turn vectors
+  into matrices or arrays.
 
 To preserve other attributes, you will need to create your own S3 class.
 
@@ -362,15 +419,11 @@ Vectors can be named in three ways.
 
 1.  When creating it.
 
-<!-- end list -->
-
 ``` r
 x <- c(a = 1, b = 2, c = 3)
 ```
 
 2.  By assigning a character vector to `names()`.
-
-<!-- end list -->
 
 ``` r
 x <- 1:3
@@ -378,8 +431,6 @@ names(x) <- c('a', 'b', 'c')
 ```
 
 3.  Using `setNames()`.
-
-<!-- end list -->
 
 ``` r
 x <- setNames(1:3, c('a', 'b', 'c'))
@@ -813,10 +864,7 @@ the source code used to create the function.
 attr(f02, "srcref")
 ```
 
-    ## function(x, y){
-    ##   # comment
-    ##   x + y
-    ## }
+    ## NULL
 
 However primitive functions do not have the three components (they
 return `NULL`) and call C code directly.
@@ -965,9 +1013,9 @@ Function calls come in four varieties:
     e.g. `sum(1:5)`. These constitute the majority of function calls in
     R
 
-2.  **infix**: the function name comes in between its arguments, e.g. `x
-    + y`. Infix forms are used for many mathematical operators and for
-    user-defined functions that begin and end with `%`.
+2.  **infix**: the function name comes in between its arguments,
+    e.g. `x + y`. Infix forms are used for many mathematical operators
+    and for user-defined functions that begin and end with `%`.
 
 3.  **replacement**: functions that replace values by assignment, e.g.
     `names(my_df) <- c('a', 'b', 'c')`.
@@ -1062,8 +1110,8 @@ ggplot(
 For an inferential model, we might have specified the following null
 hypotheses prior to seeing the data:
 
-  - Temperature has no effect on the chirp rate
-  - There are no differences between the species’ chirp rate.
+- Temperature has no effect on the chirp rate
+- There are no differences between the species’ chirp rate.
 
 The `lm()` function is commonly used to fit an ordinary linear model.
 Arguments to this function are a model formula and the data frame that
@@ -1131,16 +1179,16 @@ rate ~ temp * species
 
 The model formula also has other nice features:
 
-  - *In-line* functions can be used, e.g. to use the natural log of the
-    temperature, we can use the formula `rate ~ log(temp)`
+- *In-line* functions can be used, e.g. to use the natural log of the
+  temperature, we can use the formula `rate ~ log(temp)`
 
-  - R has many functions that are useful inside formulas,
-    e.g. `poly(x, 3)` adds linear, quadratic, and cubic terms for `x`
-    to the model as main effects.
+- R has many functions that are useful inside formulas,
+  e.g. `poly(x, 3)` adds linear, quadratic, and cubic terms for `x` to
+  the model as main effects.
 
-  - The period shortcut is available for data sets with many predictors.
-    The period represents main effects for all of the columns that are
-    not on the left-hand side of the tilde.
+- The period shortcut is available for data sets with many predictors.
+  The period represents main effects for all of the columns that are not
+  on the left-hand side of the tilde.
 
 Use a two-way interaction model.
 
@@ -1238,12 +1286,12 @@ predict(main_effect_fit, new_values)
 The R model formula is used by many modeling packages and it usually
 serves multiple purposes:
 
-  - The formula defines the columns that the model uses.
+- The formula defines the columns that the model uses.
 
-  - The standard R machinery uses the formula to encode the columns into
-    an appropriate format, e.g. create indicator variables.
+- The standard R machinery uses the formula to encode the columns into
+  an appropriate format, e.g. create indicator variables.
 
-  - The roles of the columns are defined by the formula.
+- The roles of the columns are defined by the formula.
 
 For example, the following formula indicates that there are two
 predictors and the model should contain their main effects and the
@@ -1351,8 +1399,8 @@ x <- runif(100)
     ## # A tibble: 2 × 6
     ##   expression      min   median `itr/sec` mem_alloc `gc/sec`
     ##   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-    ## 1 sqrt(x)    316.07ns 349.13ns  2169745.      848B        0
-    ## 2 x^0.5        2.06µs   2.12µs   404072.      848B        0
+    ## 1 sqrt(x)    327.94ns 371.95ns  2030416.      848B        0
+    ## 2 x^0.5        2.07µs   2.14µs   403228.      848B        0
 
 `for` versus `map_int` versus `sapply`.
 
@@ -1376,30 +1424,28 @@ for_loop <- function(n){
     ## # A tibble: 3 × 6
     ##   expression                            min  median `itr/sec` mem_alloc `gc/sec`
     ##   <bch:expr>                       <bch:tm> <bch:t>     <dbl> <bch:byt>    <dbl>
-    ## 1 for_loop(my_num)                      2ms  2.06ms      482.    1.69MB     35.3
-    ## 2 map_int(my_num, function(x) x^2)   4.91ms  5.37ms      187.   47.97KB     13.9
-    ## 3 sapply(my_num, function(x) x^2)    4.91ms   5.4ms      185.  367.85KB     15.8
+    ## 1 for_loop(my_num)                   1.88ms  1.93ms      495.    1.69MB     25.7
+    ## 2 map_int(my_num, function(x) x^2)   4.81ms  4.89ms      197.   47.98KB     14.9
+    ## 3 sapply(my_num, function(x) x^2)    4.74ms  4.85ms      207.  362.61KB     13.5
 
-  - `min` - The minimum execution time.
-  - `median` - The sample median of execution time.
-  - `itr/sec` - The estimated number of executions performed per second.
-  - `mem_alloc` - Total amount of memory allocated by R while running
-    the expression.
-  - `gc/sec` - The number of garbage collections per second.
-  - `n_itr` - Total number of iterations after filtering garbage
-    collections (if filter\_gc == TRUE).
-  - `n_gc` - Total number of garbage collections performed over all
-    iterations.
-  - `total_time` - The total time to perform the benchmarks.
-  - `result` - A list column of the object(s) returned by the evaluated
-    expression(s).
-  - `memory` - A list column with results from Rprofmem().
-  - `time` - A list column of bench\_time vectors for each evaluated
-    expression.
-  - `gc` - A list column with tibbles containing the level of garbage
-    collection (0-2, columns) for each iteration (rows).
-
-<!-- end list -->
+- `min` - The minimum execution time.
+- `median` - The sample median of execution time.
+- `itr/sec` - The estimated number of executions performed per second.
+- `mem_alloc` - Total amount of memory allocated by R while running the
+  expression.
+- `gc/sec` - The number of garbage collections per second.
+- `n_itr` - Total number of iterations after filtering garbage
+  collections (if filter_gc == TRUE).
+- `n_gc` - Total number of garbage collections performed over all
+  iterations.
+- `total_time` - The total time to perform the benchmarks.
+- `result` - A list column of the object(s) returned by the evaluated
+  expression(s).
+- `memory` - A list column with results from Rprofmem().
+- `time` - A list column of bench_time vectors for each evaluated
+  expression.
+- `gc` - A list column with tibbles containing the level of garbage
+  collection (0-2, columns) for each iteration (rows).
 
 ``` r
 plot(ms)
@@ -1416,7 +1462,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   2.837   0.033   2.870
+    ##   2.750   0.032   2.783
 
 ``` r
 system.time(
@@ -1425,7 +1471,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   5.137   0.001   5.137
+    ##   5.520   0.000   5.521
 
 ``` r
 system.time(
@@ -1434,7 +1480,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   5.539   0.024   5.564
+    ##   5.741   0.016   5.758
 
 ``` r
 all.equal(x, y)
@@ -1525,7 +1571,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.735   0.000   0.735
+    ##   0.521   0.000   0.522
 
 The `with` function evaluates an expression with data.
 
@@ -1863,16 +1909,17 @@ objects such as functions.
 search()
 ```
 
-    ##  [1] ".GlobalEnv"        "package:bench"     "package:modeldata"
-    ##  [4] "package:lubridate" "package:forcats"   "package:stringr"  
-    ##  [7] "package:dplyr"     "package:purrr"     "package:readr"    
-    ## [10] "package:tidyr"     "package:tibble"    "package:ggplot2"  
-    ## [13] "package:tidyverse" "package:stats"     "package:graphics" 
-    ## [16] "package:grDevices" "package:utils"     "package:datasets" 
-    ## [19] "package:methods"   "Autoloads"         "package:base"
+    ##  [1] ".GlobalEnv"        "package:importbio" "package:bench"    
+    ##  [4] "package:modeldata" "package:lubridate" "package:forcats"  
+    ##  [7] "package:stringr"   "package:dplyr"     "package:purrr"    
+    ## [10] "package:readr"     "package:tidyr"     "package:tibble"   
+    ## [13] "package:ggplot2"   "package:tidyverse" "package:git2r"    
+    ## [16] "package:stats"     "package:graphics"  "package:grDevices"
+    ## [19] "package:utils"     "package:datasets"  "package:methods"  
+    ## [22] "Autoloads"         "package:base"
 
 Save all functions in the global environment into a file (that you can
-source later)\!
+source later)!
 
 ``` r
 dump(list = lsf.str(), file = "functions.R")
@@ -1883,13 +1930,13 @@ unlink('functions.R')
 
 This README was generated by running `rmd_to_md.sh` with `readme.Rmd`.
 
-    ## [1] "2024-08-30 09:36:25 UTC"
+    ## [1] "2024-11-02 09:20:21 UTC"
 
 Session info.
 
-    ## R version 4.3.0 (2023-04-21)
-    ## Platform: x86_64-pc-linux-gnu (64-bit)
-    ## Running under: Ubuntu 22.04.2 LTS
+    ## R version 4.4.1 (2024-06-14)
+    ## Platform: x86_64-pc-linux-gnu
+    ## Running under: Ubuntu 22.04.5 LTS
     ## 
     ## Matrix products: default
     ## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
@@ -1910,20 +1957,21 @@ Session info.
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] bench_1.1.3     modeldata_1.1.0 lubridate_1.9.2 forcats_1.0.0  
-    ##  [5] stringr_1.5.0   dplyr_1.1.2     purrr_1.0.1     readr_2.1.4    
-    ##  [9] tidyr_1.3.0     tibble_3.2.1    ggplot2_3.4.2   tidyverse_2.0.0
+    ##  [1] importbio_0.1.0 bench_1.1.3     modeldata_1.4.0 lubridate_1.9.3
+    ##  [5] forcats_1.0.0   stringr_1.5.1   dplyr_1.1.4     purrr_1.0.2    
+    ##  [9] readr_2.1.5     tidyr_1.3.1     tibble_3.2.1    ggplot2_3.5.1  
+    ## [13] tidyverse_2.0.0 git2r_0.35.0   
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] utf8_1.2.3         generics_0.1.3     stringi_1.7.12     lattice_0.21-8    
-    ##  [5] hms_1.1.3          digest_0.6.31      magrittr_2.0.3     evaluate_0.21     
-    ##  [9] grid_4.3.0         timechange_0.2.0   RColorBrewer_1.1-3 fastmap_1.1.1     
-    ## [13] Matrix_1.5-4       mgcv_1.8-42        fansi_1.0.4        scales_1.2.1      
-    ## [17] cli_3.6.1          rlang_1.1.1        munsell_0.5.0      splines_4.3.0     
-    ## [21] withr_2.5.0        yaml_2.3.7         ggbeeswarm_0.7.2   tools_4.3.0       
-    ## [25] tzdb_0.4.0         colorspace_2.1-0   profmem_0.6.0      vctrs_0.6.2       
-    ## [29] R6_2.5.1           lifecycle_1.0.3    vipor_0.4.7        beeswarm_0.4.0    
-    ## [33] pkgconfig_2.0.3    pillar_1.9.0       gtable_0.3.3       glue_1.6.2        
-    ## [37] highr_0.10         xfun_0.39          tidyselect_1.2.0   rstudioapi_0.14   
-    ## [41] knitr_1.43         farver_2.1.1       htmltools_0.5.5    nlme_3.1-162      
-    ## [45] rmarkdown_2.22     labeling_0.4.2     compiler_4.3.0
+    ##  [1] utf8_1.2.4         generics_0.1.3     stringi_1.8.4      lattice_0.22-6    
+    ##  [5] hms_1.1.3          digest_0.6.37      magrittr_2.0.3     evaluate_1.0.1    
+    ##  [9] grid_4.4.1         timechange_0.3.0   RColorBrewer_1.1-3 fastmap_1.2.0     
+    ## [13] Matrix_1.7-0       mgcv_1.9-1         fansi_1.0.6        scales_1.3.0      
+    ## [17] cli_3.6.3          rlang_1.1.4        munsell_0.5.1      splines_4.4.1     
+    ## [21] remotes_2.5.0      withr_3.0.2        yaml_2.3.10        ggbeeswarm_0.7.2  
+    ## [25] tools_4.4.1        tzdb_0.4.0         colorspace_2.1-1   profmem_0.6.0     
+    ## [29] vctrs_0.6.5        R6_2.5.1           lifecycle_1.0.4    vipor_0.4.7       
+    ## [33] beeswarm_0.4.0     pkgconfig_2.0.3    pillar_1.9.0       gtable_0.3.6      
+    ## [37] glue_1.8.0         highr_0.11         xfun_0.48          tidyselect_1.2.1  
+    ## [41] knitr_1.48         farver_2.1.2       htmltools_0.5.8.1  nlme_3.1-164      
+    ## [45] rmarkdown_2.28     labeling_0.4.3     compiler_4.4.1
