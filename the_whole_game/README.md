@@ -59,4 +59,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 ```
 
+6. Call `use_mit_license()` to configure the License field correctly for the MIT license, which promises to name the copyright holders and year in a LICENSE file. Like other license helpers, `use_mit_license()` also puts a copy of the full license in `LICENSE.md` and adds this file to `.Rbuildignore`. It is considered a best practice to include a full license in your package’s source, such as on GitHub, but CRAN disallows the inclusion of this file in a package tarball.
+
 
