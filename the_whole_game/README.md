@@ -65,4 +65,6 @@ RoxygenNote: 7.1.2
 
 After writing the documentation, run `document()` to trigger the conversion of this new roxygen comment into `man/function.Rd`.
 
+In addition to converting roxygen special comment into the R-specific format, the call to `document()` updates the `NAMESPACE` file, based on `@export` tags found in roxygen comments. The export directive in `NAMESPACE` is what makes a function available to a user after attaching a package via library(package).
+
 
