@@ -42,4 +42,21 @@ exists("strsplit1", where = globalenv(), inherits = FALSE)
 
 4. `check()` is a convenient way to run `R CMD check`, which is the gold standard for checking that an R package is in full working order, in your R session. `check()` is meant for interactive consumption and it is essential to actually read the output of the check! Deal with problems early and often.
 
+5. The `DESCRIPTION` file provides metadata about your package. Below is an example:
+
+```
+Package: regexcite
+Title: Make Regular Expressions More Exciting
+Version: 0.0.0.9000
+Authors@R:
+    person("Jane", "Doe", , "jane@example.com", role = c("aut", "cre"))
+Description: Convenience functions to make some common tasks with string
+    manipulation and regular expressions a bit easier.
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+```
+
 
