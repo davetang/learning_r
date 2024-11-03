@@ -40,4 +40,6 @@ exists("strsplit1", where = globalenv(), inherits = FALSE)
  [1] FALSE
 ```
 
+4. `check()` is a convenient way to run `R CMD check`, which is the gold standard for checking that an R package is in full working order, in your R session. `check()` is meant for interactive consumption and it is essential to actually read the output of the check! Deal with problems early and often.
+
 
