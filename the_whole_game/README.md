@@ -61,4 +61,8 @@ RoxygenNote: 7.1.2
 
 6. Call `use_mit_license()` to configure the License field correctly for the MIT license, which promises to name the copyright holders and year in a LICENSE file. Like other license helpers, `use_mit_license()` also puts a copy of the full license in `LICENSE.md` and adds this file to `.Rbuildignore`. It is considered a best practice to include a full license in your package’s source, such as on GitHub, but CRAN disallows the inclusion of this file in a package tarball.
 
+7. Write documentation using {roxygen2} syntax, which is a specially formatted comment right above a function. {roxygen2} will then create `man/function.Rd`, which is a special R documentation file written in an R-specific markup language similar to LaTeX. If you use RStudio, open R/strsplit1.R in the source editor and put the cursor somewhere in the strsplit1() function definition. Now do Code > Insert roxygen skeleton. A very special comment should appear above your function, in which each line begins with `#'`.
+
+After writing the documentation, run `document()` to trigger the conversion of this new roxygen comment into `man/function.Rd`.
+
 
