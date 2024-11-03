@@ -67,4 +67,4 @@ After writing the documentation, run `document()` to trigger the conversion of t
 
 In addition to converting roxygen special comment into the R-specific format, the call to `document()` updates the `NAMESPACE` file, based on `@export` tags found in roxygen comments. The export directive in `NAMESPACE` is what makes a function available to a user after attaching a package via library(package).
 
-
+8. With a minimum viable product, use `install()` to install a package into your library. After installation is complete, we can attach and use the package like any other package.
