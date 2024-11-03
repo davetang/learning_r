@@ -24,3 +24,20 @@ strsplit1 <- function(x, split) {
 ```r
 use_r("strsplit1")
 ```
+
+3. To test `strsplit1()` for package development, {devtools} offers the `load_all()` function to make `strsplit1()` available for experimentation.
+
+```r
+load_all()
+```
+
+`load_all()` has made the `strsplit1()` function available, although it does not exist in the global environment. `load_all()` simulates the process of building, installing, and attaching a package. As your package accumulates more functions, some exported, some not, some of which call each other, some of which call functions from packages you depend on, `load_all()` gives you a much more accurate sense of how the package is developing than test driving functions defined in the global environment.
+
+```r
+exists("strsplit1", where = globalenv(), inherits = FALSE)
+```
+```
+ [1] FALSE
+```
+
+
