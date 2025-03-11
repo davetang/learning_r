@@ -198,10 +198,11 @@ the search path.
 base::search()
 ```
 
-    ##  [1] ".GlobalEnv"        "package:git2r"     "package:stats"    
-    ##  [4] "package:graphics"  "package:grDevices" "package:utils"    
-    ##  [7] "package:datasets"  "package:methods"   "Autoloads"        
-    ## [10] "package:base"
+    ##  [1] ".GlobalEnv"         "package:git2r"      "package:remotes"   
+    ##  [4] "package:ggbeeswarm" "package:ggplot2"    "package:stats"     
+    ##  [7] "package:graphics"   "package:grDevices"  "package:utils"     
+    ## [10] "package:datasets"   "package:methods"    "Autoloads"         
+    ## [13] "package:base"
 
 The code below will attach the `tidyverse` and `modeldata` packages
 (installing them first if they haven’t been installed yet).
@@ -221,12 +222,7 @@ using<-function(...) {
     }
 }
 using(my_packages)
-```
 
-    ## [[1]]
-    ## [1] TRUE
-
-``` r
 theme_set(theme_bw())
 ```
 
@@ -237,14 +233,14 @@ attached to the search path.
 base::search()
 ```
 
-    ##  [1] ".GlobalEnv"        "package:bench"     "package:modeldata"
-    ##  [4] "package:lubridate" "package:forcats"   "package:stringr"  
-    ##  [7] "package:dplyr"     "package:purrr"     "package:readr"    
-    ## [10] "package:tidyr"     "package:tibble"    "package:ggplot2"  
-    ## [13] "package:tidyverse" "package:git2r"     "package:stats"    
-    ## [16] "package:graphics"  "package:grDevices" "package:utils"    
-    ## [19] "package:datasets"  "package:methods"   "Autoloads"        
-    ## [22] "package:base"
+    ##  [1] ".GlobalEnv"         "package:bench"      "package:modeldata" 
+    ##  [4] "package:lubridate"  "package:forcats"    "package:stringr"   
+    ##  [7] "package:dplyr"      "package:purrr"      "package:readr"     
+    ## [10] "package:tidyr"      "package:tibble"     "package:tidyverse" 
+    ## [13] "package:git2r"      "package:remotes"    "package:ggbeeswarm"
+    ## [16] "package:ggplot2"    "package:stats"      "package:graphics"  
+    ## [19] "package:grDevices"  "package:utils"      "package:datasets"  
+    ## [22] "package:methods"    "Autoloads"          "package:base"
 
 As for the difference between `library` and `require`?
 
@@ -275,7 +271,7 @@ repo <- git2r::clone(url = repo_url, local_path = "/home/rstudio/importbio")
     ## Receiving objects:  41% (72/174),   23 kb
     ## Receiving objects:  51% (89/174),   31 kb
     ## Receiving objects:  61% (107/174),   31 kb
-    ## Receiving objects:  71% (124/174),   39 kb
+    ## Receiving objects:  71% (124/174),   47 kb
     ## Receiving objects:  81% (141/174),  111 kb
     ## Receiving objects:  91% (159/174),  119 kb
     ## Receiving objects: 100% (174/174), 1960 kb, done.
@@ -286,18 +282,8 @@ Install using `remotes::install_local()`.
 remotes::install_local("/home/rstudio/importbio")
 ```
 
-    ## Running `R CMD build`...
-
-    ## * checking for file ‘/tmp/Rtmp6MAW2v/file160c57ad5/importbio/DESCRIPTION’ ... OK
-    ## * preparing ‘importbio’:
-    ## * checking DESCRIPTION meta-information ... OK
-    ## * checking for LF line-endings in source and make files and shell scripts
-    ## * checking for empty or unneeded directories
-    ## Omitted ‘LazyData’ from DESCRIPTION
-    ## * building ‘importbio_0.1.0.tar.gz’
-
-    ## Installing package into '/packages'
-    ## (as 'lib' is unspecified)
+    ## Skipping install of 'importbio' from a local remote, the SHA1 (0.1.0) has not changed since last install.
+    ##   Use `force = TRUE` to force installation
 
 Check if you can load package.
 
@@ -1399,8 +1385,8 @@ x <- runif(100)
     ## # A tibble: 2 × 6
     ##   expression      min   median `itr/sec` mem_alloc `gc/sec`
     ##   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-    ## 1 sqrt(x)    327.94ns 371.95ns  2030416.      848B        0
-    ## 2 x^0.5        2.07µs   2.14µs   403228.      848B        0
+    ## 1 sqrt(x)    315.14ns 337.14ns  2391191.      848B        0
+    ## 2 x^0.5        2.07µs   2.13µs   401342.      848B        0
 
 `for` versus `map_int` versus `sapply`.
 
@@ -1424,9 +1410,9 @@ for_loop <- function(n){
     ## # A tibble: 3 × 6
     ##   expression                            min  median `itr/sec` mem_alloc `gc/sec`
     ##   <bch:expr>                       <bch:tm> <bch:t>     <dbl> <bch:byt>    <dbl>
-    ## 1 for_loop(my_num)                   1.88ms  1.93ms      495.    1.69MB     25.7
-    ## 2 map_int(my_num, function(x) x^2)   4.81ms  4.89ms      197.   47.98KB     14.9
-    ## 3 sapply(my_num, function(x) x^2)    4.74ms  4.85ms      207.  362.61KB     13.5
+    ## 1 for_loop(my_num)                   1.84ms  1.92ms      516.    1.69MB    35.5 
+    ## 2 map_int(my_num, function(x) x^2)   4.84ms  5.36ms      189.   48.02KB     8.68
+    ## 3 sapply(my_num, function(x) x^2)    4.88ms  5.38ms      188.  362.61KB    11.0
 
 - `min` - The minimum execution time.
 - `median` - The sample median of execution time.
@@ -1462,7 +1448,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   2.750   0.032   2.783
+    ##   2.748   0.012   2.760
 
 ``` r
 system.time(
@@ -1471,7 +1457,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   5.520   0.000   5.521
+    ##   5.335   0.008   5.343
 
 ``` r
 system.time(
@@ -1480,7 +1466,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   5.741   0.016   5.758
+    ##   5.466   0.008   5.474
 
 ``` r
 all.equal(x, y)
@@ -1571,7 +1557,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.521   0.000   0.522
+    ##   0.514   0.000   0.514
 
 The `with` function evaluates an expression with data.
 
@@ -1909,14 +1895,15 @@ objects such as functions.
 search()
 ```
 
-    ##  [1] ".GlobalEnv"        "package:importbio" "package:bench"    
-    ##  [4] "package:modeldata" "package:lubridate" "package:forcats"  
-    ##  [7] "package:stringr"   "package:dplyr"     "package:purrr"    
-    ## [10] "package:readr"     "package:tidyr"     "package:tibble"   
-    ## [13] "package:ggplot2"   "package:tidyverse" "package:git2r"    
-    ## [16] "package:stats"     "package:graphics"  "package:grDevices"
-    ## [19] "package:utils"     "package:datasets"  "package:methods"  
-    ## [22] "Autoloads"         "package:base"
+    ##  [1] ".GlobalEnv"         "package:importbio"  "package:bench"     
+    ##  [4] "package:modeldata"  "package:lubridate"  "package:forcats"   
+    ##  [7] "package:stringr"    "package:dplyr"      "package:purrr"     
+    ## [10] "package:readr"      "package:tidyr"      "package:tibble"    
+    ## [13] "package:tidyverse"  "package:git2r"      "package:remotes"   
+    ## [16] "package:ggbeeswarm" "package:ggplot2"    "package:stats"     
+    ## [19] "package:graphics"   "package:grDevices"  "package:utils"     
+    ## [22] "package:datasets"   "package:methods"    "Autoloads"         
+    ## [25] "package:base"
 
 Save all functions in the global environment into a file (that you can
 source later)!
@@ -1926,11 +1913,18 @@ dump(list = lsf.str(), file = "functions.R")
 unlink('functions.R')
 ```
 
+Set CRAN repository for installing packages; sometimes the default uses
+outdated repositories.
+
+``` r
+options(repos=c(CRAN="https://cran.r-project.org"))
+```
+
 ## Session info
 
 This README was generated by running `rmd_to_md.sh` with `readme.Rmd`.
 
-    ## [1] "2024-11-02 09:20:21 UTC"
+    ## [1] "2025-03-11 03:31:49 UTC"
 
 Session info.
 
@@ -1957,21 +1951,21 @@ Session info.
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] importbio_0.1.0 bench_1.1.3     modeldata_1.4.0 lubridate_1.9.3
-    ##  [5] forcats_1.0.0   stringr_1.5.1   dplyr_1.1.4     purrr_1.0.2    
-    ##  [9] readr_2.1.5     tidyr_1.3.1     tibble_3.2.1    ggplot2_3.5.1  
-    ## [13] tidyverse_2.0.0 git2r_0.35.0   
+    ##  [1] importbio_0.1.0  bench_1.1.3      modeldata_1.4.0  lubridate_1.9.3 
+    ##  [5] forcats_1.0.0    stringr_1.5.1    dplyr_1.1.4      purrr_1.0.2     
+    ##  [9] readr_2.1.5      tidyr_1.3.1      tibble_3.2.1     tidyverse_2.0.0 
+    ## [13] git2r_0.35.0     remotes_2.5.0    ggbeeswarm_0.7.2 ggplot2_3.5.1   
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] utf8_1.2.4         generics_0.1.3     stringi_1.8.4      lattice_0.22-6    
-    ##  [5] hms_1.1.3          digest_0.6.37      magrittr_2.0.3     evaluate_1.0.1    
-    ##  [9] grid_4.4.1         timechange_0.3.0   RColorBrewer_1.1-3 fastmap_1.2.0     
+    ##  [5] hms_1.1.3          digest_0.6.37      magrittr_2.0.3     RColorBrewer_1.1-3
+    ##  [9] evaluate_1.0.1     grid_4.4.1         timechange_0.3.0   fastmap_1.2.0     
     ## [13] Matrix_1.7-0       mgcv_1.9-1         fansi_1.0.6        scales_1.3.0      
     ## [17] cli_3.6.3          rlang_1.1.4        munsell_0.5.1      splines_4.4.1     
-    ## [21] remotes_2.5.0      withr_3.0.2        yaml_2.3.10        ggbeeswarm_0.7.2  
-    ## [25] tools_4.4.1        tzdb_0.4.0         colorspace_2.1-1   profmem_0.6.0     
-    ## [29] vctrs_0.6.5        R6_2.5.1           lifecycle_1.0.4    vipor_0.4.7       
-    ## [33] beeswarm_0.4.0     pkgconfig_2.0.3    pillar_1.9.0       gtable_0.3.6      
-    ## [37] glue_1.8.0         highr_0.11         xfun_0.48          tidyselect_1.2.1  
-    ## [41] knitr_1.48         farver_2.1.2       htmltools_0.5.8.1  nlme_3.1-164      
-    ## [45] rmarkdown_2.28     labeling_0.4.3     compiler_4.4.1
+    ## [21] withr_3.0.2        yaml_2.3.10        tools_4.4.1        tzdb_0.4.0        
+    ## [25] colorspace_2.1-1   profmem_0.6.0      vctrs_0.6.5        R6_2.5.1          
+    ## [29] lifecycle_1.0.4    vipor_0.4.7        pkgconfig_2.0.3    beeswarm_0.4.0    
+    ## [33] pillar_1.9.0       gtable_0.3.6       glue_1.8.0         highr_0.11        
+    ## [37] xfun_0.48          tidyselect_1.2.1   knitr_1.48         farver_2.1.2      
+    ## [41] htmltools_0.5.8.1  nlme_3.1-164       labeling_0.4.3     rmarkdown_2.28    
+    ## [45] compiler_4.4.1
