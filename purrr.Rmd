@@ -39,7 +39,39 @@ See the [cheatsheet](https://github.com/rstudio/cheatsheets/blob/main/purrr.pdf)
 
 > [In this chapter](https://r4ds.hadley.nz/iteration), you'll learn tools for iteration, repeatedly performing the same action on different objects. Iteration in R generally tends to look rather different from other programming languages because so much of it is implicit and we get it for free. For example, if you want to double a numeric vector x in R, you can just write 2 * x. In most other languages, you'd need to explicitly double each element of x using some sort of for loop.
 
-## {purrr}
+## The purrr package
+
+### Map functions
+
+Use `map(.x, .f, ...)` to apply a function to each element of a list or vector, and return a list.
+
+```{r map}
+l1 <- list(
+  x = c("a", "b"),
+  y = c("c", "d")
+)
+purrr::map(l1, sort, decreasing = TRUE)
+```
+
+Use `map2(.x, .y, .f, ...)` to apply a function to pairs of elements from two lists or vectors, return a list.
+
+```{r map2}
+x <- list(1, 2, 3)
+y <- list(4, 5, 6)
+purrr::map2(x, y, \(x, y) x*y)
+```
+
+Use `pmap(.l, .f, ...)` to apply a function to groups of elements from a list of lists or vectors, return a list.
+
+```{r pmap}
+x <- list(1, 2, 3)
+y <- list(4, 5, 6)
+z <- list(7, 8, 9)
+purrr::pmap(
+  list(x, y, z),
+  function(first, second, third) first * (second + third)
+)
+```
 
 ### `safely()`
 
