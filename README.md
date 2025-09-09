@@ -264,17 +264,17 @@ repo <- git2r::clone(url = repo_url, local_path = "/home/rstudio/importbio")
 ```
 
     ## cloning into '/home/rstudio/importbio'...
-    ## Receiving objects:   1% (2/174),   15 kb
-    ## Receiving objects:  11% (20/174),   15 kb
-    ## Receiving objects:  21% (37/174),   15 kb
-    ## Receiving objects:  31% (54/174),   23 kb
-    ## Receiving objects:  41% (72/174),   23 kb
-    ## Receiving objects:  51% (89/174),   31 kb
-    ## Receiving objects:  61% (107/174),   31 kb
-    ## Receiving objects:  71% (124/174),   47 kb
-    ## Receiving objects:  81% (141/174),  111 kb
-    ## Receiving objects:  91% (159/174),  119 kb
-    ## Receiving objects: 100% (174/174), 1960 kb, done.
+    ## Receiving objects:   1% (2/187),   15 kb
+    ## Receiving objects:  11% (21/187),   15 kb
+    ## Receiving objects:  21% (40/187),   15 kb
+    ## Receiving objects:  31% (58/187),   23 kb
+    ## Receiving objects:  41% (77/187),   23 kb
+    ## Receiving objects:  51% (96/187),   31 kb
+    ## Receiving objects:  61% (115/187),   39 kb
+    ## Receiving objects:  71% (133/187),   47 kb
+    ## Receiving objects:  81% (152/187),  119 kb
+    ## Receiving objects:  91% (171/187),  119 kb
+    ## Receiving objects: 100% (187/187), 1966 kb, done.
 
 Install using `remotes::install_local()`.
 
@@ -282,7 +282,7 @@ Install using `remotes::install_local()`.
 remotes::install_local("/home/rstudio/importbio")
 ```
 
-    ## Skipping install of 'importbio' from a local remote, the SHA1 (0.1.0) has not changed since last install.
+    ## Skipping install of 'importbio' from a local remote, the SHA1 (0.1.1) has not changed since last install.
     ##   Use `force = TRUE` to force installation
 
 Check if you can load package.
@@ -292,7 +292,7 @@ library("importbio")
 packageVersion("importbio")
 ```
 
-    ## [1] '0.1.0'
+    ## [1] '0.1.1'
 
 ## Vectors
 
@@ -1385,8 +1385,8 @@ x <- runif(100)
     ## # A tibble: 2 × 6
     ##   expression      min   median `itr/sec` mem_alloc `gc/sec`
     ##   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-    ## 1 sqrt(x)    315.14ns 337.14ns  2391191.      848B        0
-    ## 2 x^0.5        2.07µs   2.13µs   401342.      848B        0
+    ## 1 sqrt(x)    306.06ns  324.1ns  2965892.      848B        0
+    ## 2 x^0.5        2.09µs   2.14µs   450042.      848B        0
 
 `for` versus `map_int` versus `sapply`.
 
@@ -1410,9 +1410,9 @@ for_loop <- function(n){
     ## # A tibble: 3 × 6
     ##   expression                            min  median `itr/sec` mem_alloc `gc/sec`
     ##   <bch:expr>                       <bch:tm> <bch:t>     <dbl> <bch:byt>    <dbl>
-    ## 1 for_loop(my_num)                   1.84ms  1.92ms      516.    1.69MB    35.5 
-    ## 2 map_int(my_num, function(x) x^2)   4.84ms  5.36ms      189.   48.02KB     8.68
-    ## 3 sapply(my_num, function(x) x^2)    4.88ms  5.38ms      188.  362.61KB    11.0
+    ## 1 for_loop(my_num)                   1.96ms  2.05ms      461.    1.69MB    19.9 
+    ## 2 map_int(my_num, function(x) x^2)   4.82ms  4.95ms      195.   48.02KB     8.01
+    ## 3 sapply(my_num, function(x) x^2)    5.02ms  5.14ms      193.  362.61KB     6.31
 
 - `min` - The minimum execution time.
 - `median` - The sample median of execution time.
@@ -1448,7 +1448,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   2.748   0.012   2.760
+    ##   2.836   0.040   2.877
 
 ``` r
 system.time(
@@ -1457,7 +1457,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   5.335   0.008   5.343
+    ##   5.263   0.008   5.272
 
 ``` r
 system.time(
@@ -1466,7 +1466,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   5.466   0.008   5.474
+    ##   5.688   0.028   5.717
 
 ``` r
 all.equal(x, y)
@@ -1557,7 +1557,7 @@ system.time(
 ```
 
     ##    user  system elapsed 
-    ##   0.514   0.000   0.514
+    ##   0.876   0.000   0.876
 
 The `with` function evaluates an expression with data.
 
@@ -1746,7 +1746,7 @@ get the default path.
 Sys.getenv("LD_LIBRARY_PATH")
 ```
 
-    ## [1] "/usr/local/lib/R/lib:/usr/local/lib:/usr/lib/x86_64-linux-gnu:/usr/lib/jvm/java-11-openjdk-amd64/lib/server"
+    ## [1] "/usr/local/lib/R/lib:/usr/local/lib:/usr/lib/x86_64-linux-gnu:/usr/lib/jvm/java-21-openjdk-amd64/lib/server"
 
 Now we will add `/usr/include` to `LD_LIBRARY_PATH` and get the updated
 library path.
@@ -1757,7 +1757,7 @@ Sys.setenv("LD_LIBRARY_PATH" = new_path)
 Sys.getenv("LD_LIBRARY_PATH")
 ```
 
-    ## [1] "/usr/local/lib/R/lib:/usr/local/lib:/usr/lib/x86_64-linux-gnu:/usr/lib/jvm/java-11-openjdk-amd64/lib/server:/usr/include"
+    ## [1] "/usr/local/lib/R/lib:/usr/local/lib:/usr/lib/x86_64-linux-gnu:/usr/lib/jvm/java-21-openjdk-amd64/lib/server:/usr/include"
 
 ### Variables and objects
 
@@ -1920,21 +1920,47 @@ outdated repositories.
 options(repos=c(CRAN="https://cran.r-project.org"))
 ```
 
+Often you need to perform some operation across all pairwise
+combinations of columns; use `combn()`.
+
+``` r
+set.seed(1984)
+n <- 100
+
+my_df <- data.frame(
+  a = rnorm(n = n, mean = 100, sd = 25),
+  b = rnorm(n = n, mean = 100, sd = 25),
+  c = rnorm(n = n, mean = 100, sd = 25),
+  d = rnorm(n = n, mean = 100, sd = 25),
+  e = rnorm(n = n, mean = 100, sd = 25)
+)
+
+my_comp <- combn(letters[1:5], 2, paste, collapse="_vs_")
+my_cors <- combn(letters[1:5], 2, function(x) cor(my_df[[x[1]]], my_df[[x[2]]]))
+names(my_cors) <- my_comp
+my_cors
+```
+
+    ##       a_vs_b       a_vs_c       a_vs_d       a_vs_e       b_vs_c       b_vs_d 
+    ##  0.091124595  0.217006556 -0.091814054 -0.020255577  0.146215746  0.001433551 
+    ##       b_vs_e       c_vs_d       c_vs_e       d_vs_e 
+    ##  0.119438012 -0.096280143  0.035523508 -0.024151307
+
 ## Session info
 
 This README was generated by running `rmd_to_md.sh` with `readme.Rmd`.
 
-    ## [1] "2025-03-11 03:31:49 UTC"
+    ## [1] "2025-09-09 04:13:23 UTC"
 
 Session info.
 
-    ## R version 4.4.1 (2024-06-14)
+    ## R version 4.5.0 (2025-04-11)
     ## Platform: x86_64-pc-linux-gnu
-    ## Running under: Ubuntu 22.04.5 LTS
+    ## Running under: Ubuntu 24.04.2 LTS
     ## 
     ## Matrix products: default
     ## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
-    ## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so;  LAPACK version 3.10.0
+    ## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0
     ## 
     ## locale:
     ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
@@ -1951,21 +1977,20 @@ Session info.
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ##  [1] importbio_0.1.0  bench_1.1.3      modeldata_1.4.0  lubridate_1.9.3 
-    ##  [5] forcats_1.0.0    stringr_1.5.1    dplyr_1.1.4      purrr_1.0.2     
-    ##  [9] readr_2.1.5      tidyr_1.3.1      tibble_3.2.1     tidyverse_2.0.0 
-    ## [13] git2r_0.35.0     remotes_2.5.0    ggbeeswarm_0.7.2 ggplot2_3.5.1   
+    ##  [1] importbio_0.1.1  bench_1.1.4      modeldata_1.4.0  lubridate_1.9.4 
+    ##  [5] forcats_1.0.0    stringr_1.5.1    dplyr_1.1.4      purrr_1.1.0     
+    ##  [9] readr_2.1.5      tidyr_1.3.1      tibble_3.3.0     tidyverse_2.0.0 
+    ## [13] git2r_0.36.2     remotes_2.5.0    ggbeeswarm_0.7.2 ggplot2_3.5.2   
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] utf8_1.2.4         generics_0.1.3     stringi_1.8.4      lattice_0.22-6    
-    ##  [5] hms_1.1.3          digest_0.6.37      magrittr_2.0.3     RColorBrewer_1.1-3
-    ##  [9] evaluate_1.0.1     grid_4.4.1         timechange_0.3.0   fastmap_1.2.0     
-    ## [13] Matrix_1.7-0       mgcv_1.9-1         fansi_1.0.6        scales_1.3.0      
-    ## [17] cli_3.6.3          rlang_1.1.4        munsell_0.5.1      splines_4.4.1     
-    ## [21] withr_3.0.2        yaml_2.3.10        tools_4.4.1        tzdb_0.4.0        
-    ## [25] colorspace_2.1-1   profmem_0.6.0      vctrs_0.6.5        R6_2.5.1          
-    ## [29] lifecycle_1.0.4    vipor_0.4.7        pkgconfig_2.0.3    beeswarm_0.4.0    
-    ## [33] pillar_1.9.0       gtable_0.3.6       glue_1.8.0         highr_0.11        
-    ## [37] xfun_0.48          tidyselect_1.2.1   knitr_1.48         farver_2.1.2      
-    ## [41] htmltools_0.5.8.1  nlme_3.1-164       labeling_0.4.3     rmarkdown_2.28    
-    ## [45] compiler_4.4.1
+    ##  [1] utf8_1.2.6         generics_0.1.4     stringi_1.8.7      lattice_0.22-6    
+    ##  [5] hms_1.1.3          digest_0.6.37      magrittr_2.0.3     evaluate_1.0.3    
+    ##  [9] grid_4.5.0         timechange_0.3.0   RColorBrewer_1.1-3 fastmap_1.2.0     
+    ## [13] Matrix_1.7-3       mgcv_1.9-1         scales_1.4.0       cli_3.6.5         
+    ## [17] rlang_1.1.6        splines_4.5.0      withr_3.0.2        yaml_2.3.10       
+    ## [21] tools_4.5.0        tzdb_0.5.0         profmem_0.7.0      vctrs_0.6.5       
+    ## [25] R6_2.6.1           lifecycle_1.0.4    vipor_0.4.7        pkgconfig_2.0.3   
+    ## [29] beeswarm_0.4.0     pillar_1.11.0      gtable_0.3.6       glue_1.8.0        
+    ## [33] xfun_0.52          tidyselect_1.2.1   knitr_1.50         farver_2.1.2      
+    ## [37] htmltools_0.5.8.1  nlme_3.1-168       rmarkdown_2.29     labeling_0.4.3    
+    ## [41] compiler_4.5.0
