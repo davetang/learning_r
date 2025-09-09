@@ -26,7 +26,7 @@ dim(mat1)
 
 Create `mat2`.
 
-```{r mat1}
+```{r mat2}
 num_rows <- 10000
 num_cols <- 10000
 
