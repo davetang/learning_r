@@ -1,0 +1,10 @@
+RVER=4.5.0
+IMAGE=davetang/rstudio:${RVER}
+
+check_depend (){
+   local tool=$1
+   if [[ ! -x $(command -v ${tool}) ]]; then
+     >&2 echo Could not find ${tool}
+     exit 1
+   fi
+}

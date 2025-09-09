@@ -2,21 +2,13 @@
 
 set -euo pipefail
 
-check_depend (){
-   tool=$1
-   if [[ ! -x $(command -v ${tool}) ]]; then
-     >&2 echo Could not find ${tool}
-     exit 1
-   fi
-}
+source settings.sh
 
 dependencies=(docker)
 for tool in ${dependencies[@]}; do
    check_depend ${tool}
 done
 
-RVER=4.4.1
-IMAGE=davetang/rstudio:${RVER}
 PORT=9998
 NAME=r_package_test
 
